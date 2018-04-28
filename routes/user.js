@@ -36,8 +36,8 @@ exports.login = function(req, res){
                 req.session.userId = results[0].nip_pegawai;
                 req.session.user = results[0];
                 res.redirect('/home/dashboard');
-                res.end();
                 console.log('Login Id : '+results[0].nip_pegawai);
+                res.end();
               }
               else {
                 console.log("password salah");
@@ -68,11 +68,13 @@ exports.dashboard = function(req, res){
       return;
    }
 
-   var sql = "SELECT * FROM `pesan_chat_bot` WHERE `pengirim_pesan_chat_bot`='bot'order by waktu_pesan_chat_bot asc";
+   var sql = "SELECT * FROM `pesan_chat_pengguna` WHERE `pengirim_pesan_chat_pengguna`='"+userId+"' or `penerima_pesan_chat_pengguna`='"+userId+"' order by waktu_pesan_chat_pengguna asc";
 
    req.getConnection(function (err, connection) {
      connection.query(sql, function (err, results) {
        res.render('dashboard.ejs',{data:results, session:userId});
+			 // res.writeHead(200, {'Context-Type' : 'application/json'});
+			 // res.end(JSON.stringify(results));
      });
    });
 
@@ -80,7 +82,6 @@ exports.dashboard = function(req, res){
 
 /*Save the customer*/
 exports.chat = function(req,res){
-
   var input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
@@ -92,31 +93,10 @@ exports.chat = function(req,res){
       connection.query("INSERT INTO pesan_chat_pengguna set ?",data,function  (err,rows) {
     	if (err) throw err;
     	// res.send("Created "+JSON.stringify(rows));
-			console.log("Pesan : '"+data.isi_pesan_chat_pengguna+"' Berhasil dikirim oleh "+data.pengirim_pesan_chat_pengguna+" ke "+data.penerima_pesan_chat_pengguna);
+			console.log("Pesan : '"+data.isi_pesan_chat_pengguna+"' Berhasil dikirim oleh '"+data.pengirim_pesan_chat_pengguna+"' ke '"+data.penerima_pesan_chat_pengguna+"'");
       });
 			res.end();
   });
-    // var input = JSON.parse(JSON.stringify(req.body));
-    // req.getConnection(function (err, connection) {
-    //     var data = {
-    //       pengirim_pesan_chat_pengguna  : input.pengirim_pesan_chat_pengguna,
-    //       penerima_pesan_chat_pengguna  : 'bot',
-    //       isi_pesan_chat_pengguna       : input.isi_pesan_chat_pengguna,
-    //       waktu_pesan_chat_pengguna     : new Date(dt.now())
-    //     };
-    //     var query = connection.query("INSERT INTO pesan_chat_pengguna set ? ",data, function(err, rows){
-    //       if (err){
-    //         console.log("Error inserting : %s ",err );
-    //           console.log(data);
-    //       }
-    //       else {
-    //         // console.log(data);
-    //         // res.redirect('/home/dashboard');
-    //         // res.end();
-    //       }
-    //     });
-    //    // console.log(query.sql); get raw query
-    // });
 };
 
 //------------------------------------logout functionality----------------------------------------------

@@ -75,45 +75,8 @@
       height: 360px;
       background: #d9d9d9;
     }
-    /* .sender:nth-child(2n+1){
-      display: inline-block;
-      clear: both;
-      float: left;
-      padding: 0px;
-      width: calc(100% - 25px);
-      font-size: 0.9em;
-    }
-    .chat-sender:nth-child(2n+1){
-      background: #fff;
-      color: #262626;
-      float: left;
-      display: inline-block;
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 300px;
-      line-height: 100%;
-      word-wrap: break-word;
-      letter-spacing: 0.1px;
-      line-height: 1.3;
-      font-size:16px;
-    }
-    .sender:nth-child(2n+0){
-      float: right;
-      padding: 0px;
-      font-size: 0.9em;
-    }
-    .chat-sender:nth-child(2n+0){
-      background: #dcf8c6 !important;
-      color: #262626;
-      float: right;
-      border-radius: 20px;
-      max-width: 300px;
-      word-break: break-word;
-      letter-spacing: 0.1px;
-      line-height: 1.3;
-      font-size:16px;
-    } */
     .sender{
+      margin-left:-40px;
       display: inline-block;
       clear: both;
       float: left;
@@ -121,15 +84,20 @@
       width: calc(100% - 25px);
       font-size: 0.9em;
     }
-    .chat-sender:nth-child(2n+1){
-      background: #fff;
-      color: #262626;
+    .sender .img-sender{
+      float: left;
+      width: 25px;
+      margin-right: 10px;
+    }
+    .sender .chat-sender{
       float: left;
       display: inline-block;
       padding: 10px 15px;
       border-radius: 20px;
       max-width: 300px;
       line-height: 100%;
+      background: #fff;
+      color: #262626;
       word-wrap: break-word;
       letter-spacing: 0.1px;
       line-height: 1.3;
@@ -177,7 +145,6 @@
        <!-- Main component for a primary marketing message or call to action -->
           <div class="jumbotron">
             <h1>Welcome</h1>
-            <button type="button" name="button">Click !</button>
             <table class="table table-user-information">
               <tbody>
               </tbody>
@@ -248,7 +215,27 @@
                       <b class="name-header-chatter-bot-header-sender" style="color:#fff"> Bot</b>
                     </div>
                     <div class="col-lg-12 personal-chat-message" style="margin-top:10px;">
-
+                      <ul>
+                      <%
+                      if(data.length){
+                        for(var i = 0;i < data.length;i++) { %>
+                          <li class="sender">
+                            <img class="img-sender" src="frontend/img/chatbot.jpg" alt="User Image">
+                            <p class="chat-sender"><%=data[i].isi_pesan_chat_pengguna%></p>
+                          </li>
+                          <li class="receiver">
+                            <img class="img-receiver" src="frontend/img/chatbot.jpg" alt="User Image">
+                            <p class="chat-receiver"><%=data[i].isi_pesan_chat_pengguna%></p>
+                          </li>
+                          <%
+                        }
+                      }
+                      else { %>
+                       <tr>
+                          <td colspan="3">No user</td>
+                       </tr>
+                      <% } %>
+                      </ul>
                     </div>
                     <div class="col-lg-12 panel-typing-and-sending">
                       <form id="chat-form" method="post" action="/home/dashboard/chat">
@@ -260,6 +247,29 @@
                           </span>
                         </div>
                       </form>
+                      <!-- <form method="post" action="/home/dashboard/chat">
+                          <table cellpadding="11">
+                          <tr>
+                              <td class="label">Name</td><td>: <input type="text" name="name" required></td>
+                           </tr>
+                           <tr>
+                              <td class="label" valign="top">Address</td><td valign="top">: <textarea name="address" required cols="30" rows="5"></textarea></td>
+                          </tr>
+                          <tr>
+                              <td class="label">Email</td><td>: <input type="text" name="email" required></td>
+                           </tr>
+                            <tr>
+                              <td class="label">Phone</td><td>: <input type="text" name="phone" required></td>
+                           </tr>
+                           <tr>
+                              <td class="label"></td>
+                              <td>
+                                  &nbsp; <input type="submit" name="submit" value="Save">
+                                 <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAdd()">
+                              </td>
+                           </tr>
+                          </table>
+                      </form> -->
                     </div>
                   </div>
                 </div>
@@ -278,7 +288,7 @@
         if($.trim(message) == '') {
           return false;
         }
-        $('<div class="receiver"><p class="chat-receiver">' + message + '</p></div>').appendTo($('.personal-chat-message'));
+        $('<li class="receiver"><img class="img-receiver" src="frontend/img/chatbot.jpg" alt="" /><p class="chat-receiver">' + message + '</p></li>').appendTo($('.personal-chat-message ul'));
         $('#isi_pesan_chat_pengguna').val(null);
         $('.history-chat-body').html('<span>You: </span>' + message);
         $(".personal-chat-message").animate({scrollTop: $('.personal-chat-message').get(0).scrollHeight}, 1000);
@@ -307,36 +317,6 @@
              }
            });
           // newMessage();
-        }
-      });
-
-      $.ajax({
-        type: 'GET',
-        url : '/dashboard/chat',
-        contentType : 'application/json',
-        success: function(response){
-
-          // $.each(response, function(i, item) {
-          //     console.log(item.isi_pesan_chat_pengguna+"=");
-          // });
-          var personalChatMessage = $('.personal-chat-message');
-          personalChatMessage.html('');
-          var session = "<%=session%>";
-          // response.forEach(function(data){
-
-          // });
-          $.each( response, function( key, value ) {
-            if (value.pengirim_pesan_chat_pengguna !== session) {
-              personalChatMessage.append('\
-              <div class="sender"><p class="chat-sender">' + value.isi_pesan_chat_pengguna + '</p></div>');
-            }
-            else {
-              personalChatMessage.append('\
-              <div class="receiver"><p class="chat-receiver">' + value.isi_pesan_chat_pengguna + '</p></div>');
-            }
-            console.log( key + ": " + value.isi_pesan_chat_pengguna );
-          });
-
         }
       });
 
