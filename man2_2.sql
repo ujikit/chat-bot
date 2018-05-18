@@ -735,7 +735,7 @@ CREATE TABLE `pesan_chat_pengguna` (
   `waktu_pesan_chat_pengguna` datetime NOT NULL,
   `cek_pesan_chat_pengguna` enum('0','1') NOT NULL,
   PRIMARY KEY (`id_pesan_chat_pengguna`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -744,7 +744,6 @@ CREATE TABLE `pesan_chat_pengguna` (
 
 LOCK TABLES `pesan_chat_pengguna` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_pengguna` DISABLE KEYS */;
-INSERT INTO `pesan_chat_pengguna` VALUES (77,'197209081999031006','bot','tes1','2018-04-26 08:37:31','0'),(87,'bot','197209081999031006','balas tes1','2018-04-26 08:40:31','0'),(88,'197209081999031006','bot','tes2','2018-04-26 08:45:31','0'),(89,'bot','197209081999031006','balas tes2','2018-04-26 08:49:31','0'),(110,'197209081999031006','bot','fdfa','2018-04-29 06:06:11','0'),(111,'197209081999031006','bot','xczxc','2018-04-29 06:06:14','0');
 /*!40000 ALTER TABLE `pesan_chat_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -789,4 +788,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-29  6:09:01
+-- Dump completed on 2018-05-18 19:37:01

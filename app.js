@@ -3,17 +3,17 @@
 */
 //var methodOverride = require('method-override');
 // Express
-var express     = require('express')
-  , routes      = require('./routes')
-  , user        = require('./routes/user')
-  , data_user   = require('./models/data_user')
-  , http        = require('http')
-  , path        = require('path');
-var session     = require('express-session');
-var connection  = require('express-myconnection');
-var app         = express();
-var mysql       = require('mysql');
-var bodyParser  =require("body-parser");
+var express             = require('express');
+var index               = require('./controllers/index');
+var cek_login           = require('./models/cek_login');
+var data_user_pegawai   = require('./models/data_user_pegawai');
+var http                = require('http');
+var path                = require('path');
+var session             = require('express-session');
+var connection          = require('express-myconnection');
+var app                 = express();
+var mysql               = require('mysql');
+var bodyParser          = require("body-parser");
 // ./Express
 // var connection = mysql.createConnection({
 //               host     : 'localhost',
@@ -36,28 +36,31 @@ global.db = connection;
 
 // all environments
 app.set('port', process.env.PORT || 8080);
-app.set('views', __dirname + '/views');
+// app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/third-party', express.static(__dirname + '/third-party'));
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-              secret: 'keyboard cat',
-              resave: false,
-              saveUninitialized: true,
-              cookie: { maxAge: 60000 }
-            }))
+          secret: 'keyboard cat',
+          resave: false,
+          saveUninitialized: true,
+          cookie: { maxAge: 60000 }
+        }));
 
 // development only
-app.get('/', routes.index);//call for main index page
-app.get('/login', routes.index);//call for login page
-app.post('/login', user.login);//call for login post
-app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
-app.post('/home/dashboard/chat', user.chat);
-app.get('/home/logout', user.logout);//call for logout
+app.get('/', index.index);//login
 
-// GET Data Ajax
-app.get('/dashboard/chat', data_user.data_chat);
+// USER CRUD
+app.post('/login', cek_login.login);
+app.get('/logout', cek_login.logout);
+app.get('/dashboard', data_user_pegawai.dashboard);//call for dashboard page after login
+app.get('/dashboard/chat_user_pegawai_history', data_user_pegawai.chat_user_pegawai_history);
+app.post('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
+// app.get('/dashboard/chat_bot_history', data_user.chat_bot_history);
+// app.post('/dashboard/chat_bot', data_user.chat_bot);
 
 //Middleware
 var listener = app.listen(8888, function(){
