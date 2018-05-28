@@ -40,7 +40,7 @@ CREATE TABLE `data_pegawai` (
   KEY `nama_mata_pelajaran_pegawai` (`kd_mata_pelajaran_pegawai`),
   CONSTRAINT `data_pegawai_ibfk_1` FOREIGN KEY (`kd_mata_pelajaran_pegawai`) REFERENCES `mata_pelajaran` (`kd_mata_pelajaran`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `dp.jabatan_pegawai-j.nama_jabatan` FOREIGN KEY (`jabatan_pegawai`) REFERENCES `jabatan` (`kd_jabatan`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,7 @@ CREATE TABLE `data_pegawai` (
 
 LOCK TABLES `data_pegawai` WRITE;
 /*!40000 ALTER TABLE `data_pegawai` DISABLE KEYS */;
-INSERT INTO `data_pegawai` VALUES (3,'1111','Administrator','admin',NULL,'admin','$2y$10$PXzGHL7MGkefn9McBJ2h4uBJUsAYeCW.vgDmWu/fa7myp/BKTJ0ai',NULL,NULL,NULL,NULL,NULL),(7,'197209081999031006','HERYANI','guru','aa','197209081999031006','$2y$10$/H2aelbYqskA87iApaVOqeI2YIpZwH.0FbRqioxp1mt64m1AX/MxK','197209081999031006','Sendangadi','Sendangadi','2018-04-10','0858723621722'),(8,'192209081999031006','ENDANG SULISTYONINGSIH','guru','aqh','192209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722');
+INSERT INTO `data_pegawai` VALUES (3,'1111','Administrator','admin',NULL,'admin','$2y$10$PXzGHL7MGkefn9McBJ2h4uBJUsAYeCW.vgDmWu/fa7myp/BKTJ0ai',NULL,NULL,NULL,NULL,NULL),(7,'197209081999031006','HERYANI','guru','aa','197209081999031006','$2y$10$/H2aelbYqskA87iApaVOqeI2YIpZwH.0FbRqioxp1mt64m1AX/MxK','197209081999031006','Sendangadi','Sendangadi','2018-04-10','0858723621722'),(8,'192209081999031006','ENDANG SULISTYONINGSIH','guru','aqh','192209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722'),(9,'297209081999031006','HERYANI MULTANTRI','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','0258723621722'),(10,'597209081999031006','BUBU ARYA','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','0258723621722');
 /*!40000 ALTER TABLE `data_pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,6 +100,7 @@ CREATE TABLE `data_siswa` (
   `foto_siswa` varchar(20) DEFAULT NULL,
   `jenis_kelamin_siswa` varchar(1) DEFAULT NULL,
   `kd_kelas_daftar_siswa` varchar(15) DEFAULT NULL,
+  `jabatan_siswa` varchar(25) NOT NULL,
   `alamat_siswa` varchar(20) DEFAULT NULL,
   `tempat_lahir_siswa` varchar(25) DEFAULT NULL,
   `tanggal_lahir_siswa` date DEFAULT NULL,
@@ -130,7 +131,9 @@ CREATE TABLE `data_siswa` (
   `tempat_lahir_wali` varchar(25) DEFAULT NULL,
   `tanggal_lahir_wali` date DEFAULT NULL,
   `no_handphone_wali` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`id_siswa`)
+  PRIMARY KEY (`id_siswa`),
+  KEY `jabatan_siswa` (`jabatan_siswa`),
+  CONSTRAINT `data_siswa_ibfk_1` FOREIGN KEY (`jabatan_siswa`) REFERENCES `jabatan` (`kd_jabatan`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,7 +143,7 @@ CREATE TABLE `data_siswa` (
 
 LOCK TABLES `data_siswa` WRITE;
 /*!40000 ALTER TABLE `data_siswa` DISABLE KEYS */;
-INSERT INTO `data_siswa` VALUES (10,'0044735860','10888','Harni Ramziyah','10888','P','10ipa1','Yogyakarta','Yogyakarta','2018-04-03','08524712423','2','10888','$2y$10$.RojvW.91C/Rq/BrsNUCsuOXxTm0oBWoj/69.lJtd.PCCnkgqVwi2','Islam','Anak','0000-00-00','','','','','','','','','','','','10888','$2y$10$.RojvW.91C/Rq/BrsNUCsuOXxTm0oBWoj/69.lJtd.PCCnkgqVwi2','','','','','','0000-00-00',''),(12,'2145310829','35860','Addisty Ayu Rinjani','35860','P','10ipa1','Yogyakarta','Yogyakarta','2018-04-26','08524712423','2','35860','$2y$10$Kmb1GQdm91u9rmgfbQWAZ.QvESpoUmlLjWHiXRs6dqFNGshQGn9Dm','Islam','Anak','0000-00-00','','','','','','','','','','','','35860','$2y$10$Kmb1GQdm91u9rmgfbQWAZ.QvESpoUmlLjWHiXRs6dqFNGshQGn9Dm','','','','','','0000-00-00',''),(13,'345310829','310829','Jason Mraz','310829','P','10ipa1','Yogyakarta','Yogyakarta','2018-04-10','08524712423','2','310829','$2y$10$Lrkf34wvfRQmTfhL542gAeAw9P8L9uScpmsT6HTEk6yRP5IWXhhJO','Islam','Anak','0000-00-00','','','','','','','','','','','','310829','$2y$10$Lrkf34wvfRQmTfhL542gAeAw9P8L9uScpmsT6HTEk6yRP5IWXhhJO','','','','','','0000-00-00',''),(14,'7145310829','829','Fason Mraz','829','P','10ipa2','Yogyakarta','Yogyakarta','2018-05-01','08524712423','2','829','$2y$10$xlEhBH9APsuGxJrCxMMNu.eVvCjDYjNh/6vhR2FX.7VikVJ3EpnS.','Islam','Anak','0000-00-00','','','','','','','','','','','','829','$2y$10$xlEhBH9APsuGxJrCxMMNu.eVvCjDYjNh/6vhR2FX.7VikVJ3EpnS.','','','','','','0000-00-00',''),(15,'645310829','645','Achmad Ramzi Adriansyah','645','L','10ipa2','Yogyakarta','Yogyakarta','2018-04-19','08524712423','2','645','$2y$10$JudubVLsTVuf2ExWY3FszugK6ehAmXHnzI8H1uKjEznXEbAP38dKC','Islam','Anak','0000-00-00','','','','','','','','','','','','645','$2y$10$JudubVLsTVuf2ExWY3FszugK6ehAmXHnzI8H1uKjEznXEbAP38dKC','','','','','','0000-00-00','');
+INSERT INTO `data_siswa` VALUES (10,'0044735860','10888','Harni Ramziyah','10888','P','10ipa1','siswa','Yogyakarta','Yogyakarta','2018-04-03','08524712423','2','10888','$2y$10$.RojvW.91C/Rq/BrsNUCsuOXxTm0oBWoj/69.lJtd.PCCnkgqVwi2','Islam','Anak','0000-00-00','','','','','','','','','','','','10888','$2y$10$.RojvW.91C/Rq/BrsNUCsuOXxTm0oBWoj/69.lJtd.PCCnkgqVwi2','','','','','','0000-00-00',''),(12,'2145310829','35860','Addisty Ayu Rinjani','35860','P','10ipa1','siswa','Yogyakarta','Yogyakarta','2018-04-26','08524712423','2','35860','$2y$10$Kmb1GQdm91u9rmgfbQWAZ.QvESpoUmlLjWHiXRs6dqFNGshQGn9Dm','Islam','Anak','0000-00-00','','','','','','','','','','','','35860','$2y$10$Kmb1GQdm91u9rmgfbQWAZ.QvESpoUmlLjWHiXRs6dqFNGshQGn9Dm','','','','','','0000-00-00',''),(13,'345310829','310829','Jason Mraz','310829','P','10ipa1','siswa','Yogyakarta','Yogyakarta','2018-04-10','08524712423','2','310829','$2y$10$Lrkf34wvfRQmTfhL542gAeAw9P8L9uScpmsT6HTEk6yRP5IWXhhJO','Islam','Anak','0000-00-00','','','','','','','','','','','','310829','$2y$10$Lrkf34wvfRQmTfhL542gAeAw9P8L9uScpmsT6HTEk6yRP5IWXhhJO','','','','','','0000-00-00',''),(14,'7145310829','829','Fason Mraz','829','P','10ipa2','siswa','Yogyakarta','Yogyakarta','2018-05-01','08524712423','2','829','$2y$10$xlEhBH9APsuGxJrCxMMNu.eVvCjDYjNh/6vhR2FX.7VikVJ3EpnS.','Islam','Anak','0000-00-00','','','','','','','','','','','','829','$2y$10$xlEhBH9APsuGxJrCxMMNu.eVvCjDYjNh/6vhR2FX.7VikVJ3EpnS.','','','','','','0000-00-00',''),(15,'645310829','645','Achmad Ramzi Adriansyah','645','L','10ipa2','siswa','Yogyakarta','Yogyakarta','2018-04-19','08524712423','2','645','$2y$10$JudubVLsTVuf2ExWY3FszugK6ehAmXHnzI8H1uKjEznXEbAP38dKC','Islam','Anak','0000-00-00','','','','','','','','','','','','645','$2y$10$JudubVLsTVuf2ExWY3FszugK6ehAmXHnzI8H1uKjEznXEbAP38dKC','','','','','','0000-00-00','');
 /*!40000 ALTER TABLE `data_siswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -721,6 +724,31 @@ INSERT INTO `pesan_chat_bot` VALUES (3,'bot','Ada yang bisa kami bantu?','2018-0
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pesan_chat_bot_kosa_kata`
+--
+
+DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pesan_chat_bot_kosa_kata` (
+  `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT,
+  `kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
+  `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_pesan_chat_bot_kosa_kata`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pesan_chat_bot_kosa_kata`
+--
+
+LOCK TABLES `pesan_chat_bot_kosa_kata` WRITE;
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` DISABLE KEYS */;
+INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (1,'no hp','nomor telepon'),(2,'no handphone','nomor telepon'),(3,'no telepon','nomor telepon'),(4,'nomor hp','nomor telepon'),(5,'nomor handphone','nomor telepon'),(6,'nomor telepon','nomor telepon'),(7,'nomer hp','nomor telepon'),(8,'nomer handphone','nomor telepon'),(9,'nomer telepon','nomor telepon'),(10,'nilai siswa','nilai siswa');
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pesan_chat_pengguna`
 --
 
@@ -788,4 +816,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-18 19:37:01
+-- Dump completed on 2018-05-28 16:17:02

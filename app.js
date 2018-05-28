@@ -35,7 +35,6 @@ app.use(connection(mysql, {
 global.db = connection;
 
 // all environments
-app.set('port', process.env.PORT || 8080);
 // app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -47,7 +46,10 @@ app.use(session({
           secret: 'keyboard cat',
           resave: false,
           saveUninitialized: true,
-          cookie: { maxAge: 60000 }
+          cookie: {
+            maxAge: 600000,
+            // secure : true
+          }
         }));
 
 // development only

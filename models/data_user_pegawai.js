@@ -18,11 +18,11 @@ let connection = mysql.createConnection({
 
 exports.dashboard = function(req, res){
 	let userId = req.session.userId;
-	if(userId == null){
-	  res.redirect("/");
-	  return;
-	}
-	let sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
+	// if(userId == null){
+	//   res.redirect("/");
+	//   return;
+	// }
+	var sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
 	req.getConnection(function (err, connection) {
 	 connection.query(sql, function (err, results) {
 	   res.render('dashboard.ejs',{data:results, session:userId});
@@ -35,11 +35,11 @@ exports.dashboard = function(req, res){
 // History chat
 exports.chat_user_pegawai_history = function(req, res){
   let userId = req.session.userId;
-  if(userId == null){
-		res.redirect("/");
-		return;
-  }
-  let sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
+  // if(userId == null){
+	// 	res.redirect("/");
+	// 	return;
+  // }
+  var sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
   req.getConnection(function (err, connection) {
     connection.query(sql, function (err, results) {
 			// console.log(results);
@@ -54,13 +54,13 @@ exports.chat_user_pegawai_history = function(req, res){
 // Insert Chat
 exports.chat_user_pegawai = function(req,res){
 	let userId = req.session.userId;
-  if(userId == null){
-		res.redirect("/");
-		return;
-  }
+  // if(userId == null){
+	// 	res.redirect("/");
+	// 	return;
+  // }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
-    let data = {
+    var data = {
       pengirim_pesan_chat_pengguna  : input.pengirim_pesan_chat_pengguna,
       penerima_pesan_chat_pengguna  : 'bot',
       isi_pesan_chat_pengguna       : sanitizer.escape(input.isi_pesan_chat_pengguna),
@@ -74,54 +74,119 @@ exports.chat_user_pegawai = function(req,res){
 
 		// RESPONSE
 		let pesan = input.isi_pesan_chat_pengguna;
-		if ( pesan.match(/(nomor|telepon|handphone|hp)/gi) ) {
-			str = pesan.split(' ');
-			json = JSON.stringify(str);
-			parse = JSON.parse(json);
+		let json 	= JSON.stringify(pesan);
+		let parse = JSON.parse(json);
 
-			let data = {
-	      pengirim_pesan_chat_pengguna  : input.pengirim_pesan_chat_pengguna,
-	      penerima_pesan_chat_pengguna  : 'bot',
-	      isi_pesan_chat_pengguna       : sanitizer.escape(input.isi_pesan_chat_pengguna),
-	      waktu_pesan_chat_pengguna     : new Date(dt.now())
-	    };
-
-			let object = parse[1]; //objek pencarian
-			let data2 = [object];
-			let sql = "SELECT nama_pegawai,no_handphone_pegawai from data_pegawai where nama_pegawai=?";
-
-			connection.query(sql, data2,function  (err,rows) {
-	  	if (err){
-				throw err;
-			}
-			else {
-				console.log("Pesan : '"+data.isi_pesan_chat_pengguna+"' Berhasil dikirim oleh '"+data.pengirim_pesan_chat_pengguna+"' ke '"+data.penerima_pesan_chat_pengguna+"'");
-				res.json("Nomor Telepon Atas Nama "+rows[0].nama_pegawai+" : "+rows[0].no_handphone_pegawai);
-				// console.log(rows[0].nama_pegawai);
-			}
-	    });
-
-			// let sql = "SELECT * FROM data_pegawai";
-			// req.getConnection(function (err, connection) {
-			// 	connection.query(sql, function (err, results) {
-			// 		res.json(results);
-			// 	});
-			// });
-			// console.log(parse[1]);
+		if (parse.length === 1){
+			// console.log("Maksudnya '"+pesan+"' apa? \nMasukan ulang kata kunci yang lebih spesifik.");
+			res.json("Maksudnya '"+pesan+"' apa? \nMasukan ulang kata kunci yang lebih spesifik.");
 		}
-		// else if ( pesan.match(/\D\w+\D/g) ){
-		// 	res.json([{"name":"XSS Attack Detected"}]);
-		// 	console.log("XSS Attack Detected");
-		// 	// console.log(sanitizer.escape(pesan));
-		// 	// res.json({"obj":[{"name":"tt"},{"name":"gg"}]}); JSON Objek
-		// }
 		else {
-			console.log('tidak ada data');
-			// res.json([{"name":"Tidak Ada Data"}]);
-			// res.json({"obj":[{"name":"tt"},{"name":"gg"}]}); JSON Objek
-		}
-		// ./RESPONSE
 
-		// res.end();
+			var sql = "SELECT * FROM data_pegawai WHERE nama_pegawai!='Administrator'"; //mencari semua kosa kata
+			connection.query(sql,function  (err_data_pegawai,rows_data_pegawai){
+				if (err_data_pegawai) throw err_data_pegawai;
+				else if (rows_data_pegawai.length > 0) {
+
+					for (var i = 0; i < rows_data_pegawai.length; i++){
+						var nip_pegawai = rows_data_pegawai[i].nip_pegawai;
+						// var nama_pegawai = rows[i].nama_pegawai;
+						var regex = new RegExp(nip_pegawai, 'gi');
+						var res = parse.match(regex);
+						if (res) {
+							var nip_pegawai = res;
+							break;
+						}
+						else {
+							nip_pegawai = null;
+						}
+					}
+					for (var i = 0; i < rows_data_pegawai.length; i++){
+						var nama_pegawai = rows_data_pegawai[i].nama_pegawai;
+						console.log(nama_pegawai+"\n");
+						var regex = new RegExp(nama_pegawai, 'gi');
+						var res = parse.match(regex);
+						// if (res) {
+						// 	var nama_pegawai = res;
+						// 	break;
+						// }
+						// else {
+						// 	nama_pegawai = null;
+						// }
+					}
+
+				}
+
+				var sql = "SELECT * FROM data_siswa"; //mencari semua kosa kata
+				connection.query(sql,function  (err_data_siswa,rows_data_siswa){
+					if (err_data_siswa){ throw err_data_siswa; }
+					else if (rows_data_siswa.length > 0) {
+
+						for (var i = 0; i < rows_data_siswa.length; i++){
+							var nis_siswa = rows_data_siswa[i].nis_siswa;
+							// var nama_pegawai = rows[i].nama_pegawai;
+							var regex = new RegExp(nis_siswa, 'gi');
+							var res = parse.match(regex);
+							if (res) {
+								var nis_siswa = res;
+								break;
+							}
+							else {
+								nis_siswa = null;
+							}
+						}
+						for (var i = 0; i < rows_data_siswa.length; i++){
+							var nama_siswa = rows_data_siswa[i].nama_siswa;
+							var regex = new RegExp(nama_siswa, 'gi');
+							var res = parse.match(regex);
+							if (res) {
+								var nama_siswa = res;
+								break;
+							}
+							else {
+								nama_siswa = null;
+							}
+						}
+
+					}
+
+					console.log("");
+					console.log(nip_pegawai);
+					console.log(nama_pegawai);
+					console.log(nis_siswa);
+					console.log(nama_siswa);
+					if (nip_pegawai !== null) {
+          console.log("nip_pegawai terisi");
+					}
+					else if (nama_pegawai !== null) {
+          console.log("nama pegawai terisi");
+					}
+					else if (nis_siswa !== null) {
+          console.log("nis terisi");
+					}
+					else if (nama_siswa !== null) {
+          console.log("siswa terisi");
+					}
+
+
+
+
+
+					// if(typeof pases.nip_pegawai === 'number'){
+					// 	console.log("ya ni number");
+					// 	console.log(pases);
+					// }
+					// else if (typeof pases.nama_pegawai[0] === 'string') {
+					// 	console.log("ya ni string");
+					// 	console.log(pases);
+					// }
+					// else {
+					// 	console.log("error");
+					// }
+				});
+
+			});
+
+		}
   });
 };
