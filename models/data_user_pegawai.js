@@ -99,7 +99,7 @@ exports.chat_user_pegawai = function(req,res,next){
 							});
 							var sel12 = array.join().replace(/,/g, ' ');
 
-  							var sql = "SELECT nama_pegawai FROM data_pegawai where nama_pegawai REGEXP '"+sel12+"'"; //mencari semua kosa kata
+  							var sql = "SELECT nama_pegawai FROM data_pegawai where nama_pegawai REGEXP '"+sel12+"' order by nama_pegawai asc"; //mencari semua kosa kata
   							connection.query(sql,function  (err_data_pegawai,rows_data_pegawai){
   								if (err_data_pegawai) throw err_data_pegawai;
 									var nama_dicari = JSON.stringify(rows_data_pegawai[0].nama_pegawai);
