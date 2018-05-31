@@ -61,6 +61,7 @@ app.get('/logout', cek_login.logout);
 app.get('/dashboard', data_user_pegawai.dashboard);//call for dashboard page after login
 app.get('/dashboard/chat_user_pegawai_history', data_user_pegawai.chat_user_pegawai_history);
 app.post('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
+// app.get('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
 // app.get('/dashboard/chat_bot_history', data_user.chat_bot_history);
 // app.post('/dashboard/chat_bot', data_user.chat_bot);
 

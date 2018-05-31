@@ -44,10 +44,11 @@
                  }
                  else{
                     $('.chat-page-history').append('<div class="receiver"><p class="chat-receiver">' + message + '</p></div>');
-                    $('.chat-typing').val(null);
+                    // $('.chat-typing').val(null);
                     $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
                     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
                     setTimeout(function(){
+
                       $('.load-chat').hide();
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + response + '</p></div>');
                       $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
