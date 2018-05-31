@@ -83,15 +83,14 @@ exports.chat_user_pegawai = function(req,res,next){
 		else {
 			// Cek kosa kata
 			let sql = "SELECT * from pesan_chat_bot_kosa_kata"; //mencari semua kosa kata
-			connection.query(sql,function  (err,rows){
-			if (err){ throw err; }
-			else if (rows.length > 0) {
-			  for (var i = 0; i < rows.length; i++){
-			    var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
+			connection.query(sql,function  (err_kosa_kata,rows_kosa_kata){
+			if (err_kosa_kata) throw err_kosa_kata;
+			 if (rows_kosa_kata.length > 0) {
+			  for (var i = 0; i < rows_kosa_kata.length; i++){
+			    var kosa_kata = rows_kosa_kata[i].kosa_kata_pesan_chat_bot_kosa_kata;
 			      var regex = new RegExp(kosa_kata, 'gi');
 			      var res1 = parse.match(regex);
 			      if (res1) {
-							// var res0 = JSON.stringify(res1);
 							var sel2 = parse.replace(res1[0], ' ');
 							var sel4 = sel2.split(" ");
 							array = sel4.filter(function(str) {
@@ -99,61 +98,40 @@ exports.chat_user_pegawai = function(req,res,next){
 							});
 							var sel12 = array.join().replace(/,/g, ' ');
 
-  							var sql = "SELECT nama_pegawai FROM data_pegawai where nama_pegawai REGEXP '"+sel12+"' order by nama_pegawai asc"; //mencari semua kosa kata
-  							connection.query(sql,function  (err_data_pegawai,rows_data_pegawai){
+  							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai REGEXP '"+sel12+"' order by nama_pegawai asc"; //mencari semua kosa kata
+  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
   								if (err_data_pegawai) throw err_data_pegawai;
-									var nama_dicari = JSON.stringify(rows_data_pegawai[0].nama_pegawai);
-									res.end(nama_dicari);
-  							});
-			  				var sql = "SELECT * FROM data_siswa  order by nama_siswa desc"; //mencari semua kosa kata
-			  				connection.query(sql,function  (err_data_siswa,rows_data_siswa){
-			  					if (err_data_siswa){ throw err_data_siswa; }
-			  					else if (rows_data_siswa.length > 0) {
-			  						for (var i = 0; i < rows_data_siswa.length; i++){
-			  							var nis_siswa = rows_data_siswa[i].nis_siswa;
-			  							var regex = new RegExp(nis_siswa, 'gi');
-			  							var res1 = parse.match(regex);
-			  							if (res1) { var nis_siswa = res1; break; }
-			  							else { nis_siswa = null; }
-			  						}
-			  						for (var i = 0; i < rows_data_siswa.length; i++){
-			  							var nama_siswa = rows_data_siswa[i].nama_siswa;
-			  							var regex = new RegExp(nama_siswa, 'gi');
-			  							var res1 = parse.match(regex);
-			  							if (res1) { var nama_siswa = res1; break; }
-			  							else { nama_siswa = null; }
-			  						}
-			  					}
-			  					// console.log("");
-			  					// console.log(nip_pegawai);
-			  					// console.log(nama_pegawai);
-			  					// console.log(nis_siswa);
-			  					// console.log(nama_siswa);
-			  					// if (nip_pegawai !== null) {
-			            // console.log("nip_pegawai terisi");
-			  					// }
-			  					// else if (nama_pegawai !== null) {
-			            // console.log("nama pegawai terisi");
-			  					// }
-			  					// else if (nis_siswa !== null) {
-			            // console.log("nis terisi");
-			  					// }
-			  					// else if (nama_siswa !== null) {
-			            // console.log("siswa terisi");
-			  					// }
-
-			  					// if(typeof pases.nip_pegawai === 'number'){
-			  					// 	console.log("ya ni number");
-			  					// 	console.log(pases);
-			  					// }
-			  					// else if (typeof pases.nama_pegawai[0] === 'string') {
-			  					// 	console.log("ya ni string");
-			  					// 	console.log(pases);
-			  					// }
-			  					// else {
-			  					// 	console.log("error");
-			  					// }
+									if (rows_data_pegawai.length < 1) { var jabatan_pegawai = null; }
+									else if (rows_data_pegawai.length >= 1){
+										var nama_dicari = JSON.stringify(rows_data_pegawai[0].nama_pegawai);
+										var jabatan_pegawai = JSON.stringify(rows_data_pegawai[0].jabatan_pegawai);
+									}
+								var sql = "SELECT nama_siswa,jabatan_siswa FROM data_siswa where nama_siswa REGEXP '"+sel12+"' order by nama_siswa asc"; //mencari semua kosa kata
+			  				connection.query(sql,function (err_data_siswa,rows_data_siswa){
+									if (err_data_siswa) throw err_data_siswa;
+									if (rows_data_siswa.length < 1) { var jabatan_siswa = null; }
+									else if (rows_data_siswa.length >= 1){
+										var nama_dicari = JSON.stringify(rows_data_siswa[0].nama_siswa);
+										var jabatan_siswa = JSON.stringify(rows_data_siswa[0].jabatan_siswa);
+									}
+									// CEK GRUP KOSA KATA
+								var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata='"+res1+"'";
+								connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
+									if (err_grup_kosa_kata){ throw err_grup_kosa_kata; }
+									console.log(rows_grup_kosa_kata);
+									// if (jabatan_pegawai) {
+									// 	console.log("ini pegawai");
+									// }
+									// else if (jabatan_siswa) {
+									// 	console.log("ini siswa");
+									// }
+									// else {
+									// 	console.log("error");
+									// }
+								});
 			  				});
+  							});
+
 			        break;
 			      }
 			      else { console.log("kosa kata tidak ditemukan!"); }
