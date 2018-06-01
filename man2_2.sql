@@ -744,7 +744,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (1,'no hp','nomor telepon'),(2,'no handphone','nomor telepon'),(3,'no telepon','nomor telepon'),(4,'nomor hp','nomor telepon'),(5,'nomor handphone','nomor telepon'),(6,'nomor telepon','nomor telepon'),(7,'nomer hp','nomor telepon'),(8,'nomer handphone','nomor telepon'),(9,'nomer telepon','nomor telepon'),(10,'nilai siswa','nilai siswa');
+INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (1,'no hp','no_handphone'),(2,'no handphone','no_handphone'),(3,'no telepon','no_handphone'),(4,'nomor hp','no_handphone'),(5,'nomor handphone','no_handphone'),(6,'nomor telepon','no_handphone'),(7,'nomer hp','no_handphone'),(8,'nomer handphone','no_handphone'),(9,'nomer telepon','no_handphone'),(10,'nilai siswa','nilai siswa');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -816,4 +816,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-31 22:21:01
+-- Dump completed on 2018-06-02  1:54:01
