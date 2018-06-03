@@ -96,48 +96,54 @@ exports.chat_user_pegawai = function(req,res,next){
 							array = sel4.filter(function(str) {
 						    return /\S/.test(str);
 							}); //fungsi menghapus array yg kosong
-							var sel5 = array.join().replace(/,/g, ' '); //output : heryani
-							var sel6 = sel5.split(" ");
-							var sel7 = sel6.splice(1);
-							var sel8 = sel7.join().replace(/,/g, ' '); //output : heryani
+							var nama_objek_final = array.join().replace(/,/g, ' '); //output : heryani
 
 							// CEK GRUP KOSA KATA
 								var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata='"+res1+"'";
 								connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
 									if (err_grup_kosa_kata) throw err_grup_kosa_kata;
 									var grup_kosa_kata_final = rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
-
-								if (parse.match('pegawai')) {
-									console.log("ini pegawai");
-									var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+sel8+"' order by nama_pegawai asc"; //mencari semua kosa kata
-	  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
-	  								if (err_data_pegawai) throw err_data_pegawai;
-										if (rows_data_pegawai.length < 1) { var jabatan_pegawai = null; }
-										else if (rows_data_pegawai.length === 1){
-											var nama_pegawai = rows_data_pegawai[0].nama_pegawai;
-											var jabatan_pegawai = rows_data_pegawai[0].jabatan_pegawai;
-										}
-										else if (rows_data_pegawai.length > 1){
-											console.log("data lebih dari 1");
-										}
-										// if (jabatan_pegawai == "guru") { var jabatan_guru = "pegawai"; }
-										var nama_kolom_yg_dicari			= grup_kosa_kata_final+"_pegawai";
-										// var nama_tabel_yang_dicari		= "data_"+jabatan_guru;
-										// var nama_kondisi_yang_dicari	= "nama_"+jabatan_guru;
-										var selects = [nama_kolom_yg_dicari, nama_pegawai];
-									var sql = "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
-									connection.query(sql, selects, function  (err_final,rows_final){
-										if (err_final) throw err_final;
-	                	console.log(JSON.stringify(rows_final));
-									});
-									});
-								}
-								else if (parse.match('siswa')){
-									console.log("ini siswa");
-								}
-								else {
-									console.log("Pegawai atau Siswa ?");
-								}
+  							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+nama_objek_final+"' order by nama_pegawai asc"; //mencari semua kosa kata
+  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
+  								if (err_data_pegawai) throw err_data_pegawai;
+									if (rows_data_pegawai.length < 1) { var jabatan_pegawai = null; }
+									else if (rows_data_pegawai.length >= 1){
+										var nama_pegawai = rows_data_pegawai[0].nama_pegawai;
+										var jabatan_pegawai = rows_data_pegawai[0].jabatan_pegawai;
+									}
+								var sql = "SELECT nama_siswa,jabatan_siswa FROM data_siswa WHERE nama_siswa REGEXP '"+nama_objek_final+"' order by nama_siswa asc"; //mencari semua kosa kata
+			  				connection.query(sql,function (err_data_siswa,rows_data_siswa){
+									if (err_data_siswa) throw err_data_siswa;
+									if (rows_data_siswa.length < 1) { var jabatan_siswa = null; }
+									else if (rows_data_siswa.length >= 1){
+										var nama_siswa = JSON.stringify(rows_data_siswa[0].nama_siswa);
+										var jabatan_siswa = JSON.stringify(rows_data_siswa[0].jabatan_siswa);
+									}
+									if (jabatan_pegawai) {
+										if (jabatan_pegawai == "guru") { var jabatan_guru = "pegawai"; }
+										console.log("ini pegawai");
+										var nama_kolom_yg_dicari			= grup_kosa_kata_final+"_"+jabatan_guru;
+										var nama_tabel_yang_dicari		= "data_"+jabatan_guru;
+										var nama_kondisi_yang_dicari	= "nama_"+jabatan_guru;
+                    //  no_handphone_pegawai
+									}
+									else if (jabatan_siswa) {
+										console.log("ini siswa");
+									}
+									else {
+										console.log("bukan pegawai maupun siswa");
+									}
+									// console.log(nama_kolom_yg_dicari);
+									// console.log(nama_tabel_yang_dicari);
+									// console.log(nama_pegawai);
+								var selects = [nama_kolom_yg_dicari, nama_tabel_yang_dicari, nama_kondisi_yang_dicari, nama_pegawai];
+								var sql = "SELECT ?? FROM ?? WHERE ?? = ?";
+								connection.query(sql, selects, function  (err_final,rows_final){
+									if (err_final) throw err_final;
+                	res.end(JSON.stringify(rows_final));
+								});
+			  				});
+  							});
 								});
 
 			        break;
