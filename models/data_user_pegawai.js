@@ -90,59 +90,38 @@ exports.chat_user_pegawai = function(req,res,next){
 			    var kosa_kata = rows_kosa_kata[i].kosa_kata_pesan_chat_bot_kosa_kata;
 			      var regex = new RegExp(kosa_kata, 'gi');
 			      var res1 = parse.match(regex);
+						var regex2 = new RegExp(/pegawai/, 'gi');
+			      var res2 = parse.match(regex2);
 			      if (res1) {
-							var sel2 = parse.replace(res1[0], ' ');
-							var sel4 = sel2.split(" ");
-							array = sel4.filter(function(str) {
-						    return /\S/.test(str);
-							}); //fungsi menghapus array yg kosong
-							var sel5 = array.join().replace(/,/g, ' '); //output : heryani
-							var sel6 = sel5.split(" ");
-							var sel7 = sel6.splice(1);
-							var sel8 = sel7.join().replace(/,/g, ' '); //output : heryani
 
-							// CEK GRUP KOSA KATA
-								var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata='"+res1+"'";
-								connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
-									if (err_grup_kosa_kata) throw err_grup_kosa_kata;
-									var grup_kosa_kata_final = rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
+							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
+								connection.query(sql,function (err_cari_nama,rows_cari_nama){
+								if (err_cari_nama) throw err_cari_nama;
+								for (var i = 0; i < rows_cari_nama.length; i++) {
+									// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
+									var nama1 = rows_cari_nama[i].nama_pegawai;
 
-								if (parse.match('pegawai')) {
-									console.log("ini pegawai");
-									var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+sel8+"' order by nama_pegawai asc"; //mencari semua kosa kata
-	  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
-	  								if (err_data_pegawai) throw err_data_pegawai;
-										if (rows_data_pegawai.length < 1) { var jabatan_pegawai = null; }
-										else if (rows_data_pegawai.length === 1){
-											var nama_pegawai = rows_data_pegawai[0].nama_pegawai;
-											var jabatan_pegawai = rows_data_pegawai[0].jabatan_pegawai;
-										}
-										else if (rows_data_pegawai.length > 1){
-											console.log("data lebih dari 1");
-										}
-										// if (jabatan_pegawai == "guru") { var jabatan_guru = "pegawai"; }
-										var nama_kolom_yg_dicari			= grup_kosa_kata_final+"_pegawai";
-										// var nama_tabel_yang_dicari		= "data_"+jabatan_guru;
-										// var nama_kondisi_yang_dicari	= "nama_"+jabatan_guru;
-										var selects = [nama_kolom_yg_dicari, nama_pegawai];
-									var sql = "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
-									connection.query(sql, selects, function  (err_final,rows_final){
-										if (err_final) throw err_final;
-	                	console.log(JSON.stringify(rows_final));
-									});
-									});
-								}
-								else if (parse.match('siswa')){
-									console.log("ini siswa");
-								}
-								else {
-									console.log("Pegawai atau Siswa ?");
-								}
-								});
+									var nama2 = new RegExp(nama1, 'gi');
+									var match	= parse.match(nama2);
+									if (match !== null) {
+										let parse2= parse.split(" ");
+										var index = parse2.indexOf(match[0]);
+										console.log(index);
+										console.log(match[0]);
+									}
 
+								}
+
+								// console.log('--> fix  : '+res1); //object
+								// console.log('--> fix  : '+res2); //object
+								// console.log('--> fix  : '+res3);
+
+							});
 			        break;
 			      }
-			      else { console.log("kosa kata tidak ditemukan!"); }
+			      else {
+							// console.log("kosa kata tidak ditemukan!");
+						}
 			  }
 			}
 			else { console.log("tidak ada"); }
