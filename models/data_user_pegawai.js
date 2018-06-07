@@ -105,9 +105,29 @@ exports.chat_user_pegawai = function(req,res,next){
 									var match	= parse.match(nama2);
 									if (match !== null) {
 										let parse2= parse.split(" ");
-										var index = parse2.indexOf(match[0]);
-										console.log(index);
-										console.log(match[0]);
+										var index = parse2.indexOf(match[0]); //nomor letak array heryani
+										var splice = parse2.splice(index);
+										hps_arr_kosong = splice.filter(function(str) {
+									    return /\S/.test(str);
+										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+										// console.log(hps_arr_kosong);
+
+										for (var i = 0; i < parse2.length; i++) {
+											var g = splice.join().replace(/,/g, ' ');
+											var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+g+"' order by nama_pegawai asc"; //mencari semua kosa kata
+			  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
+			  								if (err_data_pegawai) throw err_data_pegawai;
+													if (rows_data_pegawai.length === 0) {
+														splice.pop();
+														console.log(g);
+													}
+													else {
+														console.log("data ada");
+														console.log(rows_data_pegawai);
+													}
+											});
+										}
+
 									}
 
 								}
