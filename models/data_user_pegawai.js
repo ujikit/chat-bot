@@ -114,32 +114,30 @@ exports.chat_user_pegawai = function(req,res,next){
 									}
 								}
 
-								console.log('--> fix  : '+res1); //object
-								console.log('--> fix  : '+res2); //object
-								console.log('--> fix  : '+index);
-								console.log('--> prs2 :'+parse2);
-								console.log('--> hps  : '+hps_arr_kosong);
-								console.log('--> spc2 : '+splice2);
+								// console.log('--> fix  : '+res1); //object
+								// console.log('--> fix  : '+res2); //object
+								// console.log('--> fix  : '+index);
+								// console.log('--> prs2 :'+parse2);
+								// console.log('--> hps  : '+hps_arr_kosong);
+								// console.log('--> spc2 : '+splice2);
 
+								var arr = [];
 								for (var j = 0; j < rows_cari_nama.length; j++) {
 									var nama3 = rows_cari_nama[j].nama_pegawai;
 									for (var k = 0; k < hps_arr_kosong.length; k++) {
 										var tt = hps_arr_kosong.join().replace(/,/g, ' ');
 										var regexx  = new RegExp(tt, 'gi');
 										var regexxx = nama3.match(regexx);
-										// console.log(regexxx+" === "+nama3);
 										if (regexxx === null) {
-											// console.log(regexx);
-												var s = hps_arr_kosong.pop();
+												hps_arr_kosong.pop();
 												var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
 												console.log(nama_fix);
+												arr.push(nama_fix);
 										}
-										else {
-										}
-										// console.log(splice2+' === '+rows_cari_nama[j].nama_pegawai);
 									}
-									console.log(nama3);
+									// console.log(nama3);
 								}
+								console.log(arr);
 
 							});
 			        break;
