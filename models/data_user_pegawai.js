@@ -94,7 +94,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			      var res2 = parse.match(regex2);
 			      if (res1) {
 
-							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
+							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai desc";
 								connection.query(sql,function (err_cari_nama,rows_cari_nama){
 								if (err_cari_nama) throw err_cari_nama;
 								for (var i = 0; i < rows_cari_nama.length; i++) {
@@ -131,16 +131,23 @@ exports.chat_user_pegawai = function(req,res,next){
 										if (regexxx === null) {
 												hps_arr_kosong.pop();
 												var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-												console.log(nama_fix);
+												// console.log(nama_fix);
 												arr.push(nama_fix);
 										}
 									}
 									// console.log(nama3);
 								}
-								console.log(arr);
+								for (var i = 0; i < rows_cari_nama.length; i++) {
+									// console.log(rows_cari_nama[i].nama_pegawai);
+									var nama_fix2 = rows_cari_nama[i].nama_pegawai;
+									for (var j = 0; j < arr.length; j++) {
+										var nama_fix3 = arr[j];
+									}
+									console.log(nama_fix3+' ---> '+nama_fix2);
+								}
+								// console.log(arr.length);
 
 							});
-			        break;
 			      }
 			      else {
 							// console.log("kosa kata tidak ditemukan!");
