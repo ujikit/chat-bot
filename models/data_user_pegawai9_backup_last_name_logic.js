@@ -94,7 +94,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			      var res2 = parse.match(regex2);
 			      if (res1) {
 
-							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
+							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai desc";
 								connection.query(sql,function (err_cari_nama,rows_cari_nama){
 								if (err_cari_nama) throw err_cari_nama;
 								for (var i = 0; i < rows_cari_nama.length; i++) {
@@ -110,46 +110,80 @@ exports.chat_user_pegawai = function(req,res,next){
 										hps_arr_kosong = splice.filter(function(str) {
 									    return /\S/.test(str);
 										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-										// console.log(hps_arr_kosong);
-										var sel8 = hps_arr_kosong.join().replace(/,/g, ' '); //output : heryani
-
-										// console.log(parse2);
-										console.log('sel 8  : '+sel8);
-										console.log('hps ar : '+hps_arr_kosong);
+										var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
 									}
 								}
-								var arr = [];
-								for (var j = 0;j < rows_cari_nama.length; j++) {
-									var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-									// console.log(tt+' '+rows_cari_nama[j].nama_pegawai);
-									var nama3 = rows_cari_nama[j].nama_pegawai;
-									var regexxx = new RegExp(tt, 'gi');
-									var regexx = nama3.match(regexxx);
-									if (regexx !== null) {
-										console.log(regexx);
-									}
-									else {
-										arr.push("kosong");
-										console.log(arr.length);
-										console.log("kosong");
-									}
-									if (arr.length === rows_cari_nama.length) {
-										hps_arr_kosong.pop();
-										console.log(hps_arr_kosong);
-										console.log("true");
-									}
-									else {
-										console.log("salah");
-									}
-								}
-
 
 								// console.log('--> fix  : '+res1); //object
 								// console.log('--> fix  : '+res2); //object
-								// console.log('--> fix  : '+res3);
+								// console.log('--> fix  : '+index);
+								// console.log('--> prs2 :'+parse2);
+								// console.log('--> hps  : '+hps_arr_kosong);
+								// console.log('--> spc2 : '+splice2);
 
+								var arr = [];
+								for (var j = 0; j < rows_cari_nama.length; j++) {
+									var nama3 = rows_cari_nama[j].nama_pegawai;
+									for (var k = 0; k < hps_arr_kosong.length; k++) {
+										var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+										var regexx  = new RegExp(tt, 'gi');
+										var regexxx = nama3.match(regexx);
+										if (regexxx === null) {
+												hps_arr_kosong.pop();
+												var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+												// console.log(nama_fix);
+												arr.push(nama_fix);
+										}
+									}
+								}
+								console.log('================= ' +arr+' =================');
+								// for (var i = 0; i < rows_cari_nama.length; i++) {
+								// 	// console.log(rows_cari_nama[i].nama_pegawai);
+								// 	var nama_fix2 = rows_cari_nama[i].nama_pegawai;
+								// 	for (var j = 0; j < arr.length; j++) {
+								// 		var nama_fix3 = arr[j];
+								// 		// console.log(nama_fix3+' -- '+nama_fix2);
+								// 		var regex5 = new RegExp(nama_fix3);
+								// 		var regex6 = nama_fix2.match(regex5);
+								// 		// if (regex6 !== null) {
+								// 		// 	console.log("berhasil");
+								// 		// }
+								// 		// else {
+								// 		// 	var pop = arr.pop();
+								// 		// 	console.log(pop);
+								// 		// }
+								// 		console.log(nama_fix3+' == '+nama_fix2);
+								// 		break;
+								// 	}
+								// }
+								// console.log(arr.length);
+
+								for (var i = 0; i < arr.length; i++) {
+									// console.log(rows_cari_nama[i].nama_pegawai);
+									var nama_fix2 = arr[i];
+									// console.log('============= '+nama_fix2+' =============');
+									for (var j = 0; j < rows_cari_nama.length; j++) {
+										// console.log(nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+										var regex5 = new RegExp(nama_fix2, 'gi');
+										var regex6 = rows_cari_nama[j].nama_pegawai.match(regex5);
+										if (regex6 !== null) {
+											if (nama_fix2 === "") {
+												return false
+											}
+											else {
+												console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+												var res3 = rows_cari_nama[j].nama_pegawai;
+												// return false;
+												break;
+											}
+										}
+										else {
+											// console.log(false);
+										}
+									}
+								}
+								console.log(res3);
 							});
-			        break;
 			      }
 			      else {
 							// console.log("kosa kata tidak ditemukan!");

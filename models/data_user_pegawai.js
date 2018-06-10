@@ -94,7 +94,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			      var res2 = parse.match(regex2);
 			      if (res1) {
 
-							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai desc";
+							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
 								connection.query(sql,function (err_cari_nama,rows_cari_nama){
 								if (err_cari_nama) throw err_cari_nama;
 								for (var i = 0; i < rows_cari_nama.length; i++) {
@@ -135,18 +135,54 @@ exports.chat_user_pegawai = function(req,res,next){
 												arr.push(nama_fix);
 										}
 									}
-									// console.log(nama3);
 								}
-								for (var i = 0; i < rows_cari_nama.length; i++) {
-									// console.log(rows_cari_nama[i].nama_pegawai);
-									var nama_fix2 = rows_cari_nama[i].nama_pegawai;
-									for (var j = 0; j < arr.length; j++) {
-										var nama_fix3 = arr[j];
-									}
-									console.log(nama_fix3+' ---> '+nama_fix2);
-								}
+								console.log('================= ' +arr+' =================');
+								// for (var i = 0; i < rows_cari_nama.length; i++) {
+								// 	// console.log(rows_cari_nama[i].nama_pegawai);
+								// 	var nama_fix2 = rows_cari_nama[i].nama_pegawai;
+								// 	for (var j = 0; j < arr.length; j++) {
+								// 		var nama_fix3 = arr[j];
+								// 		// console.log(nama_fix3+' -- '+nama_fix2);
+								// 		var regex5 = new RegExp(nama_fix3);
+								// 		var regex6 = nama_fix2.match(regex5);
+								// 		// if (regex6 !== null) {
+								// 		// 	console.log("berhasil");
+								// 		// }
+								// 		// else {
+								// 		// 	var pop = arr.pop();
+								// 		// 	console.log(pop);
+								// 		// }
+								// 		console.log(nama_fix3+' == '+nama_fix2);
+								// 		break;
+								// 	}
+								// }
 								// console.log(arr.length);
 
+								for (var i = 0; i < arr.length; i++) {
+									// console.log(rows_cari_nama[i].nama_pegawai);
+									var nama_fix2 = arr[i];
+									// console.log('============= '+nama_fix2+' =============');
+									for (var j = 0; j < rows_cari_nama.length; j++) {
+										// console.log(nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+										var regex5 = new RegExp(nama_fix2, 'gi');
+										var regex6 = rows_cari_nama[j].nama_pegawai.match(regex5);
+										if (regex6 !== null) {
+											if (nama_fix2 === "") {
+												return false
+											}
+											else {
+												console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+												var res3 = rows_cari_nama[j].nama_pegawai;
+												// return false;
+												return false
+											}
+										}
+										else {
+											// console.log(false);
+										}
+									}
+								}
+								console.log(res3);
 							});
 			      }
 			      else {
