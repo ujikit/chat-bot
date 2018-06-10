@@ -104,37 +104,42 @@ exports.chat_user_pegawai = function(req,res,next){
 									var nama2 = new RegExp(nama1, 'gi');
 									var match	= parse.match(nama2);
 									if (match !== null) {
-										let parse2= parse.split(" ");
+										var parse2= parse.split(" ");
 										var index = parse2.indexOf(match[0]); //nomor letak array heryani
 										var splice = parse2.splice(index);
 										hps_arr_kosong = splice.filter(function(str) {
 									    return /\S/.test(str);
 										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-										// console.log(hps_arr_kosong);
-
-										for (var i = 0; i < parse2.length; i++) {
-											var g = splice.join().replace(/,/g, ' ');
-											var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+g+"' order by nama_pegawai asc"; //mencari semua kosa kata
-			  							connection.query(sql,function (err_data_pegawai,rows_data_pegawai){
-			  								if (err_data_pegawai) throw err_data_pegawai;
-													if (rows_data_pegawai.length === 0) {
-														splice.pop();
-														console.log(g);
-													}
-													else {
-														console.log("data ada");
-														console.log(rows_data_pegawai);
-													}
-											});
-										}
-
+										var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
 									}
-
 								}
 
-								// console.log('--> fix  : '+res1); //object
-								// console.log('--> fix  : '+res2); //object
-								// console.log('--> fix  : '+res3);
+								console.log('--> fix  : '+res1); //object
+								console.log('--> fix  : '+res2); //object
+								console.log('--> fix  : '+index);
+								console.log('--> prs2 :'+parse2);
+								console.log('--> hps  : '+hps_arr_kosong);
+								console.log('--> spc2 : '+splice2);
+
+								for (var j = 0; j < rows_cari_nama.length; j++) {
+									var nama3 = rows_cari_nama[j].nama_pegawai;
+									for (var k = 0; k < hps_arr_kosong.length; k++) {
+										var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+										var regexx  = new RegExp(tt, 'gi');
+										var regexxx = nama3.match(regexx);
+										// console.log(regexxx+" === "+nama3);
+										if (regexxx === null) {
+											// console.log(regexx);
+												var s = hps_arr_kosong.pop();
+												var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+												console.log(nama_fix);
+										}
+										else {
+										}
+										// console.log(splice2+' === '+rows_cari_nama[j].nama_pegawai);
+									}
+									console.log(nama3);
+								}
 
 							});
 			        break;
