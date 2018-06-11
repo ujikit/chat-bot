@@ -101,13 +101,13 @@ exports.chat_user_pegawai = function(req,res,next){
 									// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
 									var nama1 = rows_cari_nama[i].nama_pegawai;
 									var nama4 = nama1.split(" ");
-									var nama2 = new RegExp(nama4, 'gi');
+									var nama2 = new RegExp(nama4[0], 'gi');
 									var match	= parse.match(nama2);
 									if (match !== null) {
 										var parse2= parse.split(" ");
 										var index = parse2.indexOf(match[0]); //nomor letak array heryani
 										var splice = parse2.splice(index);
-										hps_arr_kosong = splice.filter(function(str) {
+										var hps_arr_kosong = splice.filter(function(str) {
 									    return /\S/.test(str);
 										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
 										var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
