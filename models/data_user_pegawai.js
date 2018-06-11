@@ -100,8 +100,8 @@ exports.chat_user_pegawai = function(req,res,next){
 								for (var i = 0; i < rows_cari_nama.length; i++) {
 									// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
 									var nama1 = rows_cari_nama[i].nama_pegawai;
-
-									var nama2 = new RegExp(nama1, 'gi');
+									var nama4 = nama1.split(" ");
+									var nama2 = new RegExp(nama4, 'gi');
 									var match	= parse.match(nama2);
 									if (match !== null) {
 										var parse2= parse.split(" ");
@@ -114,12 +114,13 @@ exports.chat_user_pegawai = function(req,res,next){
 									}
 								}
 
-								// console.log('--> fix  : '+res1); //object
-								// console.log('--> fix  : '+res2); //object
-								// console.log('--> fix  : '+index);
-								// console.log('--> prs2 :'+parse2);
-								// console.log('--> hps  : '+hps_arr_kosong);
-								// console.log('--> spc2 : '+splice2);
+								console.log('--> fix  : '+res1); //object
+								console.log('--> fix  : '+res2); //object
+								console.log('--> fix  : '+index);
+								console.log('--> prs2 : '+parse2);
+								console.log('--> spc1 : '+splice);
+								console.log('--> spc2 : '+splice2);
+								console.log('--> hps  : '+hps_arr_kosong);
 
 								var arr = [];
 								for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -137,26 +138,6 @@ exports.chat_user_pegawai = function(req,res,next){
 									}
 								}
 								console.log('================= ' +arr+' =================');
-								// for (var i = 0; i < rows_cari_nama.length; i++) {
-								// 	// console.log(rows_cari_nama[i].nama_pegawai);
-								// 	var nama_fix2 = rows_cari_nama[i].nama_pegawai;
-								// 	for (var j = 0; j < arr.length; j++) {
-								// 		var nama_fix3 = arr[j];
-								// 		// console.log(nama_fix3+' -- '+nama_fix2);
-								// 		var regex5 = new RegExp(nama_fix3);
-								// 		var regex6 = nama_fix2.match(regex5);
-								// 		// if (regex6 !== null) {
-								// 		// 	console.log("berhasil");
-								// 		// }
-								// 		// else {
-								// 		// 	var pop = arr.pop();
-								// 		// 	console.log(pop);
-								// 		// }
-								// 		console.log(nama_fix3+' == '+nama_fix2);
-								// 		break;
-								// 	}
-								// }
-								// console.log(arr.length);
 
 								for (var i = 0; i < arr.length; i++) {
 									// console.log(rows_cari_nama[i].nama_pegawai);
