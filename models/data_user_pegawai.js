@@ -112,6 +112,7 @@ exports.chat_user_pegawai = function(req,res,next){
 									    return /\S/.test(str);
 										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
 										var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
+										hps_arr_kosong.push("null");
 									}
 								}
 
