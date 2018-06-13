@@ -1,3 +1,4 @@
+
 let bcrypt = require('bcryptjs');
 // node-datetime
 let dateTime = require('node-datetime');
@@ -122,6 +123,7 @@ exports.chat_user_pegawai = function(req,res,next){
 								console.log('--> spc2 : '+splice2);
 								console.log('--> hps  : '+hps_arr_kosong);
 
+                // BUG BUG BUG
 								var arr = [];
 								for (var j = 0; j < rows_cari_nama.length; j++) {
 									var nama3 = rows_cari_nama[j].nama_pegawai;
@@ -137,6 +139,8 @@ exports.chat_user_pegawai = function(req,res,next){
 										}
 									}
 								}
+                // ./BUG BUG BUG
+
 								console.log('================= ' +arr+' =================');
 
 								for (var i = 0; i < arr.length; i++) {
