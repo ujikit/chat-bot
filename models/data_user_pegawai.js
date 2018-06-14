@@ -90,91 +90,103 @@ exports.chat_user_pegawai = function(req,res,next){
 			  for (var i = 0; i < rows_kosa_kata.length; i++){
 			    var kosa_kata = rows_kosa_kata[i].kosa_kata_pesan_chat_bot_kosa_kata;
 			      var regex = new RegExp(kosa_kata, 'gi');
-			      var res1 = parse.match(regex);
-						var regex2 = new RegExp(/pegawai/, 'gi');
-			      var res2 = parse.match(regex2);
-			      if (res1) {
-
-							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
-								connection.query(sql,function (err_cari_nama,rows_cari_nama){
-								if (err_cari_nama) throw err_cari_nama;
-								for (var i = 0; i < rows_cari_nama.length; i++) {
-									// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
-									var nama1 = rows_cari_nama[i].nama_pegawai;
-									var nama4 = nama1.split(" ");
-									var nama2 = new RegExp(nama4[0], 'gi');
-									var match	= parse.match(nama2);
-									if (match !== null) {
-										var parse2= parse.split(" ");
-										var index = parse2.indexOf(match[0]); //nomor letak array heryani
-										var splice = parse2.splice(index);
-										var hps_arr_kosong = splice.filter(function(str) {
-									    return /\S/.test(str);
-										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-										var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
-										hps_arr_kosong.push("null");
-									}
-								}
-
-								console.log('--> fix  : '+res1); //object
-								console.log('--> fix  : '+res2); //object
-								console.log('--> fix  : '+index);
-								console.log('--> prs2 : '+parse2);
-								console.log('--> spc1 : '+splice);
-								console.log('--> spc2 : '+splice2);
-								console.log('--> hps  : '+hps_arr_kosong);
-
-                // BUG BUG BUG
-								var arr = [];
-								for (var j = 0; j < rows_cari_nama.length; j++) {
-									var nama3 = rows_cari_nama[j].nama_pegawai;
-									for (var k = 0; k < hps_arr_kosong.length; k++) {
-										var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-										var regexx  = new RegExp(tt, 'gi');
-										var regexxx = nama3.match(regexx);
-										if (regexxx === null) {
-												hps_arr_kosong.pop();
-												var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-												// console.log(nama_fix);
-												arr.push(nama_fix);
-										}
-									}
-								}
-                // ./BUG BUG BUG
-
-								console.log('================= ' +arr+' =================');
-
-								for (var i = 0; i < arr.length; i++) {
-									// console.log(rows_cari_nama[i].nama_pegawai);
-									var nama_fix2 = arr[i];
-									// console.log('============= '+nama_fix2+' =============');
-									for (var j = 0; j < rows_cari_nama.length; j++) {
-										// console.log(nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
-										var regex5 = new RegExp(nama_fix2, 'gi');
-										var regex6 = rows_cari_nama[j].nama_pegawai.match(regex5);
-										if (regex6 !== null) {
-											if (nama_fix2 === "") {
-												return false
-											}
-											else {
-												console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
-												var res3 = rows_cari_nama[j].nama_pegawai;
-												// return false;
-												return false
-											}
-										}
-										else {
-											// console.log(false);
-										}
-									}
-								}
-								console.log(res3);
-							});
-			      }
-			      else {
-							// console.log("kosa kata tidak ditemukan!");
+			      var ress = parse.match(regex);
+						if (ress !== null) {
+							var res1 = ress;
+							console.log(res1);
 						}
 			  }
+				var regex2 = new RegExp(/pegawai/, 'gi');
+				var res2 = parse.match(regex2);
+				if (res1 !== undefined && res2 !== null) {
+					var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata='"+res1+"'";
+					connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
+						if (err_grup_kosa_kata) throw err_grup_kosa_kata;
+						var grup_kosa_kata_final = rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
+						var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
+							connection.query(sql,function (err_cari_nama,rows_cari_nama){
+							if (err_cari_nama) throw err_cari_nama;
+							for (var i = 0; i < rows_cari_nama.length; i++) {
+								// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
+								var nama1 = rows_cari_nama[i].nama_pegawai;
+								var nama4 = nama1.split(" ");
+								var nama2 = new RegExp(nama4[0], 'gi');
+								var match	= parse.match(nama2);
+								if (match !== null) {
+									var parse2= parse.split(" ");
+									var index = parse2.indexOf(match[0]); //nomor letak array heryani
+									var splice = parse2.splice(index);
+									var hps_arr_kosong = splice.filter(function(str) {
+								    return /\S/.test(str);
+									}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+									var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
+									hps_arr_kosong.push("null");
+								}
+							}
+
+							// console.log('--> fix  : '+res1); //object
+							// console.log('--> fix  : '+res2); //object
+							// console.log('--> fix  : '+index);
+							// console.log('--> prs2 : '+parse2);
+							// console.log('--> spc1 : '+splice);
+							// console.log('--> spc2 : '+splice2);
+							// console.log('--> hps  : '+hps_arr_kosong);
+
+				      // BUG BUG BUG
+							var arr = [];
+							for (var j = 0; j < rows_cari_nama.length; j++) {
+								var nama3 = rows_cari_nama[j].nama_pegawai;
+								for (var k = 0; k < hps_arr_kosong.length; k++) {
+									var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+									var regexx  = new RegExp(tt, 'gi');
+									var regexxx = nama3.match(regexx);
+									if (regexxx === null) {
+											hps_arr_kosong.pop();
+											var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+											// console.log(nama_fix);
+											arr.push(nama_fix);
+									}
+								}
+							}
+				      // ./BUG BUG BUG
+
+							console.log('================= ' +arr+' =================');
+
+							for (var i = 0; i < arr.length; i++) {
+								// console.log(rows_cari_nama[i].nama_pegawai);
+								var nama_fix2 = arr[i];
+								// console.log('============= '+nama_fix2+' =============');
+								for (var j = 0; j < rows_cari_nama.length; j++) {
+									// console.log(nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+									var regex5 = new RegExp(nama_fix2, 'gi');
+									var regex6 = rows_cari_nama[j].nama_pegawai.match(regex5);
+									if (regex6 !== null) {
+										if (nama_fix2 === "") { return false }
+										else {
+											// console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
+											var res3 = rows_cari_nama[j].nama_pegawai;
+											var nama_pegawai_yg_dicari	= res3;
+											var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai';
+											var selects = [nama_kolom_yg_dicari, nama_pegawai_yg_dicari];
+											var sql = "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
+											connection.query(sql, selects, function  (err_final,rows_final){
+											if (err_final) throw err_final;
+												console.log(JSON.stringify(rows_final));
+											});
+											return false;
+										}
+									}
+									else {
+										// console.log(false);
+									}
+								}
+							}
+						});
+					});
+				}
+				else if (res1 === undefined) { console.log("kata kunci tdk ditemukan"); }
+				else if (res2 === null) { console.log("pegawai atau siswa"); }
+				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); }
 			}
 			else { console.log("tidak ada"); }
 			});
