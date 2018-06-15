@@ -93,7 +93,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			      var ress = parse.match(regex);
 						if (ress !== null) {
 							var res1 = ress;
-							console.log(res1);
+							// console.log(res1);
 						}
 			  }
 				var regex2 = new RegExp(/pegawai/, 'gi');
@@ -124,15 +124,15 @@ exports.chat_user_pegawai = function(req,res,next){
 								}
 							}
 
-							// console.log('--> fix  : '+res1); //object
-							// console.log('--> fix  : '+res2); //object
-							// console.log('--> fix  : '+index);
-							// console.log('--> prs2 : '+parse2);
-							// console.log('--> spc1 : '+splice);
-							// console.log('--> spc2 : '+splice2);
-							// console.log('--> hps  : '+hps_arr_kosong);
+							console.log('--> fix  : '+res1); //object
+							console.log('--> fix  : '+res2); //object
+							console.log('--> fix  : '+index);
+							console.log('--> prs2 : '+parse2);
+							console.log('--> spc1 : '+splice);
+							console.log('--> spc2 : '+splice2);
+							console.log('--> hps  : '+hps_arr_kosong);
+							console.log('--> hps  : '+hps_arr_kosong.length);
 
-				      // BUG BUG BUG
 							var arr = [];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
 								var nama3 = rows_cari_nama[j].nama_pegawai;
@@ -145,12 +145,9 @@ exports.chat_user_pegawai = function(req,res,next){
 											var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
 											// console.log(nama_fix);
 											arr.push(nama_fix);
-									}
-								}
-							}
-				      // ./BUG BUG BUG
+									} } }
 
-							console.log('================= ' +arr+' =================');
+							// console.log('================= ' +arr+' =================');
 
 							for (var i = 0; i < arr.length; i++) {
 								// console.log(rows_cari_nama[i].nama_pegawai);
@@ -172,24 +169,20 @@ exports.chat_user_pegawai = function(req,res,next){
 											connection.query(sql, selects, function  (err_final,rows_final){
 											if (err_final) throw err_final;
 												console.log(JSON.stringify(rows_final));
-											});
+											});// ./rows_final
 											return false;
-										}
-									}
+										} }
 									else {
-										// console.log(false);
-									}
-								}
-							}
+									} } }
 						});
-					});
+					}); // ./grup_kosa_kata_final
 				}
-				else if (res1 === undefined) { console.log("kata kunci tdk ditemukan"); }
-				else if (res2 === null) { console.log("pegawai atau siswa"); }
+				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); }
+				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); }
 				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); }
 			}
 			else { console.log("tidak ada"); }
-			});
+		}); // ./pesan_chat_bot_kosa_kata
 		}
-  });
+  }); // ./req.getConnection(function (err, connection)
 };
