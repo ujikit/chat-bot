@@ -161,14 +161,24 @@ exports.chat_user_pegawai = function(req,res,next){
 										if (nama_fix2 === "") { return false }
 										else {
 											// console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
-											var res3 = rows_cari_nama[j].nama_pegawai;
+											var res3 										= rows_cari_nama[j].nama_pegawai;
 											var nama_pegawai_yg_dicari	= res3;
 											var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai';
-											var selects = [nama_kolom_yg_dicari, nama_pegawai_yg_dicari];
-											var sql = "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
+											var selects 								= [nama_kolom_yg_dicari, nama_pegawai_yg_dicari];
+											var sql 										= "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
 											connection.query(sql, selects, function  (err_final,rows_final){
 											if (err_final) throw err_final;
-												console.log(JSON.stringify(rows_final));
+											var rowss_final = JSON.stringify(rows_final);
+											var final				= rowss_final.replace(':'," ");
+											var final2			= final.split(" ");
+											var final3			= final2[1].match(/"(?:[^"\\]|\\.)*"/gi);
+											// console.log(final);
+											console.log(final2[1]);
+											res.end("TES </br>"+final3[0]);
+											console.log(rowss_final);
+											// res.end(JSON.stringify(final3));
+											// console.log(nama_kolom_yg_dicari);
+											// res.end(JSON.stringify('Oke ketemu <b>'+rows_final[0].nama_kolom_yg_dicari+'</b>'));
 											});// ./rows_final
 											return false;
 										} }
@@ -177,8 +187,8 @@ exports.chat_user_pegawai = function(req,res,next){
 						});
 					}); // ./grup_kosa_kata_final
 				}
-				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); }
-				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); }
+				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); res.end("Mohon maaf, pengguna yang dicari pegawai atau siswa?</br><b>Ulangi pertanyaanmu lagi.</b>"); }
+				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); res.end("Mohon maaf, pengguna yang dicari pegawai atau siswa?</br><b>Ulangi pertanyaanmu lagi.</b>") }
 				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); }
 			}
 			else { console.log("tidak ada"); }
