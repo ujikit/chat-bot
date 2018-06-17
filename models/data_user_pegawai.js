@@ -174,7 +174,13 @@ exports.chat_user_pegawai = function(req,res,next){
 											var final3			= final2[1].match(/"(?:[^"\\]|\\.)*"/gi);
 											// console.log(final);
 											console.log(final2[1]);
-											res.end("TES </br>"+final3[0]);
+											function capital_letter(str){
+										    str = str.split(" ");
+										    for (var i = 0, x = str.length; i < x; i++){ str[i] = str[i][0].toUpperCase() + str[i].substr(1); }
+										    return str.join(" ");
+											}
+
+											res.end(capital_letter(res1[0])+" "+capital_letter(res2[0])+" Atas Nama : <b>"+capital_letter(res3)+" </b>Adalah "+final3[0]);
 											console.log(rowss_final);
 											// res.end(JSON.stringify(final3));
 											// console.log(nama_kolom_yg_dicari);
