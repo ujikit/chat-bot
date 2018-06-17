@@ -50,6 +50,7 @@
                     setTimeout(function(){
 
                       $('.load-chat').hide();
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender"><img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&h=350" style="width:170px"></img></p></div>');
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + response + '</p></div>');
                       $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
                     },1000);
@@ -64,7 +65,8 @@
         $.ajax({
           type: 'GET',
           url : '/dashboard/chat_user_pegawai_history',
-          contentType : 'application/json',
+          dataType : "html",
+          // contentType : 'application/json',
           success: function(response){
             let personalChatMessage = $('.chat-page-history');
             personalChatMessage.html('');
