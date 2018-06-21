@@ -1,4 +1,3 @@
-
 let bcrypt = require('bcryptjs');
 // node-datetime
 let dateTime = require('node-datetime');
@@ -131,7 +130,12 @@ exports.chat_user_pegawai = function(req,res,next){
 							console.log('--> spc1 : '+splice);
 							console.log('--> spc2 : '+splice2);
 							console.log('--> hps  : '+hps_arr_kosong);
-							console.log('--> hps  : '+hps_arr_kosong.length);
+							// console.log('--> hps  : '+hps_arr_kosong.length);
+
+              if (index === undefined) {
+                res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.</br><b>Ulangi pertanyaanmu lagi.</b>|error")
+                return false;
+              }
 
 							var arr = [];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -163,28 +167,27 @@ exports.chat_user_pegawai = function(req,res,next){
 											// console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
 											var res3 										= rows_cari_nama[j].nama_pegawai;
 											var nama_pegawai_yg_dicari	= res3;
-											var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai';
+											if (grup_kosa_kata_final == "nama_mata_pelajaran") {
+                      	var nama_kolom_yg_dicari		= grup_kosa_kata_final;
+											}
+											else if (grup_kosa_kata_final !== "nama_mata_pelajaran") {
+                      	var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai';
+											}
 											var selects 								= [nama_kolom_yg_dicari, nama_pegawai_yg_dicari];
-											var sql 										= "SELECT ?? FROM data_pegawai WHERE nama_pegawai = ?";
+											var sql 										= "SELECT ?? FROM data_pegawai inner join mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai = ? order by nama_pegawai asc";
 											connection.query(sql, selects, function  (err_final,rows_final){
 											if (err_final) throw err_final;
 											var rowss_final = JSON.stringify(rows_final);
-											var final				= rowss_final.replace(':'," ");
-											var final2			= final.split(" ");
-											var final3			= final2[1].match(/"(?:[^"\\]|\\.)*"/gi);
-											// console.log(final);
-											console.log(final2[1]);
+											var final				= rowss_final.split(":");
+											var final2			= final[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+
 											function capital_letter(str){
 										    str = str.split(" ");
 										    for (var i = 0, x = str.length; i < x; i++){ str[i] = str[i][0].toUpperCase() + str[i].substr(1); }
 										    return str.join(" ");
-											}
+											} // ./READONLY
 
-											res.end(capital_letter(res1[0])+" "+capital_letter(res2[0])+" Atas Nama : <b>"+capital_letter(res3)+" </b>Adalah "+final3[0]);
-											console.log(rowss_final);
-											// res.end(JSON.stringify(final3));
-											// console.log(nama_kolom_yg_dicari);
-											// res.end(JSON.stringify('Oke ketemu <b>'+rows_final[0].nama_kolom_yg_dicari+'</b>'));
+											res.end(final2+"|success");
 											});// ./rows_final
 											return false;
 										} }
@@ -193,9 +196,10 @@ exports.chat_user_pegawai = function(req,res,next){
 						});
 					}); // ./grup_kosa_kata_final
 				}
-				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); res.end("Mohon maaf, pengguna yang dicari pegawai atau siswa?</br><b>Ulangi pertanyaanmu lagi.</b>"); }
-				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); res.end("Mohon maaf, pengguna yang dicari pegawai atau siswa?</br><b>Ulangi pertanyaanmu lagi.</b>") }
-				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); }
+				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); res.end("Mohon maaf, kami tidak memahami <b>kata kunci</b> yang dicari.</br><b>Ulangi pertanyaanmu lagi.</b>|error"); }
+				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); res.end("Mohon maaf, pengguna yang dicari <b>pegawai</b> atau <b>siswa</b>?</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
+				else if (res1 === undefined && res2 === null) { console.log("kata kunci & pegawai / siswa SALAH"); res.end("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari dan <b>pegawai</b> atau <b>siswa</b>.</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
+				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); res.end("Mohon maaf, kami tidak memahami <b>kata kunci</b> subjek yang diminta, <b>pegawai</b> atau <b>siswa</b> dan <b>objek</b> yang dicari</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
 			}
 			else { console.log("tidak ada"); }
 		}); // ./pesan_chat_bot_kosa_kata

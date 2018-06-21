@@ -49,7 +49,7 @@ CREATE TABLE `data_pegawai` (
 
 LOCK TABLES `data_pegawai` WRITE;
 /*!40000 ALTER TABLE `data_pegawai` DISABLE KEYS */;
-INSERT INTO `data_pegawai` VALUES (3,'1111','Administrator','admin',NULL,'admin','$2y$10$PXzGHL7MGkefn9McBJ2h4uBJUsAYeCW.vgDmWu/fa7myp/BKTJ0ai',NULL,NULL,NULL,NULL,NULL),(8,'192209081999031006','ENDANG SULISTYONINGSIH','guru','aqh','192209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722'),(9,'297209081999031006','HERYANI MULTANTRI','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','2258723621722'),(10,'597209081999031006','BUBU ARYA','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','0258723621722'),(11,'562209081999031006','ENDANG','guru','aqh','562209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722'),(12,'117209081999031006','HERYANI','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','117209081999031006','Sendangadi','Sendangadi','2018-04-10','3258723621722'),(13,'297209081999031006','HERYANI RAMADHAN UYE','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(14,'897209081999031006','HARNO JULISMAN','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(15,'497229081999031006','HARNO R','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(16,'333209081999031006','TUKIRAN','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722');
+INSERT INTO `data_pegawai` VALUES (3,'1111','Administrator','admin',NULL,'admin','$2y$10$PXzGHL7MGkefn9McBJ2h4uBJUsAYeCW.vgDmWu/fa7myp/BKTJ0ai',NULL,NULL,NULL,NULL,NULL),(8,'192209081999031006','ENDANG SULISTYONINGSIH','guru','aqh','192209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722'),(9,'229720908199031006','HERYANI MULTANTRI','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','2258723621722'),(10,'597209081999031006','BUBU ARYA','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','0258723621722'),(11,'562209081999031006','ENDANG','guru','aqh','562209081999031006','$2y$10$0i9SyDvzMfBaNLww3xmWYuYT8IkDZIBhiiAw57A3KvNJC6CEso/Ey','192209081999031006','Sendangadi','Sendangadi','2018-04-17','0858723621722'),(12,'117209081999031006','HERYANI','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','117209081999031006','Sendangadi','Sendangadi','2018-04-10','3258723621722'),(13,'297209081999031006','HERYANI RAMADHAN UYE','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(14,'897209081999031006','HARNO JULISMAN','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(15,'497229081999031006','HARNO R','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722'),(16,'333209081999031006','TUKIRAN','guru','aa','297209081999031006','$2y$10$SLEJkvgxiWGiiE0yHdQf3OwM28rlDnTVVBiV/BdwZZIXuKo834VUa','297209081999031006','Sendangadi','Sendangadi','2018-04-10','1258723621722');
 /*!40000 ALTER TABLE `data_pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -735,7 +735,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
   `kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
   `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -744,7 +744,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (5,'nomor handphone','no_handphone'),(6,'berapa nomor handphone','no_handphone'),(7,'berapakah nomor handphone','no_handphone'),(8,'nomor telepon','no_handphone'),(9,'berapa nomor telepon','no_handphone'),(10,'berapakah nomor telepon','no_handphone'),(19,'nomor induk','nip'),(21,'nama','nama');
+INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (5,'nomor handphone','no_handphone'),(6,'berapa nomor handphone','no_handphone'),(7,'berapakah nomor handphone','no_handphone'),(8,'nomor telepon','no_handphone'),(9,'berapa nomor telepon','no_handphone'),(10,'berapakah nomor telepon','no_handphone'),(19,'nomor induk','nip'),(21,'nama','nama'),(22,'nama panjang','nama'),(23,'siapakah nama','nama'),(24,'siapakah nama panjang','nama'),(25,'siapakah kepanjangan nama','nama'),(26,'kepanjangan nama','nama');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -816,4 +816,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-12  5:27:01
+-- Dump completed on 2018-06-18 17:00:01
