@@ -73,9 +73,10 @@ exports.chat_user_pegawai = function(req,res,next){
     // });
 
 		// RESPONSE
-		let pesan = input.isi_pesan_chat_pengguna;
-		let json 	= JSON.stringify(pesan);
-		let parse = JSON.parse(json);
+		let pesan  = input.isi_pesan_chat_pengguna;
+		let json 	 = JSON.stringify(pesan);
+		let parse0 =	json.replace(/[!?]/gi, "");
+		let parse  = JSON.parse(parse0);
 
 		if (parse.length === 1){
 			res.json("Maksudnya '"+pesan+"' apa? \nMasukan ulang kata kunci yang lebih spesifik.");
@@ -125,7 +126,8 @@ exports.chat_user_pegawai = function(req,res,next){
 
 							console.log('--> fix  : '+res1); //object
 							console.log('--> fix  : '+res2); //object
-							console.log('--> fix  : '+index);
+							console.log('--> fix  : '+index); //memotong kalimat penting menjadi nama yang dicari. misalnya heryani r bla bla bla
+							console.log('--> prs  : '+parse);
 							console.log('--> prs2 : '+parse2);
 							console.log('--> spc1 : '+splice);
 							console.log('--> spc2 : '+splice2);
@@ -167,12 +169,8 @@ exports.chat_user_pegawai = function(req,res,next){
 											// console.log(true+' '+nama_fix2+' - '+rows_cari_nama[j].nama_pegawai);
 											var res3 										= rows_cari_nama[j].nama_pegawai;
 											var nama_pegawai_yg_dicari	= res3;
-											if (grup_kosa_kata_final == "nama_mata_pelajaran") {
-                      	var nama_kolom_yg_dicari		= grup_kosa_kata_final;
-											}
-											else if (grup_kosa_kata_final !== "nama_mata_pelajaran") {
-                      	var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai';
-											}
+											if (grup_kosa_kata_final == "nama_mata_pelajaran") { var nama_kolom_yg_dicari		= grup_kosa_kata_final; }
+											else if (grup_kosa_kata_final !== "nama_mata_pelajaran") { var nama_kolom_yg_dicari		= grup_kosa_kata_final+'_pegawai'; }
 											var selects 								= [nama_kolom_yg_dicari, nama_pegawai_yg_dicari];
 											var sql 										= "SELECT ?? FROM data_pegawai inner join mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai = ? order by nama_pegawai asc";
 											connection.query(sql, selects, function  (err_final,rows_final){
@@ -187,7 +185,9 @@ exports.chat_user_pegawai = function(req,res,next){
 										    return str.join(" ");
 											} // ./READONLY
 
-											res.end(final2+"|success");
+											res.end("|"
+															+final2+"|"
+															+"success");
 											});// ./rows_final
 											return false;
 										} }
@@ -196,7 +196,50 @@ exports.chat_user_pegawai = function(req,res,next){
 						});
 					}); // ./grup_kosa_kata_final
 				}
-				else if (res1 === undefined && res2 !== null) { console.log("kata kunci tdk ditemukan"); res.end("Mohon maaf, kami tidak memahami <b>kata kunci</b> yang dicari.</br><b>Ulangi pertanyaanmu lagi.</b>|error"); }
+				else if (res1 === undefined && res2 !== null) {
+					var sql 		= "SELECT kosa_kata_pesan_chat_bot_kosa_kata from pesan_chat_bot_kosa_kata";
+					connection.query(sql, function  (err_final,rows_final){
+						var arr 	= [];
+						var arrK	= [];
+						var arrKK	= [];
+						for (var i = 0; i < rows_final.length; i++) { arr.push(rows_final[i].kosa_kata_pesan_chat_bot_kosa_kata) }
+						var parsee = parse.split(" ");
+						for (var i = 0; i < arr.length; i++) {
+							for (var j = 0; j < parsee.length; j++) {
+								var a = arr[i];
+								var b = parsee[j];
+						    var c = a.match(b);
+								if (c) { arrK.push(b) }
+							}
+						}
+						for (var i = 0; i < arrK.length; i++) { if (arrK[i].length !== 1) { arrKK.push(arrK[i]) } } //looping untuk hapus array data yang cuman 1 string length
+						var arrKKK = arrKK.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
+						var suggest = arrKKK;
+						if (suggest.length !== 1) {
+						  var suggest = JSON.stringify(suggest);
+						  var suggest = suggest.replace(/[^a-zA-Z0-9\s',]/gi, "");
+						  var suggest = suggest.replace(/,/gi, "|");
+						}
+						var sql 		= "SELECT kosa_kata_pesan_chat_bot_kosa_kata from pesan_chat_bot_kosa_kata where kosa_kata_pesan_chat_bot_kosa_kata REGEXP ? GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
+						connection.query(sql, suggest, function  (err_final,rows_finals){
+							console.log(rows_finals);
+							var arrKKKK = [];
+							for (var i = 0; i < rows_finals.length; i++) {
+								var j = i+1;
+								arrKKKK.push(j+'. '+rows_finals[i].kosa_kata_pesan_chat_bot_kosa_kata)
+							}
+							var arrKKKK = JSON.stringify(arrKKKK);
+							var arrKKKK = arrKKKK.replace(/[^a-zA-Z0-9\s'.,]/gi, "");
+						  var arrKKKK = arrKKKK.replace(/,/gi, "</br>");
+							// console.log(arrKKKK);
+							res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari.</br><b>Ulangi pertanyaanmu lagi.</b>|"
+											 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : </br><b>"+arrKKKK+"</b>|"
+											 +"error|"
+										 	 +"not_found_kosa_kata");
+							// console.log(suggest);
+						})
+					})
+				}
 				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); res.end("Mohon maaf, pengguna yang dicari <b>pegawai</b> atau <b>siswa</b>?</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
 				else if (res1 === undefined && res2 === null) { console.log("kata kunci & pegawai / siswa SALAH"); res.end("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari dan <b>pegawai</b> atau <b>siswa</b>.</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
 				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); res.end("Mohon maaf, kami tidak memahami <b>kata kunci</b> subjek yang diminta, <b>pegawai</b> atau <b>siswa</b> dan <b>objek</b> yang dicari</br><b>Ulangi pertanyaanmu lagi.</b>|error") }

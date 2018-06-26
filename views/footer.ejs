@@ -35,6 +35,7 @@
 
              let personalChatMessage = $('.chat-page-history');
              var r = response.split("|");
+             // alert(r)
              // return false;
 
              // personalChatMessage.html('');
@@ -46,7 +47,7 @@
                 </div>');
              }
              else{
-               $('.chat-sending').addClass('disabled');
+               $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
                 $('.chat-page-history').append('<div class="receiver"><p class="chat-receiver">' + message + '</p></div>');
                 // $('.chat-typing').val(null);
                 $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
@@ -54,12 +55,18 @@
                 setTimeout(function(){
                   $('.chat-sending').removeClass('disabled');
                   $('.load-chat').hide();
-                  if (r[1] == "success") {
+                  if (r[2] == "success") {
                     $('.chat-page-history').append('<div class="sender"><p class="chat-sender"><img src="http://localhost/_Project/man2/frontend/img/foto/pegawai/297209081999031006" style="width:170px"></img></p></div>');
-                    $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
+                    $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
                   }
-                  else if (r[1] == "error") {
-                    $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
+                  else if (r[2] == "error") {
+                    if (r[3] == "not_found_kosa_kata") {
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
+                    }
+                    else {
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
+                    }
                   }
                   $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
                 },1000);
