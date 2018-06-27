@@ -135,7 +135,10 @@ exports.chat_user_pegawai = function(req,res,next){
 							// console.log('--> hps  : '+hps_arr_kosong.length);
 
               if (index === undefined) {
-                res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.</br><b>Ulangi pertanyaanmu lagi.</b>|error")
+                res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.</br><b>Ulangi pertanyaanmu lagi.</b>|"
+											 +"|"
+											 +"error|"
+										   +"")
                 return false;
               }
 
@@ -187,7 +190,8 @@ exports.chat_user_pegawai = function(req,res,next){
 
 											res.end("|"
 															+final2+"|"
-															+"success");
+															+"success|"
+															+"");
 											});// ./rows_final
 											return false;
 										} }
@@ -233,16 +237,34 @@ exports.chat_user_pegawai = function(req,res,next){
 						  var arrKKKK = arrKKKK.replace(/,/gi, "</br>");
 							// console.log(arrKKKK);
 							res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari.</br><b>Ulangi pertanyaanmu lagi.</b>|"
-											 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : </br><b>"+arrKKKK+"</b>|"
-											 +"error|"
-										 	 +"not_found_kosa_kata");
+											+"Mungkin <b>kata kunci</b> yang kamu cari ada disini : </br><b>"+arrKKKK+"</b>|"
+											+"error|"
+										 	+"suggest");
 							// console.log(suggest);
 						})
 					})
 				}
-				else if (res1 !== undefined && res2 === null) { console.log("pegawai atau siswa"); res.end("Mohon maaf, pengguna yang dicari <b>pegawai</b> atau <b>siswa</b>?</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
-				else if (res1 === undefined && res2 === null) { console.log("kata kunci & pegawai / siswa SALAH"); res.end("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari dan <b>pegawai</b> atau <b>siswa</b>.</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
-				else { console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa"); res.end("Mohon maaf, kami tidak memahami <b>kata kunci</b> subjek yang diminta, <b>pegawai</b> atau <b>siswa</b> dan <b>objek</b> yang dicari</br><b>Ulangi pertanyaanmu lagi.</b>|error") }
+				else if (res1 !== undefined && res2 === null) {
+					console.log("pegawai atau siswa");
+					res.end("Mohon maaf, pengguna yang dicari <b>pegawai</b> atau <b>siswa</b>?</br><b>Ulangi pertanyaanmu lagi.</b>|"
+								 +"|"
+								 +"error|"
+							 	 +"")
+				}
+				else if (res1 === undefined && res2 === null) {
+					console.log("kata kunci & pegawai / siswa SALAH");
+					res.end("Mohon maaf, kami tidak memahami <b>kata</b> <b>kunci</b> yang dicari dan <b>pegawai</b> atau <b>siswa</b>.</br><b>Ulangi pertanyaanmu lagi.</b>|"
+								 +"Pastikan kamu sudah <b>membaca panduan penggunaan</b> ya!|"
+								 +"error|"
+								 +"suggest")
+				}
+				else {
+					console.log("Tidak terdapat kata kunci subjek dan pegawai atau siswa");
+					res.end("Mohon maaf, kami tidak memahami permintaan yang kamu cari</br><b>Ulangi pertanyaanmu lagi.</b>|"
+								 +"Pastikan kamu sudah <b>membaca panduan penggunaan</b> ya!|"
+								 +"error|"
+								 +"suggest")
+			}
 			}
 			else { console.log("tidak ada"); }
 		}); // ./pesan_chat_bot_kosa_kata

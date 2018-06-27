@@ -60,7 +60,7 @@
                     $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
                   }
                   else if (r[2] == "error") {
-                    if (r[3] == "not_found_kosa_kata") {
+                    if (r[3] == "suggest") {
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
                     }
