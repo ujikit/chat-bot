@@ -1,8 +1,5 @@
-  </head>
+  <%- include header_pegawai %>
   <body>
-
-    <%- include header %>
-
     <!-- Main component for a primary marketing message or call to action -->
     <nav class="white" role="navigation">
      <div class="nav-wrapper container">
@@ -34,9 +31,10 @@
                 <i class="material-icons prefix">textsms</i>
                 <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
                 <input  id="icon_prefix" type="text" class="chat-typing" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
+                <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
               </div>
               <div class="col s2 m2 l2 xl1">
-                <a class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></a>
+                <button class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></button>
               </div>
             </form>
             <div class="col s1 m1 l1 xl1"></div>
@@ -44,6 +42,16 @@
         </div>
       </div>
     </div>
-    <%- include footer %>
-  </body>
-</html>
+
+    <!-- Modal Structure -->
+    <div id="modal-tampil-foto" class="modal">
+      <div class="modal-content">
+        <h4>Tampil Foto</h4>
+        <img class="duplicate-name-photo" style="width:170px"></img>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
+    <%- include footer_pegawai %>
