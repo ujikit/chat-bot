@@ -18,11 +18,11 @@ let connection = mysql.createConnection({
 
 exports.dashboard = function(req, res){
 	let userId = req.session.userId;
-	if(userId == null){
-	  res.redirect("/");
-	  return;
-	}
-	let sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
+	// if(userId == null){
+	//   res.redirect("/");
+	//   return;
+	// }
+	var sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
 	req.getConnection(function (err, connection) {
 	 connection.query(sql, function (err, results) {
 	   res.render('dashboard.ejs',{data:results, session:userId});
@@ -35,11 +35,11 @@ exports.dashboard = function(req, res){
 // History chat
 exports.chat_user_pegawai_history = function(req, res){
   let userId = req.session.userId;
-  if(userId == null){
-		res.redirect("/");
-		return;
-  }
-  let sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
+  // if(userId == null){
+	// 	res.redirect("/");
+	// 	return;
+  // }
+  var sql = "SELECT * FROM pesan_chat_pengguna WHERE pengirim_pesan_chat_pengguna='"+userId+"' or penerima_pesan_chat_pengguna='"+userId+"' order by waktu_pesan_chat_pengguna asc";
   req.getConnection(function (err, connection) {
     connection.query(sql, function (err, results) {
 			// console.log(results);
@@ -52,15 +52,15 @@ exports.chat_user_pegawai_history = function(req, res){
 };
 
 // Insert Chat
-exports.chat_user_pegawai = function(req,res){
+exports.chat_user_pegawai = function(req,res,next){
 	let userId = req.session.userId;
-  if(userId == null){
-		res.redirect("/");
-		return;
-  }
+  // if(userId == null){
+	// 	res.redirect("/");
+	// 	return;
+  // }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
-    let data = {
+    var data = {
       pengirim_pesan_chat_pengguna  : input.pengirim_pesan_chat_pengguna,
       penerima_pesan_chat_pengguna  : 'bot',
       isi_pesan_chat_pengguna       : sanitizer.escape(input.isi_pesan_chat_pengguna),
@@ -74,138 +74,90 @@ exports.chat_user_pegawai = function(req,res){
 
 		// RESPONSE
 		let pesan = input.isi_pesan_chat_pengguna;
-		let str 	= pesan.split(' ');
-		let json 	= JSON.stringify(str);
+		let json 	= JSON.stringify(pesan);
 		let parse = JSON.parse(json);
 
-		if (parse.length <= 1){
-			// console.log("Maksudnya '"+pesan+"' apa? \nMasukan ulang kata kunci yang lebih spesifik.");
+		if (parse.length === 1){
 			res.json("Maksudnya '"+pesan+"' apa? \nMasukan ulang kata kunci yang lebih spesifik.");
 		}
 		else {
+			// Cek kosa kata
+			let sql = "SELECT * from pesan_chat_bot_kosa_kata"; //mencari semua kosa kata
+			connection.query(sql,function  (err_kosa_kata,rows_kosa_kata){
+			if (err_kosa_kata) throw err_kosa_kata;
+			 if (rows_kosa_kata.length > 0) {
+			  for (var i = 0; i < rows_kosa_kata.length; i++){
+			    var kosa_kata = rows_kosa_kata[i].kosa_kata_pesan_chat_bot_kosa_kata;
+			      var regex = new RegExp(kosa_kata, 'gi');
+			      var res1 = parse.match(regex);
+						var regex2 = new RegExp(/pegawai/, 'gi');
+			      var res2 = parse.match(regex2);
+			      if (res1) {
 
-			if ( pesan.match(/(no|nomer|nomor)-(hp|handphone|telepon|)/gi) ){
-				let data = {
-		      pengirim_pesan_chat_pengguna  : input.pengirim_pesan_chat_pengguna,
-		      penerima_pesan_chat_pengguna  : 'bot',
-		      isi_pesan_chat_pengguna       : sanitizer.escape(input.isi_pesan_chat_pengguna),
-		      waktu_pesan_chat_pengguna     : new Date(dt.now())
-		    };
+							var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
+								connection.query(sql,function (err_cari_nama,rows_cari_nama){
+								if (err_cari_nama) throw err_cari_nama;
+								for (var i = 0; i < rows_cari_nama.length; i++) {
+									// console.log(i+'. '+rows_cari_nama[i].nama_pegawai);
+									var nama1 = rows_cari_nama[i].nama_pegawai;
 
-				var anyar = parse.splice(1);
-				var objek = anyar.join(',').replace(/,/g, ' ').split();
-				var objek2 = objek[0].toUpperCase();
-				// var regex = new RegExp(objek, 'gi');
-				let sql = "SELECT nama_pegawai,no_handphone_pegawai from data_pegawai where nama_pegawai=?";
-				connection.query(sql, objek2,function  (err,rows) {
-				if (err){
-					throw err;
-				}
-				else if (rows.length === 1) {
-					// console.log(rows);
-					console.log("Pesan : '"+data.isi_pesan_chat_pengguna+"' Berhasil dikirim oleh '"+data.pengirim_pesan_chat_pengguna+"' ke '"+data.penerima_pesan_chat_pengguna+"'");
-					res.json("Nomor Telepon Atas Nama "+rows[0].nama_pegawai+" : "+rows[0].no_handphone_pegawai);
-					console.log(rows[0].nama_pegawai);
-				}
-				else if (rows.length === 0) {
-					console.log("tidak ada");
-				}
-				else {
-					console.log("error!");
-				}
-				});
+									var nama2 = new RegExp(nama1, 'gi');
+									var match	= parse.match(nama2);
+									if (match !== null) {
+										var parse2= parse.split(" ");
+										var index = parse2.indexOf(match[0]); //nomor letak array heryani
+										var splice = parse2.splice(index);
+										hps_arr_kosong = splice.filter(function(str) {
+									    return /\S/.test(str);
+										}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+										// console.log(hps_arr_kosong);
+										var sel8 = hps_arr_kosong.join().replace(/,/g, ' '); //output : heryani
+
+										// console.log(parse2);
+										console.log('sel 8  : '+sel8);
+										console.log('hps ar : '+hps_arr_kosong);
+									}
+								}
+								var arr = [];
+								for (var j = 0;j < rows_cari_nama.length; j++) {
+									var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+									// console.log(tt+' '+rows_cari_nama[j].nama_pegawai);
+									var nama3 = rows_cari_nama[j].nama_pegawai;
+									var regexxx = new RegExp(tt, 'gi');
+									var regexx = nama3.match(regexxx);
+									if (regexx !== null) {
+										console.log(regexx);
+									}
+									else {
+										arr.push("kosong");
+										console.log(arr.length);
+										console.log("kosong");
+									}
+									if (arr.length === rows_cari_nama.length) {
+										hps_arr_kosong.pop();
+										console.log(hps_arr_kosong);
+										console.log("true");
+									}
+									else {
+										console.log("salah");
+									}
+								}
+
+
+								// console.log('--> fix  : '+res1); //object
+								// console.log('--> fix  : '+res2); //object
+								// console.log('--> fix  : '+res3);
+
+							});
+			        break;
+			      }
+			      else {
+							// console.log("kosa kata tidak ditemukan!");
+						}
+			  }
 			}
-			else {
-			res.end("Maaf pertanyaan anda tidak dapat dimengerti!");
-			}
-
-		}
-		// ./RESPONSE
-
-  });
-};
-
-
-
-
-
-// Cek kosa kata
-let sql = "SELECT * from pesan_chat_bot_kosa_kata"; //mencari semua kosa kata
-connection.query(sql,function  (err,rows){
-if (err){ throw err; }
-else if (rows.length > 0) {
-	for (var i = 0; i < rows.length; i++){
-		var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
-		var regex = new RegExp(kosa_kata, 'gi');
-		var res1 = parse.match(regex);
-		if (res1) {
-			res1 = res1;
-			break;
-		}
-		else {
-			// console.log("kosa kata tidak ditemukan!");
-		}
-	}
-	// CEK GRUP KOSA KATA
-	let sql2 = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata='"+res1+"'";
-	connection.query(sql2, function  (errr,rowss){
-		if (errr){ throw errr; }
-		var grup_kosa_kata = rowss[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
-		// console.log(rowss[0].grup_kosa_kata_pesan_chat_bot_kosa_kata);
-		if (grup_kosa_kata == "nomor telepon"){
-			let sql3 = "SELECT * FROM data_pegawai WHERE nama_pegawai!='Administrator'"; //mencari semua kosa kata
-			connection.query(sql3,function  (errrr,rowsss){
-				if (errrr){ throw errrr; }
-				else if (rows.length > 0) {
-
-					for (var i = 0; i < rowsss.length; i++){
-						var nip_pegawai = rowsss[i].nip_pegawai;
-						// var nama_pegawai = rowsss[i].nama_pegawai;
-						var regexxx = new RegExp(nip_pegawai, 'gi');
-						var res2 = parse.match(regexxx);
-						if (res2) {
-							nama_objek = res2;
-							var pases1 = JSON.parse('{"nip_pegawai":'+nama_objek+'}');
-							break;
-						}
-						else {
-							console.log("Objek nip pencarian tidak ditemukan!");
-						}
-					}
-					for (var i = 0; i < rowsss.length; i++){
-						var nama_pegawai = rowsss[i].nama_pegawai;
-						var regexxxx = new RegExp(nama_pegawai, 'gi');
-						var res3 = parse.match(regexxxx);
-						if (res3) {
-							var nama_objek2 = res3;
-							var g = JSON.stringify(nama_objek2);
-							var pases1 = JSON.parse('{"nama_pegawai":'+g+'}');
-							break;
-						}
-						else {
-							console.log("Objek nama pencarian tidak ditemukan!");
-						}
-					}
-
-				}
-				if(typeof pases1.nip_pegawai === 'number'){
-					console.log("ya ni number");
-					console.log(pases1);
-				}
-				else if (typeof pases1.nama_pegawai[0] === 'string') {
-					console.log("ya ni string");
-					console.log(pases1);
-				}
-				else {
-					console.log("error");
-				}
+			else { console.log("tidak ada"); }
 			});
 		}
-		else if (grup_kosa_kata == ""){
-		}
-	});
-}
-else {
-	console.log("tidak ada");
-}
-});
+  });
+};

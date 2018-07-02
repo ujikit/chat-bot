@@ -1,5 +1,3 @@
-</div>
-
 <!--  Scripts-->
 <script src="/third-party/jquery-3.3.1.min.js"></script>
 <script src="/third-party/materialize/js/materialize.min.js"></script>
@@ -11,6 +9,7 @@
 
     // Materialize JS
     $('.sidenav').sidenav();
+    $('.modal').modal();
     // ./Materialize JS
 
     $('.chat-sending').click(function(event) {
@@ -19,6 +18,7 @@
       if(message.trim() == ''){
         return false;
       }
+      // xss attack
       else if ( message.match(/<(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)/gi) ) {
         // $('.chat-page-history').append('<div class="receiver"><p class="chat-receiver">' + message + '</p></div>');
         $('.chat-page-history').append('<div class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></div>');
@@ -29,14 +29,12 @@
       else{
         $.ajax({
            type: "POST",
-           url: "/dashboard/chat_user_pegawai",
+           url: "/dashboard/chat_user_siswa",
            data: $("#chat-form").serialize(), // serializes the form's elements.
            success: function(response){
 
              let personalChatMessage = $('.chat-page-history');
              var r = response.split("|");
-             // alert(r)
-             // return false;
 
              // personalChatMessage.html('');
              let session = "<%=session%>";
@@ -56,8 +54,17 @@
                   $('.chat-sending').removeClass('disabled');
                   $('.load-chat').hide();
                   if (r[2] == "success") {
-                    $('.chat-page-history').append('<div class="sender"><p class="chat-sender"><img src="http://localhost/_Project/man2/frontend/img/foto/pegawai/297209081999031006" style="width:170px"></img></p></div>');
-                    $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
+                    if (r[3] == "duplicate_name") {
+                      // var name_button = r[0].replace(/&\d+&/g, "");
+                      // var nip_pegawai = name_button.match(/(&\d+&)/g);
+                      // var nip_pegawai = nip_pegawai.replace(/[&]/g, "");
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
+                      $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
+                    }
+                    // else {
+                    //   $('.chat-page-history').append('<div class="sender"><p class="chat-sender"><img src="http://localhost/_Project/man2/frontend/img/foto/pegawai/297209081999031006" style="width:170px"></img></p></div>');
+                    //   $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
+                    // }
                   }
                   else if (r[2] == "error") {
                     if (r[3] == "suggest") {
@@ -78,38 +85,10 @@
 
     }); // ./chat-sending clicked
 
-    $.ajax({
-      type: 'GET',
-      url : '/dashboard/chat_user_pegawai_history',
-      dataType : "html",
-      // contentType : 'application/json',
-      success: function(response){
-        let personalChatMessage = $('.chat-page-history');
-        personalChatMessage.html('');
-        let session = "<%=session%>";
-        if (response.length === 0){
-          personalChatMessage.append('\
-          <div class="sender">\
-          <p class="chat-sender">Halo dari MANDAYA BOT, Ada yang bisa kami bantu?</br></p>\
-          </div>');
-        }
-        else{
-          $.each( response, function( key, value ){
-            if (value.pengirim_pesan_chat_pengguna !== session){
-              personalChatMessage.append('\
-              <div class="sender"><p class="chat-sender">' + value.isi_pesan_chat_pengguna + '</p></div>');
-            }
-            else {
-              personalChatMessage.append('\
-              <div class="receiver"><p class="chat-receiver">' + value.isi_pesan_chat_pengguna + '</p></div>');
-            }
-            // console.log(key + ": " + value.isi_pesan_chat_pengguna);
-          });
-        }
-      }
-    });
-
-    // ./CHAT
+    // event
+    $('.button-tampil-foto').click(function(){
+      alert($(this).attr("value"))
+    })
 
   }); /*DOCUMENT READY*/
 

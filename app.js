@@ -7,6 +7,7 @@ var express             = require('express');
 var index               = require('./controllers/index');
 var cek_login           = require('./models/cek_login');
 var data_user_pegawai   = require('./models/data_user_pegawai');
+var data_user_siswa     = require('./models/data_user_siswa');
 var http                = require('http');
 var path                = require('path');
 var session             = require('express-session');
@@ -35,7 +36,8 @@ app.use(connection(mysql, {
 global.db = connection;
 
 // all environments
-// app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/views');
+// app.set('views', __dirname + '/views/siswa');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -59,9 +61,13 @@ app.get('/', index.index);//login
 // USER CRUD
 app.post('/login', cek_login.login);
 app.get('/logout', cek_login.logout);
-app.get('/dashboard', data_user_pegawai.dashboard);//call for dashboard page after login
-app.get('/dashboard/chat_user_pegawai_history', data_user_pegawai.chat_user_pegawai_history);
+// Pegawai
+app.get('/dashboard-pegawai', data_user_pegawai.dashboard_pegawai);//call for dashboard page after login
 app.post('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
+//Siswa
+app.get('/dashboard-siswa', data_user_siswa.dashboard_siswa);
+app.post('/dashboard/chat_user_siswa', data_user_siswa.chat_user_siswa);
+
 // app.get('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
 // app.get('/dashboard/chat_bot_history', data_user.chat_bot_history);
 // app.post('/dashboard/chat_bot', data_user.chat_bot);
