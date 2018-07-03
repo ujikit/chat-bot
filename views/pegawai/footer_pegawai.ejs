@@ -19,7 +19,8 @@
         return false;
       }
       // xss attack
-      else if ( message.match(/<(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)/gi) ) {
+      // else if ( message.match(/<(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)/gi) ) {
+      else if ( message.match(/<[(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)]+/gi) ) {
         // $('.chat-page-history').append('<div class="receiver"><p class="chat-receiver">' + message + '</p></div>');
         $('.chat-page-history').append('<div class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></div>');
         $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
@@ -55,9 +56,6 @@
                   $('.load-chat').hide();
                   if (r[2] == "success") {
                     if (r[3] == "duplicate_name") {
-                      // var name_button = r[0].replace(/&\d+&/g, "");
-                      // var nip_pegawai = name_button.match(/(&\d+&)/g);
-                      // var nip_pegawai = nip_pegawai.replace(/[&]/g, "");
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[0] + '</p></div>');
                       $('.chat-page-history').append('<div class="sender"><p class="chat-sender">' + r[1] + '</p></div>');
                       var sek = r[4]+'>';
