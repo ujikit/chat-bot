@@ -155,8 +155,28 @@ exports.chat_user_pegawai = function(req,res,next){
 							var j = i+1;
 							h.push(j+'. '+g[i])
 						}
+
+						// HANDLING NULL SUGGEST
+						if (h.length === 0) {
+							var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_pegawai FROM pesan_chat_bot_kosa_kata_pegawai";
+						  connection.query(sql, function  (err_rows,rows_suggestAll){
+								var v = []
+								for (var i = 0; i < rows_suggestAll.length; i++) {
+									var no = i + 1;
+									v.push("<br>"+no+". "+rows_suggestAll[i].kosa_kata_pesan_chat_bot_kosa_kata_pegawai);
+								}
+								var v = JSON.stringify(v)
+								var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+								res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.</br><b>Ulangi pertanyaanmu lagi.</b>|"
+											 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <b>"+v+"</b>|"
+											 +"error|"
+											 +"suggest");
+							})
+			 			return false;
+						}
+						// ./HANDLING NULL SUGGEST
+
 						var g = JSON.stringify(h);
-						console.log(g);
 						var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
 						var i	= h.replace(/,/gi, "<br>")
 						var j= i.split(",");
@@ -334,6 +354,27 @@ exports.chat_user_pegawai = function(req,res,next){
 			        var j = i+1;
 			        h.push(j+'. '+g[i])
 			      }
+
+            // HANDLING NULL SUGGEST
+						if (h.length === 0) {
+							var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
+						  connection.query(sql, function  (err_rows,rows_suggestAll){
+								var v = []
+								for (var i = 0; i < rows_suggestAll.length; i++) {
+									var no = i + 1;
+									v.push("<br>"+no+". "+rows_suggestAll[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa);
+								}
+								var v = JSON.stringify(v)
+								var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+								res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.</br><b>Ulangi pertanyaanmu lagi.</b>|"
+											 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <b>"+v+"</b>|"
+											 +"error|"
+											 +"suggest");
+							})
+			 			return false;
+						}
+						// ./HANDLING NULL SUGGEST
+
 			      var g = JSON.stringify(h);
 			      console.log(g);
 			      var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
