@@ -28,7 +28,7 @@ app.use(connection(mysql, {
     user: 'root',
     password: '',
     port: '3306',
-    database: 'man2'
+    database: 'man2_chatbot'
 }, 'single'));
 
 // connection.connect();
