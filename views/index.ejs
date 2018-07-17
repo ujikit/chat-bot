@@ -24,10 +24,20 @@
 <body>
 <div class="container rectangle-all-login">
     <div class="row">
-      <div class="col l6 green darken-3 hide-on-small-only">
+      <div class="col l6 green darken-3 hide-on-small-only" style="height:530px;">
         <div class="rectangle-asset-left-login left">
           <h4 class="col l12">Mandaya BOT</h4>
           <p class="col l12 rectangle-desc-left-login">Sistem Informasi Terpusat Sekolah Melalui Aplikasi Chat.</p>
+          <p class="col l12 rectangle-desc-left-login" style="font-size:30px;margin-top:-10px;color:#43a047">__________</p>
+          <div class="col l12 rectangle-desc-left-login">
+            <div class="row"> <div class="col l1"> <i class="material-icons">access_time</i> </div> <div class="col l11"> Respon yang cepat terhadap pengguna. </div> </div>
+          </div>
+          <div class="col l12 rectangle-desc-left-login">
+            <div class="row"> <div class="col l1"> <i class="material-icons">accessibility</i> </div> <div class="col l11"> Kemampuan pelayanan dalam 24 jam. </div> </div>
+          </div>
+          <div class="col l12 rectangle-desc-left-login">
+            <div class="row"> <div class="col l1"> <i class="material-icons">insert_chart</i> </div> <div class="col l11"> Kemudahan dalam memberikan informasi sekolah. </div> </div>
+          </div>
         </div>
       </div>
       <div class="col l6 white">
@@ -58,11 +68,6 @@
                       <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">Masuk
                         <i class="material-icons right">send</i>
                       </button>
-                        <div class="message-response" style="background:red; margin-top:10px;">
-                          <% if (message.length > 0) { %>
-                                      <div class="alert alert-danger col-sm-12"><%= message %></div>
-                          <% } %>
-                        </div>
                       </div>
                       <div class="col l12 s12 lupa-password">
                         <a href="#modal-lupa-password-pegawai" id="lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>

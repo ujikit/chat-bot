@@ -9,8 +9,19 @@
     $('.modal').modal();
     // ./Materialize JS
 
+    $(document).keypress(function(e) {
+      if(e.which == 13) {
+        alert('You pressed enter!');
+        submit();
+      }
+    });
+
     $('.chat-sending').click(function(event) {
       event.preventDefault();
+      submit();
+    }); // ./chat-sending clicked
+
+    function submit(){
       let message = $(".chat-typing").val();
       if(message.trim() == ''){
         return false;
@@ -90,7 +101,7 @@
            }
          });
       }
-    }); // ./chat-sending clicked
+    }
 
     // event
     $('.button-tampil-foto').click(function(){
