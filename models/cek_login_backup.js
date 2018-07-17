@@ -21,21 +21,22 @@ exports.login = function(req, res){
    var sess = req.session;
    if(req.method == "POST"){
       var post = req.body;
-      var name = post.user_name;
-      var pass = post.password;
-      var sql  = "SELECT * FROM data_pegawai WHERE username_pegawai='"+name+"'";
+      var username = post.username;
+      var password = post.password;
+      var sql  = "SELECT * FROM data_pegawai WHERE username_pegawai='"+username+"'";
       req.getConnection(function (err, connection) {
         connection.query(sql, function (err, results) {
           if(results.length){
             var password_pegawai = results[0].password_pegawai;
-            bcrypt.compare(pass, password_pegawai).then((result) => {
+            bcrypt.compare(password, password_pegawai).then((result) => {
               if (result) {
-                console.log(result);
-                req.session.userId = results[0].nip_pegawai;
-                req.session.user = results[0];
-                res.redirect('/dashboard');
-                console.log('Login Id : '+results[0].nip_pegawai);
-                res.end();
+                // console.log(result);
+                // req.session.userId = results[0].nip_pegawai;
+                // req.session.user = results[0];
+                // res.redirect('/dashboard');
+                // console.log('Login Id : '+results[0].nip_pegawai);
+                // res.end();
+								res.json({name:"logged In", type:"success"});
               }
               else {
                 console.log("password salah");
@@ -45,8 +46,8 @@ exports.login = function(req, res){
           }
           else{
             console.log("Username Tidak Ada");
-             message = 'Wrong Credentials.';
-             res.render('index.ejs',{message: message});
+						 res.json({name:"Username Tidak Tersedia", type:"error"});
+             // res.render('index.ejs',{message: message});
           }
         });
       });

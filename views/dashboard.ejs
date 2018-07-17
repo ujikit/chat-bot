@@ -1,11 +1,16 @@
-  <%- include header_pegawai %>
+  <%- include header %>
   <body>
     <!-- Main component for a primary marketing message or call to action -->
-    <nav class="white" role="navigation">
+    <nav class="green darken-3" role="navigation">
      <div class="nav-wrapper container">
        <a id="logo-container" href="#" class="brand-logo">Logo</a>
        <ul class="right hide-on-med-and-down">
          <li><a href="#">Tata Cara</a></li>
+         <% if (jabatan == 'guru') { %>
+           <li><a href="/logout_pegawai">Keluar</a></li>
+         <% } else if (jabatan == 'siswa'){ %>
+           <li><a href="/logout_siswa">Keluar</a></li>
+         <% } %>
        </ul>
        <ul id="nav-mobile" class="sidenav">
          <li><a href="#">Tata Cara</a></li>
@@ -13,6 +18,7 @@
        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
      </div>
     </nav>
+    <h1>sd <%= session %></h1>
     <div class="container">
       <div class="col s12 chat-page">
         <div class="col s12 chat-page-history">
@@ -34,7 +40,7 @@
                 <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
               </div>
               <div class="col s2 m2 l2 xl1">
-                <button class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></button>
+                <a class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></a>
               </div>
             </form>
             <div class="col s1 m1 l1 xl1"></div>
@@ -53,5 +59,4 @@
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
       </div>
     </div>
-
-    <%- include footer_pegawai %>
+    <% include footer %>

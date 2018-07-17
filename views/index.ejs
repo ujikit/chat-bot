@@ -1,76 +1,195 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sample Site</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
-   
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
+  <style media="screen">
+    body{
+      overflow-x: hidden;
+      overflow-y: hidden;
+      background-image: url("http://localhost/_Project/man2/frontend/img/background-login-chatbot.png");
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .rectangle-all-login{ margin-top: 70px; }
+    .rectangle-asset-left-login{ color:white; margin-top:40px; }
+    .rectangle-desc-left-login{ margin-top:0px; }
+    .lupa-password{ margin-top:20px; }
+    .tabs .tab a { color: #4caf50!important; }
+    .tabs .indicator { background-color: #4caf50 !important; }
+  </style>
 </head>
-<body id="clrblk">
-        <div class="container">   
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                   
-            <div class="panel panel-info" >
-                    <div class="panel-heading">
-                        <div class="panel-title">Sign In</div>
-                        <!--<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>-->
-                    </div>    
- 
-                    <div style="padding-top:30px" class="panel-body" >
-                                                                        <% if (message.length > 0) { %>
-                                                                                    <div class="alert alert-danger col-sm-12"><%= message %></div>
-                                                                        <% } %>
-                           
-                        <form id="loginform" class="form-horizontal" role="form" method="post" action="/login">
-                                   
-                            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username" type="text" class="form-control" name="user_name" value="" placeholder="username">                                       
-                                    </div>
-                               
-                            <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="login-password" type="password" class="form-control" name="password" placeholder="password">
-                                    </div>
-                                   
- 
-                               
-                            <div class="input-group">
-                                      <!--<div class="checkbox">
-                                        <label>
-                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                                        </label>
-                                      </div>-->
-                                    </div>
- 
- 
-                                <div style="margin-top:10px" class="form-group">
-                                    <!-- Button -->
- 
-                                    <div class="col-sm-12 controls">
-                                      <button id="btn-login" type="submit" class="btn btn-success">Login  </button>
-                                     
- 
-                                    </div>
-                                </div>
- 
- 
-                                <div class="form-group">
-                                    <div class="col-md-12 control">
-                                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                                            Don't have an account!
-                                        <a href="/signup">
-                                            Sign Up Here
-                                        </a>
-                                        </div>
-                                    </div>
-                                </div>   
-                            </form>    
- 
- 
- 
-                        </div>                    
-                    </div> 
+<body>
+<div class="container rectangle-all-login">
+    <div class="row">
+      <div class="col l6 green darken-3 hide-on-small-only">
+        <div class="rectangle-asset-left-login left">
+          <h4 class="col l12">Mandaya BOT</h4>
+          <p class="col l12 rectangle-desc-left-login">Sistem Informasi Terpusat Sekolah Melalui Aplikasi Chat.</p>
         </div>
-       
+      </div>
+      <div class="col l6 white">
+        <ul class="tabs tabs-fixed-width tab-demo">
+          <li class="tab"><a class="active" href="#pegawai">Pegawai</a></li>
+          <li class="tab"><a href="#siswa">Siswa</a></li>
+        </ul>
+        <div style="margin-top:40px;">
+          <div class="col l12">
+            <div class="row">
+              <div class="container">
+                <div id="pegawai">
+                  <form method="post" action="/login_pegawai" id="form-login-chatbot-pegawai">
+                    <center>
+                      <img src="http://localhost/_Project/man2/frontend/img/guru.png" alt="logo man2" style="width:34%">
+                    </center>
+                    <div class="row" style="margin-top:20px;">
+                      <input type="hidden" name="privilage" value="pegawai">
+                      <div class="input-field col l12 s12">
+                        <input name="username" id="icon_prefix" type="text" class="validate" autocomplete="on">
+                        <label for="icon_prefix">Masukan Username</label>
+                      </div>
+                      <div class="input-field col l12 s12">
+                        <input name="password" id="icon_telephone" type="password" class="validate">
+                        <label for="icon_telephone">Masukan Password</label>
+                      </div>
+                      <div class="col l12 s12">
+                      <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">Masuk
+                        <i class="material-icons right">send</i>
+                      </button>
+                        <div class="message-response" style="background:red; margin-top:10px;">
+                          <% if (message.length > 0) { %>
+                                      <div class="alert alert-danger col-sm-12"><%= message %></div>
+                          <% } %>
+                        </div>
+                      </div>
+                      <div class="col l12 s12 lupa-password">
+                        <a href="#modal-lupa-password-pegawai" id="lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div id="siswa">
+                  <form method="post" action="/login_siswa" id="form-login-chatbot-siswa">
+                    <center>
+                      <img src="http://localhost/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
+                    </center>
+                    <div class="row" style="margin-top:20px;">
+                      <input type="hidden" name="privilage" value="siswa">
+                      <div class="input-field col l12 s12">
+                        <input name="username" id="icon_prefix" type="text" class="validate" autocomplete="on">
+                        <label for="icon_prefix">Masukan Username</label>
+                      </div>
+                      <div class="input-field col l12 s12">
+                        <input name="password" id="icon_telephone" type="password" class="validate">
+                        <label for="icon_telephone">Masukan Password</label>
+                      </div>
+                      <div class="col l12 s12">
+                      <button id="button-login-chatbot-siswa" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">Masuk
+                        <i class="material-icons right">send</i>
+                      </button>
+                      </div>
+                      <div class="col l12 s12 lupa-password">
+                        <a href="#modal-lupa-password-siswa" id="lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+</div>
+
+<!-- Modal Structure -->
+<!-- <div id="modal-lupa-password-siswa" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <center>
+      <div class="row">
+        <div class="col l12">
+          <h5>Halaman Lupa Password</h5>
+        </div>
+      </div>
+    </center>
+    <form method="post" action="/forgot_password">
+      <div class="row" style="margin-top:20px;">
+        <input type="hidden" name="privilage_forgot_password" value="siswa">
+        <div class="input-field col l12 s12">
+          <input name="username_forgot_password" id="icon_prefix" type="text" class="validate">
+          <label for="icon_prefix">Masukan Username</label>
+        </div>
+        <div class="input-field col l12 s12">
+          <input name="password_forgot_password" id="icon_telephone" type="tel" class="validate">
+          <label for="icon_telephone">Masukan Password Baru</label>
+        </div>
+        <div class="col l12 s12">
+        <button class="btn waves-effect green darken-3 waves-light" type="submit" name="action" style="width:100%;height:13%;margin-top:20px;">Submit
+          <i class="material-icons right">send</i>
+        </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <p class="center" style="font-size:10px;">Powered by : MAN 2 YK</p>
+  </div>
+</div> -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+<script type="text/javascript" src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.modal-trigger').leanModal();
+
+    $('#lupa-password-pegawai').click(function(){
+      window.location.href = "http://localhost/_Project/man2/login_guru_atau_bk.php";
+    })
+    $('#lupa-password-siswa').click(function(){
+      window.location.href = "http://localhost/_Project/man2/login_siswa.php";
+    })
+    // // Login Pegawai
+    // $('#button-login-chatbot-pegawai').click(function(event){
+    //   event.preventDefault();
+    //   $.ajax({
+    //      type: "POST",
+    //      url: "/login_pegawai",
+    //      data: $("#form-login-chatbot-pegawai").serialize(), // serializes the form's elements.
+    //      success: function(response){
+    //         if (response.type == 'error') {
+    //           window.location.replace("http://localhost:8888/");
+    //           // $('.message-response').append(response.name);
+    //           alert(response.name)
+    //           return false;
+    //        }
+    //        else {
+    //          window.location.replace("http://localhost:8888/dashboard_pegawai");
+    //        }
+    //      }
+    //   })
+    // })
+    // // Login Siswa
+    // $('#button-login-chatbot-siswa').click(function(event){
+    //   event.preventDefault();
+    //   $.ajax({
+    //      type: "POST",
+    //      url: "/login_siswa",
+    //      data: $("#form-login-chatbot-siswa").serialize(), // serializes the form's elements.
+    //      success: function(response){
+    //        if (response.type == 'error') {
+    //          alert(response.name)
+    //        }
+    //        else {
+    //          window.location.replace("http://localhost:8888/dashboard_siswa");
+    //        }
+    //      }
+    //   })
+    // })
+  });
+</script>
+
 </body>
 </html>

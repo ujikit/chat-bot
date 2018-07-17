@@ -5,9 +5,6 @@
 // Express
 var express             = require('express');
 var index               = require('./controllers/index');
-var cek_login           = require('./models/cek_login');
-var data_user_pegawai   = require('./models/data_user_pegawai');
-var data_user_siswa     = require('./models/data_user_siswa');
 var http                = require('http');
 var path                = require('path');
 var session             = require('express-session');
@@ -16,12 +13,12 @@ var app                 = express();
 var mysql               = require('mysql');
 var bodyParser          = require("body-parser");
 // ./Express
-// var connection = mysql.createConnection({
-//               host     : 'localhost',
-//               user     : 'root',
-//               password : '',
-//               database : 'man2'
-//             });
+// Pegawai
+var cek_login_pegawai   = require('./models/cek_login_pegawai');
+var data_user_pegawai   = require('./models/data_user_pegawai');
+// Siswa
+var cek_login_siswa   = require('./models/cek_login_siswa');
+var data_user_siswa     = require('./models/data_user_siswa');
 
 app.use(connection(mysql, {
     host: 'localhost',
@@ -50,7 +47,7 @@ app.use(session({
           resave: false,
           saveUninitialized: true,
           cookie: {
-            maxAge: 600000,
+            maxAge: 600000
             // secure : true
           }
         }));
@@ -59,13 +56,17 @@ app.use(session({
 app.get('/', index.index);//login
 
 // USER CRUD
-app.post('/login', cek_login.login);
-app.get('/logout', cek_login.logout);
+// app.post('/forgot_password', cek_login.forgot_password);
+
 // Pegawai
-app.get('/dashboard-pegawai', data_user_pegawai.dashboard_pegawai);//call for dashboard page after login
+app.post('/login_pegawai', cek_login_pegawai.login_pegawai);
+app.get('/logout_pegawai', cek_login_pegawai.logout_pegawai);
+app.get('/dashboard_pegawai', data_user_pegawai.dashboard_pegawai);//call for dashboard page after login
 app.post('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
 //Siswa
-app.get('/dashboard-siswa', data_user_siswa.dashboard_siswa);
+app.post('/login_siswa', cek_login_siswa.login_siswa);
+app.get('/logout_siswa', cek_login_siswa.logout_siswa);
+app.get('/dashboard_siswa', data_user_siswa.dashboard_siswa);
 app.post('/dashboard/chat_user_siswa', data_user_siswa.chat_user_siswa);
 
 // app.get('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
