@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 	host : "localhost",
 	user : "root",
 	password : "",
-	database : "man2"
+	database : "man2_chatbot"
 });
 // ./Connection
 

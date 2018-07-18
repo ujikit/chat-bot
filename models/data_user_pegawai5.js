@@ -11,7 +11,8 @@ let connection = mysql.createConnection({
 	host : "localhost",
 	user : "root",
 	password : "",
-	database : "man2_chatbot"
+	database : "man2_chatbot",
+	multipleStatements: true
 });
 // ./Connection
 
@@ -31,10 +32,14 @@ exports.dashboard_pegawai = function(req, res){
 // Insert Chat
 exports.chat_user_pegawai = function(req,res,next){
 	let userId = req.session.userId;
-  // if(userId == null){
-	// 	res.redirect("/");
-	// 	return;
-  // }
+  if(userId == null){
+		res.send("Login dulu ya!</b>|"
+					 +"|"
+					 +"success|"
+					 +"plain")
+		// res.redirect("/");
+		return;
+  }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
@@ -51,19 +56,15 @@ exports.chat_user_pegawai = function(req,res,next){
 		let parse  = JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
+			console.log("0");
 			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
 			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
 			var offset = data[4]-1;
 			// PEGAWAI
 			if (data[1] == "pegawai") {
-				var sqls 		= "SELECT "+data[0]+", nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP '"+data[2]+"' order by nama_pegawai asc LIMIT 1 OFFSET "+offset;
+				var sqls 		= "SELECT "+data[0]+", nip_pegawai FROM data_pegawai inner join mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP '"+data[2]+"' order by nama_pegawai asc LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
-					if (rows === undefined) {
-						res.send("Pilihan tidak ada, ulangi pertanyaanmu :)</b>|"
-									 +"|"
-									 +"error|"
-									 +"")
-					}
+					if (rows === undefined) { }
 					else if (data[3] < data[4] || data[4] == 0) {
 						res.send("Keluar dari pilihan.</b>|"
 									 +"|"
@@ -127,15 +128,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			var regex2 = new RegExp(/(pegawai|siswa)/, 'gi');
 			var res2 = parse.match(regex2);
 			console.log(res2);
-			if (res2 == null){
-				console.log("pegawai atau siswa");
-				res.end("Mohon maaf, maksud dari pertanyaan : <b>"+pesan+"</b> apa ya?.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-				+"Coba ketikan salah satu <b>kalimat</b> dibawah ini untuk melihat <b>semua jenis informasi</b> yang ada: <br><br><b>1.Pegawai</b><br><b>2.Siswa</b>|"
-				+"error|"
-				+"suggest")
-				return false;
-			}
-			else if (res2[0] == "pegawai") { // MENCARI PEGAWAI
+			if (res2 == "pegawai") { // MENCARI PEGAWAI
 				// CEK KOSA KATA
 				let sql = "SELECT * from pesan_chat_bot_kosa_kata_pegawai"; //mencari semua kosa kata
 				connection.query(sql,function  (err_kosa_kata,rows_kosa_kata_pegawai){
@@ -201,7 +194,7 @@ exports.chat_user_pegawai = function(req,res,next){
 					})
 				}
 				else {
-					// MENCARI GRUP KOSA KATA (PEGAWAI)
+					// MENCARI GRUP KOSA KATA
 				  var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata_pegawai FROM pesan_chat_bot_kosa_kata_pegawai WHERE kosa_kata_pesan_chat_bot_kosa_kata_pegawai ='"+res1+"'";
 				  connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
 				    if (err_grup_kosa_kata) throw err_grup_kosa_kata;
@@ -268,7 +261,7 @@ exports.chat_user_pegawai = function(req,res,next){
 				                var count_pegawai = count_pegawai.replace(/[^0-9]+/, "")
 				                if (count_pegawai == 1) {
 				                  var selects 								= [grup_kosa_kata_final, nama_pegawai_yg_dicari];
-				                  var sql 										= "SELECT ??, nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP ? order by nama_pegawai asc";
+				                  var sql 										= "SELECT ??, nip_pegawai FROM data_pegawai inner join mata_pelajaran on data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP ? order by nama_pegawai asc";
 				                  connection.query(sql, selects, function  (err_final,rows){
 					                  if (err_final) throw err_final;
 					                  var rowss_final = JSON.stringify(rows);
@@ -337,7 +330,7 @@ exports.chat_user_pegawai = function(req,res,next){
 				}
 				}); // ./pesan_chat_bot_kosa_kata
 			} // ./MENCARI PEGAWAI
-			else if (res2[0] == "siswa") { // MENCARI siswa
+			else if (res2 == "siswa") { // MENCARI siswa
 			  // CEK KOSA KATA
 			  let sql = "SELECT * from pesan_chat_bot_kosa_kata_siswa"; //mencari semua kosa kata
 			  connection.query(sql,function  (err_kosa_kata,rows_kosa_kata_siswa){
@@ -373,11 +366,11 @@ exports.chat_user_pegawai = function(req,res,next){
             // HANDLING NULL SUGGEST SISWA
 						if (h.length === 0) {
 							var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
-						  connection.query(sql, function  (err_rows,rows){
+						  connection.query(sql, function  (err_rows,rows_suggestAll){
 								var v = []
-								for (var i = 0; i < rows.length; i++) {
+								for (var i = 0; i < rows_suggestAll.length; i++) {
 									var no = i + 1;
-									v.push("<br>"+no+". "+rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa);
+									v.push("<br>"+no+". "+rows_suggestAll[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa);
 								}
 								var v = JSON.stringify(v)
 								var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
@@ -401,7 +394,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			    })
 			  }
 			  else {
-					// MENCARI GRUP KOSA KATA (SISWA)
+					// MENCARI GRUP KOSA KATA
 			    var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE kosa_kata_pesan_chat_bot_kosa_kata_siswa ='"+res1+"'";
 			    connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
 			      if (err_grup_kosa_kata) throw err_grup_kosa_kata;
@@ -535,6 +528,13 @@ exports.chat_user_pegawai = function(req,res,next){
 			  }); // ./pesan_chat_bot_kosa_kata
 			} // ./MENCARI siswa
       // NOT FOUND 2
+			else if (res2 === null) {
+			  console.log("pegawai atau siswa");
+			  res.end("Mohon maaf, ada yang kurang dari pertanyaanmu.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+			         +"Kombinasikan <b>pencarianmu</b> dengan <b>kata</b> dibawah ini : <br><b>1.Pegawai</b><br><b>2.Siswa</b><br><b>3.Pembayaran</b><br><b>4.Kelas</b>|"
+			         +"error|"
+			         +"suggest")
+			}
 		}
   }); // ./req.getConnection(function (err, connection)
 };
