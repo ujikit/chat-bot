@@ -15,21 +15,28 @@ let connection = mysql.createConnection({
 });
 // ./Connection
 
-exports.dashboard_pegawai = function(req, res){
-	let userId = req.session.userId;
-	if(userId == null){
-		console.log(userId);
-	  res.redirect("/");
-	  return;
-	}
-	var sql 		= "SELECT jabatan_pegawai from data_pegawai where nip_pegawai='"+userId+"'";
+exports.dashboard_siswa = function(req, res){
+	// let userId = req.session.userId;
+	// if(userId == null){
+	// 	res.send("Login dulu ya!</b>|"
+	// 				 +"|"
+	// 				 +"success|"
+	// 				 +"plain")
+	// 	// res.redirect("/");
+	//   return;
+	// }
+	// var sql 		= "SELECT jabatan_siswa from data_siswa where nis_siswa='"+userId+"'";
+	// connection.query(sql, function  (err_final,rows){
+	// 	res.render('dashboard.ejs',{session:userId, jabatan:rows[0].jabatan_siswa});
+	// })
+	var sql 		= "SELECT * from data_siswa where nis_siswa='10888'";
 	connection.query(sql, function  (err_final,rows){
-		res.render('dashboard.ejs',{session:userId, jabatan:rows[0].jabatan_pegawai});
+		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa});
 	})
 };
 
 // Insert Chat
-exports.chat_user_pegawai = function(req,res,next){
+exports.chat_user_siswa = function(req,res,next){
 	let userId = req.session.userId;
   // if(userId == null){
 	// 	res.redirect("/");
@@ -51,6 +58,7 @@ exports.chat_user_pegawai = function(req,res,next){
 		let parse  = JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
+
 			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
 			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
 			var offset = data[4]-1;
@@ -124,13 +132,12 @@ exports.chat_user_pegawai = function(req,res,next){
 			}
 		}
 		else if (data.isi_pesan_chat_pengguna_choose.length == 0) {
-			var regex2 = new RegExp(/(pegawai|siswa|kelas)/, 'gi');
+			var regex2 = new RegExp(/(pegawai|siswa|bayar|kelas)/, 'gi');
 			var res2 = parse.match(regex2);
-			console.log(res2);
 			if (res2 == null){
 				console.log("pegawai atau siswa");
 				res.end("Mohon maaf, maksud dari pertanyaan : <b>"+pesan+"</b> apa ya?.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-				+"Coba ketikan salah satu <b>kalimat</b> dibawah ini untuk melihat <b>semua jenis informasi</b> yang ada: <br><br><b>1.Pegawai</b><br><b>2.Siswa</b><br><b>3.Kelas</b>|"
+				+"Coba ketikan salah satu <b>kalimat</b> dibawah ini untuk melihat <b>semua jenis informasi</b> yang ada: <br><br><b>1. Pegawai</b><br><b>2. Siswa</b><br><b>3. Pembayaran</b><br><b>4. Kelas</b><br><b>5. Nilai</b><br><b>6. Pertanyaan Umum</b>|"
 				+"error|"
 				+"suggest")
 				return false;
@@ -448,8 +455,6 @@ exports.chat_user_pegawai = function(req,res,next){
 			                arr.push(nama_fix);
 			            } } }
 
-			        // console.log('================= ' +arr+' =================');
-
 			        for (var i = 0; i < arr.length; i++) {
 			          var nama_fix2 = arr[i];
 			          for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -534,7 +539,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			  }
 			  }); // ./pesan_chat_bot_kosa_kata
 			} // ./MENCARI siswa
-			else if (res2[0] == "kelas") {
+			else if (res2[0] == "bayar") { // MENCARI BAYAR
 				// CEK KOSA KATA
 			  let sql = "SELECT * from pesan_chat_bot_kosa_kata_siswa"; //mencari semua kosa kata
 			  connection.query(sql,function  (err_rows,rows){
@@ -547,7 +552,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			          var res1 = ress;
 			        }
 			    }
-			  // NOT FOUND 1 dan SUGGEST KELAS
+			  // NOT FOUND 1 dan SUGGEST BAYAR
 			  if (res1 === undefined) {
 			    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
 			    connection.query(sql, function  (err_rows,rows){
@@ -568,7 +573,110 @@ exports.chat_user_pegawai = function(req,res,next){
 			        var j = i+1;
 			        h.push(j+'. '+g[i])
 			      }
-            // HANDLING NULL SUGGEST KELAS
+            // HANDLING NULL SUGGEST SISWA
+						if (h.length === 0) {
+							var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
+						  connection.query(sql, function  (err_rows,rows){
+								var v = []
+								for (var i = 0; i < rows.length; i++) {
+									var no = i + 1;
+									v.push("<br>"+no+". "+rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa);
+								}
+								var v = JSON.stringify(v)
+								var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+								res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+											 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <b>"+v+"</b>|"
+											 +"error|"
+											 +"suggest");
+							})
+			 			return false;
+						}
+						// ./HANDLING NULL SUGGEST BAYAR kosa kata ada di database
+			      var g = JSON.stringify(h);
+			      var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
+			      var i	= h.replace(/,/gi, "<br>")
+			      var j	= i.split(",");
+			      var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
+			      res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+			              +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
+			              +"error|"
+			              +"suggest");
+			    })
+			  }
+			  else {
+					// MENCARI GRUP KOSA KATA (BAYAR)
+			    var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE kosa_kata_pesan_chat_bot_kosa_kata_siswa REGEXP '"+res1+"'";
+			    connection.query(sql, function  (err_rows,rows){
+			      if (err_rows) throw err_rows;
+			      var grup_kosa_kata_final = rows[0].grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa;
+						console.log(grup_kosa_kata_final);
+						if (grup_kosa_kata_final == "0_detail_pembayaran") { //JIKA YANG DICARI DAFTAR PEMBAYARAN
+							var selects = [grup_kosa_kata_final]
+							var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar where nis_siswa_pembayaran='10888' ORDER BY lunas_pembayaran DESC";
+					    connection.query(sql, function  (err_rows,rows){
+								var dataArray = []
+								for (var i = 0; i < rows.length; i++) {
+									var no = i + 1;
+									if (rows[i].lunas_pembayaran == "Y") { var y_n = "<button class='waves-effect waves-light green darken-1 btn-small pulse' value='"+rows[i].id_pembayaran+"'>(Lunas)</button>"; }
+									else { var y_n = "<button class='waves-effect waves-light red lighten-1 btn-small pulse' value='"+rows[i].id_pembayaran+"'>(Belum Lunas)</button>"; }
+									if (rows[i].kekurangan_pembayaran == null || rows[i].kekurangan_pembayaran == '' ) { var kekurangan = "<button class='waves-effect waves-light grey darken-1 btn-small'>Tidak ada.</button>"; }
+									else { var kekurangan = "<button class='waves-effect waves-light grey darken-1 btn-small'>Rp. "+rows[i].kekurangan_pembayaran+"</button>" }
+									if (rows[i].tanggal_terakhir_pembayaran == null || rows[i].tanggal_terakhir_pembayaran == '' ) { var tanggal_terakhir_pembayaran = "<button class='waves-effect waves-light grey darken-1 btn-small'>Belum Pernah.</button>"; }
+									else { var tanggal_terakhir_pembayaran = "<button class='waves-effect waves-light grey darken-1 btn-small'>"+rows[i].tanggal_terakhir_pembayaran+"</button>" }
+									// tanggal_terakhir_pembayaran 				= JSON.stringify(rows[i].tanggal_terakhir_pembayaran)
+									// tanggal_terakhir_pembayaran 				= tanggal_terakhir_pembayaran.match(/((.*)-\d+)/g)
+									// jam_terakhir_pembayaran							=	JSON.stringify(rows[i].tanggal_terakhir_pembayaran)
+									// jam_terakhir_pembayaran							= jam_terakhir_pembayaran.match(/(\d(.?):\d+:\d+)/g)
+									// var jam_tanggal_terakhir_pembayaran			= "<button class='waves-effect waves-light grey darken-1 btn-small'>Tanggal : "+tanggal_terakhir_pembayaran+" Jam : "+jam_terakhir_pembayaran+"</button>"
+									dataArray.push("<br><b>"+no+". "+rows[i].nama_pembayaran_daftar+"</b><br>a). Status : <br><b>"+y_n+"</b><br>b). Kekurangan : <br><b>"+kekurangan+"</b><br>c). Terakhir Bayar : <br><b>"+tanggal_terakhir_pembayaran+"</b><br>");
+								}
+								var dataArray = JSON.stringify(dataArray)
+								var dataArray = dataArray.replace(/[^a-zA-Z0-9.\s+<>:(=)'_/&#-]/g, "")
+							res.send("Jika kamu merasa sudah melunasi, namun belum tercatat dibagian <b>Tata Usaha</b>, mohon segera <b>lapor</b> dan membawa <b>bukti pembayaran</b> ke bagian <b>Tata Usaha</b>.|"
+				              +"Daftar Tagihan Pembayaran Kamu : <br>"+dataArray+"|"
+				              +"success|"
+				              +"");
+							return false;
+						})
+						}
+			      }); // ./grup_kosa_kata_final
+			  }
+			  }); // ./pesan_chat_bot_kosa_kata
+			} // ./MENCARI BAYAR
+			else if (res2[0] == "kelas") { // MENCARI siswa
+			  // CEK KOSA KATA
+			  let sql = "SELECT * from pesan_chat_bot_kosa_kata_siswa"; //mencari semua kosa kata
+			  connection.query(sql,function  (err_kosa_kata,rows_kosa_kata_siswa){
+			  if (err_kosa_kata) throw err_kosa_kata;
+			    for (var i = 0; i < rows_kosa_kata_siswa.length; i++){
+			      var kosa_kata = rows_kosa_kata_siswa[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa;
+			        var regex = new RegExp(kosa_kata, 'gi');
+			        var ress = parse.match(regex);
+			        if (ress !== null) {
+			          var res1 = ress;
+			        }
+			    }
+			  // NOT FOUND 1 dan SUGGEST SISWA
+			  if (res1 === undefined) {
+			    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
+			    connection.query(sql, function  (err_rows,rows){
+			      var g = []
+			      var h = []
+			      var ps = parse.split(" ")
+			      for (var i = 0; i < ps.length; i++) {
+			        for (var j = 0; j < rows.length; j++) {
+			          var p = ps[i]
+			          var k = rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa
+			          var r = new RegExp(p, 'gi')
+			          var m = k.match(r)
+			          if (m !== null && p.length !== 1) { g.push(k) }
+			        }
+			      }
+			      for (var i = 0; i < g.length; i++) {
+			        var j = i+1;
+			        h.push(j+'. '+g[i])
+			      }
+            // HANDLING NULL SUGGEST SISWA
 						if (h.length === 0) {
 							var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
 						  connection.query(sql, function  (err_rows,rows){
@@ -590,7 +698,7 @@ exports.chat_user_pegawai = function(req,res,next){
 			      var g = JSON.stringify(h);
 			      var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
 			      var i	= h.replace(/,/gi, "<br>")
-			      var j	= i.split(",");
+			      var j= i.split(",");
 			      var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
 			      res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 			              +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
@@ -599,85 +707,43 @@ exports.chat_user_pegawai = function(req,res,next){
 			    })
 			  }
 			  else {
-					// MENCARI GRUP KOSA KATA (KELAS)
-			    var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE kosa_kata_pesan_chat_bot_kosa_kata_siswa REGEXP '"+res1+"'";
-			    connection.query(sql, function (err_rows,rows){
-			      if (err_rows) throw err_rows;
-			      var grup_kosa_kata_final = rows[0].grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa;
-						if (grup_kosa_kata_final == "daftar_kelas_dan_wali_kelas") { //JIKA YANG DICARI DAFTAR KELAS DAN WALI KELAS
+					// MENCARI GRUP KOSA KATA (SISWA)
+			    var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE kosa_kata_pesan_chat_bot_kosa_kata_siswa ='"+res1+"'";
+			    connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
+			      if (err_grup_kosa_kata) throw err_grup_kosa_kata;
+			      var grup_kosa_kata_final = rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa;
+						console.log(grup_kosa_kata_final);
+						if (grup_kosa_kata_final == '0_daftar kelas') {
 							var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
 					    connection.query(sql, function  (err_rows,rows){
 							var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
 							connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
-							// console.log(hitung_jml_siswa_per_kelas);
-							// for (var i = 0; i < hitung_jml_siswa_per_kelas.length; i++) {
-							// 	console.log(hitung_jml_siswa_per_kelas[i].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+hitung_jml_siswa_per_kelas[i].cnt);
-							// }
-							// console.log("--");
-							var arr = []
-							for (var i = 0; i < rows.length; i++) {
-								for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
-									var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
-									var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
-									console.log(regex);
-									if (regex !== null) {
-										var no = j+1;
-										arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : "+rows[i].nama_pegawai+"<br>b). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
+								var arr = []
+								for (var i = 0; i < rows.length; i++) {
+									for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
+										var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
+										var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
+										if (regex !== null) {
+											var no = j+1;
+											arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : "+rows[i].nama_pegawai+"<br>b). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
+										}
 									}
-									// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 								}
-							}
-							var arr = JSON.stringify(arr)
-							var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
-							console.log(arr);
-							res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
-				              +"|"
-				              +"success|"
-				              +"plain");
-							return false;
-						})
-						})
-						}
-						else {
-							var sql = "SELECT ?? FROM pembayaran INNER JOIN pembayaran_daftar ON pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar where nis_siswa_pembayaran='10900' ORDER BY lunas_pembayaran DESC";
-					    connection.query(sql, grup_kosa_kata_final, function  (err_rows,rows){
-								var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai where nama_pegawai!='Administrator' order by nama_pegawai asc";
-						      connection.query(sql,function (err_cari_nama,rows){
-						      if (err_cari_nama) throw err_cari_nama;
-						      for (var i = 0; i < rows.length; i++) {
-						        var nama1 = rows[i].nama_pegawai;
-						        var nama4 = nama1.split(" ");
-						        var nama2 = new RegExp(nama4[0], 'gi');
-						        var match	= parse.match(nama2);
-						        if (match !== null) {
-						          var parse2= parse.split(" ");
-						          var index = parse2.indexOf(match[0]); //nomor letak array heryani
-						          var splice = parse2.splice(index);
-						          var hps_arr_kosong = splice.filter(function(str) {
-						            return /\S/.test(str);
-						          }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-						          var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
-						          hps_arr_kosong.push("null");
-						        }
-						      }
-
-		              // NOT FOUND 3 PEGAWAI
-						      if (index === undefined) {
-						        res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-						               +"|"
-						               +"error|"
-						               +"")
-						        return false;
-						      }
-								})
+								var arr = JSON.stringify(arr)
+								var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
+								res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
+					              +"|"
+					              +"success|"
+					              +"plain");
+								return false;
+							})
 							})
 							return false;
-						}
+						} // ./daftar kelas
 			      }); // ./grup_kosa_kata_final
 			  }
 			  }); // ./pesan_chat_bot_kosa_kata
-			} // ./kelas
-      // NOT FOUND 2
+			} // ./MENCARI kelas
 		}
   }); // ./req.getConnection(function (err, connection)
 };
