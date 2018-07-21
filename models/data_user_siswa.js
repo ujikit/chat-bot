@@ -62,7 +62,37 @@ exports.chat_user_siswa = function(req,res,next){
 			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
 			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
 			var offset = data[4]-1;
-
+			if (data[1] == "pegawai") {
+				var sqls 		= "SELECT "+data[0]+", nip_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+data[2]+"' order by nama_pegawai asc LIMIT 1 OFFSET "+offset;
+				connection.query(sqls, function  (err_final,rows){
+				  if (rows === undefined) { }
+				  else if (data[3] < data[4] || data[4] == 0) {
+				    res.send("Keluar dari pilihan.</b>|"
+				           +"|"
+				           +"success|"
+				           +"plain")
+				    // res.send("Mohon maaf, pilihan kamu tidak tersedia.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+				    // 			 +"|"
+				    // 			 +"error|"
+				    // 			 +"")
+				   return false;
+				  }
+				  else {
+				    var rows_s = JSON.stringify(rows)
+				    var rows_s = rows_s.split(":")
+				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+				    var rows_s = rows_s.replace(/nippegawai/gi, "");
+				    res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				            +rows_s+"|"
+				            +"success|"
+				            +"");
+				    //jika terdeteksi data.isi_pesan_chat_pengguna_choose ada datanya, maka tidak akan mengeksekusi perintah dibawahnya
+				    if (data.isi_pesan_chat_pengguna_choose !== null) { return false; }
+				    return false;
+				  }
+				})
+			}
+			else if (data[1] == "siswa") {
 				var sqls 		= "SELECT "+data[0]+", nis_siswa FROM data_siswa WHERE nama_siswa REGEXP '"+data[2]+"' order by nama_siswa asc LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
 					if (rows === undefined) { }
@@ -91,6 +121,7 @@ exports.chat_user_siswa = function(req,res,next){
 						return false;
 					}
 				})
+			}
 		}
 		else if (data.isi_pesan_chat_pengguna_choose.length == 0) {
 			var privilege = ["siswa"];
