@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.26-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.32-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: man2_chatbot
 -- ------------------------------------------------------
--- Server version	10.1.26-MariaDB
+-- Server version	10.1.32-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -788,7 +788,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_siswa` (
   `grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa` varchar(50) NOT NULL,
   `chat_privilege_kosa_kata` varchar(25) NOT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_siswa`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -799,6 +799,30 @@ LOCK TABLES `pesan_chat_bot_kosa_kata_siswa` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` DISABLE KEYS */;
 INSERT INTO `pesan_chat_bot_kosa_kata_siswa` VALUES (1,'ampu pegawai','nama_mata_pelajaran','pegawai,siswa'),(2,'nomor induk pegawai','nip_pegawai','pegawai,siswa'),(3,'nama lengkap pegawai','nama_pegawai','pegawai,siswa'),(4,'jenis kelamin pegawai','jenis_kelamin_pegawai','pegawai,siswa'),(5,'alamat rumah pegawai','alamat_pegawai','pegawai,siswa'),(6,'nomor telepon pegawai','no_handphone_pegawai','pegawai,siswa'),(39,'nomor telepon siswa','no_handphone_siswa','pegawai,siswa'),(40,'nomor induk siswa','nis_siswa','pegawai,siswa'),(41,'nomor induk nasional siswa','nisn_siswa','pegawai,siswa'),(46,'tempat lahir siswa','tempat_lahir_siswa','pegawai,siswa'),(47,'tanggal lahir siswa','tanggal_lahir_siswa','pegawai,siswa'),(50,'nama ayah siswa','orangtua_nama_ayah_siswa','pegawai,siswa'),(51,'nama ibu siswa','orangtua_nama_ibu_siswa','pegawai,siswa'),(52,'alamat orangtua siswa','orangtua_alamat_siswa','pegawai,siswa'),(53,'nomor telepon orang tua siswa','orangtua_telepon_siswa','pegawai,siswa'),(54,'pekerjaan ayah siswa','orangtua_pekerjaan_ayah_siswa','pegawai,siswa'),(55,'pekerjaan ibu siswa','orangtua_pekerjaan_ibu_siswa','pegawai,siswa'),(56,'nama wali siswa','nama_wali','pegawai,siswa'),(57,'pekerjaan wali siswa','pekerjaan_wali','pegawai,siswa'),(58,'alamat wali siswa','alamat_wali','pegawai,siswa'),(59,'nomor telepon wali siswa','no_handphone_wali','pegawai,siswa'),(67,'detail pembayaran','0_detail_pembayaran','siswa'),(68,'daftar kelas dan wali kelas','0_daftar_kelas_dan_wali_kelas','pegawai,siswa'),(70,'jumlah siswa','0_jumlah_siswa','pegawai,siswa');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pesan_chat_bot_kosa_kata_suggest`
+--
+
+DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata_suggest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
+  `id_pesan_chat_bot_kosa_kata_suggest` int(11) NOT NULL AUTO_INCREMENT,
+  `nomor_induk_pesan_chat_bot_kosa_kata_suggest` varchar(25) DEFAULT NULL,
+  `kata_kunci_pesan_chat_bot_kosa_kata_suggest` int(50) DEFAULT NULL,
+  PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_suggest`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pesan_chat_bot_kosa_kata_suggest`
+--
+
+LOCK TABLES `pesan_chat_bot_kosa_kata_suggest` WRITE;
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -870,4 +894,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-21 19:15:01
+-- Dump completed on 2018-08-03 19:18:01

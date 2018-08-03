@@ -35,7 +35,7 @@ exports.dashboard_siswa = function(req, res){
 	})
 };
 
-// Insert Chat
+// Response Chat
 exports.chat_user_siswa = function(req,res,next){
 	let userId = req.session.userId;
   // if(userId == null){
@@ -71,11 +71,7 @@ exports.chat_user_siswa = function(req,res,next){
 				           +"|"
 				           +"success|"
 				           +"plain")
-				    // res.send("Mohon maaf, pilihan kamu tidak tersedia.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-				    // 			 +"|"
-				    // 			 +"error|"
-				    // 			 +"")
-				   return false;
+				   	return false;
 				  }
 				  else {
 				    var rows_s = JSON.stringify(rows)
@@ -101,10 +97,6 @@ exports.chat_user_siswa = function(req,res,next){
 									 +"|"
 									 +"success|"
 									 +"plain")
-						// res.send("Mohon maaf, pilihan kamu tidak tersedia.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-						// 			 +"|"
-						// 			 +"error|"
-						// 			 +"")
 					 return false;
 					}
 					else {
@@ -112,10 +104,21 @@ exports.chat_user_siswa = function(req,res,next){
 						var rows_s = rows_s.split(":")
 						var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 						var rows_s = rows_s.replace(/nissiswa/gi, "");
-						res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
-										+rows_s+"|"
-										+"success|"
-										+"");
+						// DATA KOSONG SISWA
+						if (rows_s == "null" || rows_s == "") {
+							res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+											+"Mohon maaf, data yang kamu minta masih kosong.|"
+											+"success|"
+											+"");
+							return false
+						}
+						else {
+							res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							+rows_s+"|"
+							+"success|"
+							+"");
+							return false;
+						}
 						//jika terdeteksi data.isi_pesan_chat_pengguna_choose ada datanya, maka tidak akan mengeksekusi perintah dibawahnya
 						if (data.isi_pesan_chat_pengguna_choose !== null) { return false; }
 						return false;
@@ -143,20 +146,20 @@ exports.chat_user_siswa = function(req,res,next){
 				    connection.query(sql, function  (err_rows,rows){
 				      var g = []
 				      var h = []
-							var p = parse.replace(/(pegawai|siswa)/gi, "")
+							var p = parse.replace(/(pegawai|siswa|dan)/gi, "")
 							var p = p.split(" ")
 							var p = p.filter(function(n){ return n != '' });
 							for (var i = 0; i < p.length; i++) {
 							  for (var j = 0; j < rows.length; j++) {
 							    var r = new RegExp(p[i], 'gi')
 							    var m = rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa.match(r)
-							    console.log(m);
 							    if (m !== null) {
 							      g.push(rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa)
 							    }
 							  }
-							  console.log('===================');
+							  // console.log('===================');
 							}
+							var g = g.filter(function(elem, index, self) { return index === self.indexOf(elem); }) // hapus array duplikat
 				      for (var i = 0; i < g.length; i++) {
 				        var j = i+1;
 				        h.push(j+'. '+g[i])
@@ -222,8 +225,6 @@ exports.chat_user_siswa = function(req,res,next){
 					              +"Daftar Tagihan Pembayaran Kamu : <br>"+dataArray+"|"
 					              +"success|"
 					              +"");
-
-								console.log(rows);
 								return false;
 							})
 							}
@@ -232,17 +233,11 @@ exports.chat_user_siswa = function(req,res,next){
 						    connection.query(sql, function  (err_rows,rows){
 								var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
 								connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
-								// console.log(hitung_jml_siswa_per_kelas);
-								// for (var i = 0; i < hitung_jml_siswa_per_kelas.length; i++) {
-								// 	console.log(hitung_jml_siswa_per_kelas[i].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+hitung_jml_siswa_per_kelas[i].cnt);
-								// }
-								// console.log("--");
 								var arr = []
 								for (var i = 0; i < rows.length; i++) {
 									for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
 										var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
 										var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
-										console.log(regex);
 										if (regex !== null) {
 											var no = j+1;
 											arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : "+rows[i].nama_pegawai+"<br>b). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
@@ -252,7 +247,6 @@ exports.chat_user_siswa = function(req,res,next){
 								}
 								var arr = JSON.stringify(arr)
 								var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
-								console.log(arr);
 								res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
 					              +"|"
 					              +"success|"
@@ -362,7 +356,6 @@ exports.chat_user_siswa = function(req,res,next){
 									                }
 									                nama_nip_baru.push("<br>"+(j+1)+" > lebih. <b>Keluar<b>")
 									                var nama_nip_baru = JSON.stringify(nama_nip_baru)
-									                console.log(grup_kosa_kata_final+'>'+regex6[0]+'>'+count_pegawai);
 									                var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 									                res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
 									                        +"Coba pilih nomor yang telah disediakan : |"
@@ -486,7 +479,7 @@ exports.chat_user_siswa = function(req,res,next){
 						                      }
 																	nama_nip_baru.push("<br>"+(j+1)+" > lebih. <b>Keluar<b>")
 						                      var nama_nip_baru = JSON.stringify(nama_nip_baru)
-																	console.log(grup_kosa_kata_final+'>'+regex6[0]+'>'+count_siswa);
+																	// console.log(grup_kosa_kata_final+'>'+regex6[0]+'>'+count_siswa);
 						                      var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 						                      res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
 						                              +"Coba pilih nomor yang telah disediakan : |"

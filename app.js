@@ -19,6 +19,8 @@ var data_user_pegawai   = require('./models/data_user_pegawai');
 // Siswa
 var cek_login_siswa   = require('./models/cek_login_siswa');
 var data_user_siswa     = require('./models/data_user_siswa');
+// App
+var data_user_app    = require('./models/data_user_app');
 
 app.use(connection(mysql, {
     host: 'localhost',
@@ -68,7 +70,8 @@ app.post('/login_siswa', cek_login_siswa.login_siswa);
 app.get('/logout_siswa', cek_login_siswa.logout_siswa);
 app.get('/dashboard_siswa', data_user_siswa.dashboard_siswa);
 app.post('/dashboard/chat_user_siswa', data_user_siswa.chat_user_siswa);
-
+// Suggest
+app.post('/dashboard/data_user_app/submit_suggest_kosa_kata', data_user_app.data_user_suggest);
 // app.get('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
 // app.get('/dashboard/chat_bot_history', data_user.chat_bot_history);
 // app.post('/dashboard/chat_bot', data_user.chat_bot);

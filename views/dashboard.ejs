@@ -19,14 +19,21 @@
      </div>
     </nav>
     <h1>sd <%= session %></h1>
+
+
+ <!-- Dropdown Structure -->
+ <ul id='dropdown1' class='dropdown-content'>
+   <li><a href="#!">Usulkan</a></li>
+ </ul>
+
     <div class="container">
       <div class="col s12 chat-page">
-        <div class="col s12 chat-page-history">
-          <ul>
-          </ul>
+        <div class="col s12">
+          <ul class="chat-page-history">
          <!-- <p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p> -->
-         <!-- <div class="receiver"><p class="chat-receiver">TesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTes</p></div> -->
+         <!-- <div class="receiver"><p class="chat-receiver"><a class="dropdown-trigger btn" href="#" data-target="dropdown1">Drop Me!</a></p></div> -->
          <!-- <div class="sender"><p class="chat-sender">TesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTes</p></div> -->
+          </ul>
         </div>
         <div class="col s12 chat-page-typing-and-sending">
           <div class="row">
@@ -50,7 +57,7 @@
     </div>
 
     <!-- Modal Structure -->
-    <div id="modal-tampil-foto" class="modal">
+    <!-- <div id="modal-tampil-foto" class="modal">
       <div class="modal-content">
         <h4>Tampil Foto</h4>
         <img class="duplicate-name-photo" style="width:170px"></img>
@@ -58,5 +65,6 @@
       <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
       </div>
-    </div>
+    </div> -->
+
     <% include footer %>
