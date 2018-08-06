@@ -78,7 +78,7 @@ exports.chat_user_siswa = function(req,res,next){
 				    var rows_s = rows_s.split(":")
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
-				    res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
 				            +"");
@@ -106,14 +106,14 @@ exports.chat_user_siswa = function(req,res,next){
 						var rows_s = rows_s.replace(/nissiswa/gi, "");
 						// DATA KOSONG SISWA
 						if (rows_s == "null" || rows_s == "") {
-							res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 											+"Mohon maaf, data yang kamu minta masih kosong.|"
 											+"success|"
 											+"");
 							return false
 						}
 						else {
-							res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
 							+"");
@@ -311,7 +311,7 @@ exports.chat_user_siswa = function(req,res,next){
 									  }
 									  // NOT FOUND 3 pegawai
 									  if (index === undefined) {
-									    res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+									    res.send("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 									           +"|"
 									           +"error|"
 									           +"")
@@ -347,7 +347,7 @@ exports.chat_user_siswa = function(req,res,next){
 									            var count_pegawai = count_pegawai.replace(/[^0-9]+/, "")
 									            if (count_pegawai == 1) {
 									              var selects 								= [grup_kosa_kata_final, regex6[0]];
-									              var sql 										= "SELECT ??, nip_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP ? order by nama_pegawai asc";
+									              var sql 										= "SELECT ??, nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran ON data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP ? order by nama_pegawai asc";
 									              connection.query(sql, selects, function  (err_final,rows){
 									                if (err_final) throw err_final;
 									                var rowss_final = JSON.stringify(rows);
@@ -361,14 +361,14 @@ exports.chat_user_siswa = function(req,res,next){
 									                } // ./READONLY
 									                // DATA KOSONG pegawai
 									                if (final == "null" || final == "") {
-									                  res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+									                  res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 									                          +"Mohon maaf, data yang kamu minta masih kosong.|"
 									                          +"success|"
 									                          +"");
 									                  return false
 									                }
 									                else {
-									                  res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+									                  res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 									                  +final+"|"
 									                  +"success|"
 									                  +"");
@@ -434,7 +434,7 @@ exports.chat_user_siswa = function(req,res,next){
 						        }
 			              // NOT FOUND 3 SISWA
 						        if (index === undefined) {
-						          res.end("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+						          res.send("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 						                 +"|"
 						                 +"error|"
 						                 +"")
@@ -484,14 +484,14 @@ exports.chat_user_siswa = function(req,res,next){
 																	} // ./READONLY
 				                          // DATA KOSONG SISWA
 																	if (final == "null" || final == "") {
-																		res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+																		res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 								                            +"Mohon maaf, data yang kamu minta masih kosong.|"
 								                            +"success|"
 								                            +"");
 																		return false
 																	}
 																	else {
-																		res.end("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+																		res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																		+final+"|"
 																		+"success|"
 																		+"");
