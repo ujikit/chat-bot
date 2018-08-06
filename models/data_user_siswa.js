@@ -142,7 +142,7 @@ exports.chat_user_siswa = function(req,res,next){
 					}
 					// NOT FOUND kosa kata dan SUGGEST ksoa kata siswa
 				  if (res1 === undefined) {
-				    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa!='umum'";
+				    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa ORDER BY kosa_kata_pesan_chat_bot_kosa_kata_siswa asc";
 				    connection.query(sql, function  (err_rows,rows){
 				      var g = []
 				      var h = []
@@ -171,14 +171,15 @@ exports.chat_user_siswa = function(req,res,next){
 									var v = []
 									for (var i = 0; i < rows.length; i++) {
 										var no = i + 1;
-										v.push("<br>"+no+". "+rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa);
+										v.push("<br>"+no+". "+rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa+'<button>Tes</button>');
 									}
+                  // Pertanyaan tidak ada didatabase sama sekali
 									var v = JSON.stringify(v)
 									var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
-									res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+									res.send("Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 												 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <b>"+v+"</b>|"
 												 +"error|"
-												 +"suggest");
+												 +"");
 								})
 				 			return false;
 							}
@@ -188,7 +189,7 @@ exports.chat_user_siswa = function(req,res,next){
 				      var i	= h.replace(/,/gi, "<br>")
 				      var j= i.split(",");
 				      var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
-				      res.send("Mohon maaf, kami tidak memahami <b>kata</b> <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+				      res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 				              +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
 				              +"error|"
 				              +"suggest");
@@ -252,6 +253,37 @@ exports.chat_user_siswa = function(req,res,next){
 					              +"success|"
 					              +"plain");
 								return false;
+							})
+							})
+							}
+							else if (grup_kosa_kata_final == "0_jumlah_siswa") { //JIKA YANG DICARI DAFTAR KELAS DAN WALI KELAS
+								var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
+						    connection.query(sql, function  (err_rows,rows){
+								var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
+								connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
+								var sql = "SELECT COUNT(nis_siswa) as jumlah_seluruh_siswa FROM data_siswa";
+						    connection.query(sql, function  (err_rows,rows_jumlah_siswa){
+									var arr = []
+									for (var i = 0; i < rows.length; i++) {
+										for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
+											var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
+											var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
+											if (regex !== null) {
+												var no = j+1;
+												arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
+											}
+											// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
+										}
+									}
+									arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
+									var arr = JSON.stringify(arr)
+									var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
+									res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
+						              +"|"
+						              +"success|"
+						              +"plain");
+									return false;
+								})
 							})
 							})
 							}

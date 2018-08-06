@@ -682,7 +682,7 @@ CREATE TABLE `pembayaran` (
   PRIMARY KEY (`id_pembayaran`),
   KEY `kd_pembayaran` (`kd_pembayaran`),
   KEY `nis_siswa_pembayaran` (`nis_siswa_pembayaran`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -691,7 +691,7 @@ CREATE TABLE `pembayaran` (
 
 LOCK TABLES `pembayaran` WRITE;
 /*!40000 ALTER TABLE `pembayaran` DISABLE KEYS */;
-INSERT INTO `pembayaran` VALUES (61,'d_ulang',NULL,'565.000','10888',NULL,NULL,'N'),(62,'seragam','500.000','1.000.000','10888','0000-00-00 00:00:00','2018-07-21 12:47:45','N'),(63,'uang_operasional',NULL,'1.800.000','10888',NULL,NULL,'N'),(64,'spp',NULL,'1.500.000','10888',NULL,NULL,'N'),(65,'d_ulang',NULL,'565.000','10900',NULL,NULL,'N'),(66,'seragam',NULL,'1.500.000','10900',NULL,NULL,'N'),(67,'uang_operasional',NULL,'1.800.000','10900',NULL,NULL,'N'),(68,'spp',NULL,'1.500.000','10900',NULL,NULL,'N');
+INSERT INTO `pembayaran` VALUES (61,'d_ulang',NULL,'565.000','10888',NULL,NULL,'N'),(62,'seragam','500.000','1.000.000','10888','0000-00-00 00:00:00','2018-07-21 12:47:45','N'),(63,'uang_operasional',NULL,'1.800.000','10888',NULL,NULL,'N'),(64,'spp',NULL,'1.500.000','10888',NULL,NULL,'N'),(65,'d_ulang',NULL,'565.000','10900',NULL,NULL,'N'),(66,'seragam',NULL,'1.500.000','10900',NULL,NULL,'N'),(67,'uang_operasional',NULL,'1.800.000','10900',NULL,NULL,'N'),(68,'spp',NULL,'1.500.000','10900',NULL,NULL,'N'),(69,'d_ulang',NULL,'565.000','',NULL,NULL,'N'),(70,'seragam',NULL,'1.500.000','',NULL,NULL,'N'),(71,'uang_operasional',NULL,'1.800.000','',NULL,NULL,'N'),(72,'spp',NULL,'1.500.000','',NULL,NULL,'N');
 /*!40000 ALTER TABLE `pembayaran` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -751,6 +751,31 @@ LOCK TABLES `pesan` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pesan_chat_bot_kosa_kata`
+--
+
+DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pesan_chat_bot_kosa_kata` (
+  `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT,
+  `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
+  `data_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_pesan_chat_bot_kosa_kata`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pesan_chat_bot_kosa_kata`
+--
+
+LOCK TABLES `pesan_chat_bot_kosa_kata` WRITE;
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` DISABLE KEYS */;
+INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (1,'','nomor induk'),(2,'','nama lengkap'),(8,'','nomor telepon'),(29,'','jabatan'),(33,'','ampu'),(34,'','ajar'),(39,'','alamat rumah'),(40,'','jumlah');
+/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pesan_chat_bot_kosa_kata_pegawai`
 --
 
@@ -797,7 +822,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_siswa` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata_siswa` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata_siswa` VALUES (1,'ampu pegawai','nama_mata_pelajaran','pegawai,siswa'),(2,'nomor induk pegawai','nip_pegawai','pegawai,siswa'),(3,'nama lengkap pegawai','nama_pegawai','pegawai,siswa'),(4,'jenis kelamin pegawai','jenis_kelamin_pegawai','pegawai,siswa'),(5,'alamat rumah pegawai','alamat_pegawai','pegawai,siswa'),(6,'nomor telepon pegawai','no_handphone_pegawai','pegawai,siswa'),(39,'nomor telepon siswa','no_handphone_siswa','pegawai,siswa'),(40,'nomor induk siswa','nis_siswa','pegawai,siswa'),(41,'nomor induk nasional siswa','nisn_siswa','pegawai,siswa'),(46,'tempat lahir siswa','tempat_lahir_siswa','pegawai,siswa'),(47,'tanggal lahir siswa','tanggal_lahir_siswa','pegawai,siswa'),(50,'nama ayah siswa','orangtua_nama_ayah_siswa','pegawai,siswa'),(51,'nama ibu siswa','orangtua_nama_ibu_siswa','pegawai,siswa'),(52,'alamat orangtua siswa','orangtua_alamat_siswa','pegawai,siswa'),(53,'nomor telepon orang tua siswa','orangtua_telepon_siswa','pegawai,siswa'),(54,'pekerjaan ayah siswa','orangtua_pekerjaan_ayah_siswa','pegawai,siswa'),(55,'pekerjaan ibu siswa','orangtua_pekerjaan_ibu_siswa','pegawai,siswa'),(56,'nama wali siswa','nama_wali','pegawai,siswa'),(57,'pekerjaan wali siswa','pekerjaan_wali','pegawai,siswa'),(58,'alamat wali siswa','alamat_wali','pegawai,siswa'),(59,'nomor telepon wali siswa','no_handphone_wali','pegawai,siswa'),(67,'detail pembayaran','0_detail_pembayaran','siswa'),(68,'daftar kelas dan wali kelas','0_daftar_kelas_dan_wali_kelas','pegawai,siswa'),(70,'jumlah siswa','0_jumlah_siswa','pegawai,siswa');
+INSERT INTO `pesan_chat_bot_kosa_kata_siswa` VALUES (1,'ampu pegawai','nama_mata_pelajaran','pegawai,siswa'),(2,'nomor induk pegawai','nip_pegawai','pegawai,siswa'),(3,'nama lengkap pegawai','nama_pegawai','pegawai,siswa'),(4,'jenis kelamin pegawai','jenis_kelamin_pegawai','pegawai,siswa'),(5,'alamat rumah pegawai','alamat_pegawai','pegawai,siswa'),(6,'nomor telepon pegawai','no_handphone_pegawai','pegawai,siswa'),(39,'nomor telepon siswa','no_handphone_siswa','pegawai,siswa'),(40,'nomor induk siswa','nis_siswa','pegawai,siswa'),(41,'nomor induk nasional siswa','nisn_siswa','pegawai,siswa'),(42,'alamat rumah siswa','alamat_siswa','pegawai,siswa'),(46,'tempat lahir siswa','tempat_lahir_siswa','pegawai,siswa'),(47,'tanggal lahir siswa','tanggal_lahir_siswa','pegawai,siswa'),(50,'nama ayah siswa','orangtua_nama_ayah_siswa','pegawai,siswa'),(51,'nama ibu siswa','orangtua_nama_ibu_siswa','pegawai,siswa'),(52,'alamat orangtua siswa','orangtua_alamat_siswa','pegawai,siswa'),(53,'nomor telepon orang tua siswa','orangtua_telepon_siswa','pegawai,siswa'),(54,'pekerjaan ayah siswa','orangtua_pekerjaan_ayah_siswa','pegawai,siswa'),(55,'pekerjaan ibu siswa','orangtua_pekerjaan_ibu_siswa','pegawai,siswa'),(56,'nama wali siswa','nama_wali','pegawai,siswa'),(57,'pekerjaan wali siswa','pekerjaan_wali','pegawai,siswa'),(58,'alamat wali siswa','alamat_wali','pegawai,siswa'),(59,'nomor telepon wali siswa','no_handphone_wali','pegawai,siswa'),(67,'detail pembayaran','0_detail_pembayaran','siswa'),(68,'daftar kelas dan wali kelas','0_daftar_kelas_dan_wali_kelas','pegawai,siswa'),(70,'jumlah siswa','0_jumlah_siswa','pegawai,siswa');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -811,9 +836,9 @@ DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata_suggest`;
 CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
   `id_pesan_chat_bot_kosa_kata_suggest` int(11) NOT NULL AUTO_INCREMENT,
   `nomor_induk_pesan_chat_bot_kosa_kata_suggest` varchar(25) DEFAULT NULL,
-  `kata_kunci_pesan_chat_bot_kosa_kata_suggest` int(50) DEFAULT NULL,
+  `kata_kunci_pesan_chat_bot_kosa_kata_suggest` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_suggest`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -822,6 +847,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata_suggest` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` DISABLE KEYS */;
+INSERT INTO `pesan_chat_bot_kosa_kata_suggest` VALUES (5,'10888','sad');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -894,4 +920,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-03 19:18:01
+-- Dump completed on 2018-08-06 16:54:01
