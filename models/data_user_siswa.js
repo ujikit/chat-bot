@@ -241,7 +241,7 @@ exports.chat_user_siswa = function(req,res,next){
 										var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
 										if (regex !== null) {
 											var no = j+1;
-											arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : "+rows[i].nama_pegawai+"<br>b). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
+											arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : <b>"+rows[i].nama_pegawai+"</b><br>b). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
 										}
 										// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 									}
@@ -256,36 +256,70 @@ exports.chat_user_siswa = function(req,res,next){
 							})
 							})
 							}
-							else if (grup_kosa_kata_final == "0_jumlah_siswa") { //JIKA YANG DICARI DAFTAR KELAS DAN WALI KELAS
-								var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
-						    connection.query(sql, function  (err_rows,rows){
-								var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
-								connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
-								var sql = "SELECT COUNT(nis_siswa) as jumlah_seluruh_siswa FROM data_siswa";
-						    connection.query(sql, function  (err_rows,rows_jumlah_siswa){
-									var arr = []
-									for (var i = 0; i < rows.length; i++) {
-										for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
-											var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
-											var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
-											if (regex !== null) {
-												var no = j+1;
-												arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Jumlah Siswa : "+hitung_jml_siswa_per_kelas[j].cnt+"<br>");
+							else if (grup_kosa_kata_final == "0_jumlah_siswa" || grup_kosa_kata_final == "0_jumlah_pegawai") { //JIKA YANG DICARI DAFTAR KELAS DAN WALI KELAS
+								var jabatan_yg_dicari = grup_kosa_kata_final.split("_");
+								if (jabatan_yg_dicari[2] == "siswa") {
+									var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
+							    connection.query(sql, function  (err_rows,rows){
+									var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
+									connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
+									var sql = "SELECT COUNT(nis_siswa) as jumlah_seluruh_siswa FROM data_siswa";
+							    connection.query(sql, function  (err_rows,rows_jumlah_siswa){
+										var arr = []
+										for (var i = 0; i < rows.length; i++) {
+											for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
+												var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
+												var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
+												if (regex !== null) {
+													var no = j+1;
+													arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
+												}
+												// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 											}
-											// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 										}
-									}
-									arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
-									var arr = JSON.stringify(arr)
-									var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
-									res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
-						              +"|"
-						              +"success|"
-						              +"plain");
-									return false;
+										arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
+										var arr = JSON.stringify(arr)
+										var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
+										res.send("Jumlah Seluruh Siswa : <br>"+arr+"|"
+							              +"|"
+							              +"success|"
+							              +"plain");
+										return false;
+									})
 								})
-							})
-							})
+								})
+								}
+								else if(jabatan_yg_dicari[2] == "pegawai"){
+									var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
+							    connection.query(sql, function  (err_rows,rows){
+									var sql = "SELECT kd_kelas_daftar_mata_pelajaran_transaksi, COUNT(DISTINCT nip_pegawai_mata_pelajaran_transaksi) AS cnt FROM mata_pelajaran_transaksi GROUP BY kd_kelas_daftar_mata_pelajaran_transaksi ORDER BY kd_kelas_daftar_mata_pelajaran_transaksi ASC";
+									connection.query(sql, function (err_hitung_jml_pegawai_per_kelas,hitung_jml_pegawai_per_kelas){
+									var sql = "SELECT COUNT(nip_pegawai) as jumlah_seluruh_pegawai FROM data_pegawai WHERE jabatan_pegawai != 'admin'";
+							    connection.query(sql, function  (err_rows,rows_jumlah_pegawai){
+										var arr = []
+										for (var i = 0; i < rows.length; i++) {
+											for (var j = 0; j < hitung_jml_pegawai_per_kelas.length; j++) {
+												var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
+												var regex	= hitung_jml_pegawai_per_kelas[j].kd_kelas_daftar_mata_pelajaran_transaksi.match(regex)
+												if (regex !== null) {
+													var no = j+1;
+													arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Pegawai : <b>"+hitung_jml_pegawai_per_kelas[j].cnt+"</b><br>");
+												}
+												// console.log(hitung_jml_pegawai_per_kelas[j].kd_kelas_daftar_nilai_pegawai_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_pegawai_per_kelas[j].cnt);
+											}
+										}
+										arr.push("<br>Jumlah Seluruh Pegawai : <b><br>"+rows_jumlah_pegawai[0].jumlah_seluruh_pegawai+"</b>")
+										var arr = JSON.stringify(arr)
+										var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
+										res.send("Jumlah Seluruh pegawai : <br>"+arr+"|"
+							              +"|"
+							              +"success|"
+							              +"plain");
+										return false;
+								})
+								})
+								})
+								}
 							}
 							else {
 								var jabatan_cari = pesan.match(/(pegawai|siswa)/gi);
