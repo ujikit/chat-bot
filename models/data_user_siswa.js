@@ -217,11 +217,6 @@ exports.chat_user_siswa = function(req,res,next){
 										else { var kekurangan = "<button class='waves-effect waves-light grey darken-1 btn-small'>Rp. "+rows[i].kekurangan_pembayaran+"</button>" }
 										if (rows[i].tanggal_terakhir_pembayaran == null || rows[i].tanggal_terakhir_pembayaran == '' ) { var tanggal_terakhir_pembayaran = "<button class='waves-effect waves-light grey darken-1 btn-small'>Belum Pernah.</button>"; }
 										else { var tanggal_terakhir_pembayaran = "<button class='waves-effect waves-light grey darken-1 btn-small'>"+rows[i].tanggal_terakhir_pembayaran+"</button>" }
-										// tanggal_terakhir_pembayaran 				= JSON.stringify(rows[i].tanggal_terakhir_pembayaran)
-										// tanggal_terakhir_pembayaran 				= tanggal_terakhir_pembayaran.match(/((.*)-\d+)/g)
-										// jam_terakhir_pembayaran							=	JSON.stringify(rows[i].tanggal_terakhir_pembayaran)
-										// jam_terakhir_pembayaran							= jam_terakhir_pembayaran.match(/(\d(.?):\d+:\d+)/g)
-										// var jam_tanggal_terakhir_pembayaran			= "<button class='waves-effect waves-light grey darken-1 btn-small'>Tanggal : "+tanggal_terakhir_pembayaran+" Jam : "+jam_terakhir_pembayaran+"</button>"
 										dataArray.push("<br><b>"+no+". "+rows[i].nama_pembayaran_daftar+"</b><br>a). Status : <br><b>"+y_n+"</b><br>b). Kekurangan : <br><b>"+kekurangan+"</b><br>c). Terakhir Bayar : <br><b>"+tanggal_terakhir_pembayaran+"</b><br>");
 									}
 									var dataArray = JSON.stringify(dataArray)
@@ -358,7 +353,6 @@ exports.chat_user_siswa = function(req,res,next){
 										           +"")
 										    return false;
 										  }
-
 										  var arr = [];
 										  for (var j = 0; j < rows_cari_nama.length; j++) {
 										    var nama3 = rows_cari_nama[j].nama_pegawai;
@@ -371,7 +365,6 @@ exports.chat_user_siswa = function(req,res,next){
 										          var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
 										          arr.push(nama_fix);
 										      } } }
-
 										  for (var i = 0; i < arr.length; i++) {
 										    var nama_fix2 = arr[i];
 										    for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -387,7 +380,10 @@ exports.chat_user_siswa = function(req,res,next){
 										            var count_pegawai = count_pegawai.replace(/[^0-9]+/, "")
 										            var count_pegawai = count_pegawai.replace(/[^0-9]+/, "")
 										            if (count_pegawai == 1) {
-										              var selects 								= [grup_kosa_kata_final, regex6[0]];
+                                  // Variabel menghubungkan antara tabel pegawai dan mata pelajaran
+																	if (grup_kosa_kata_final == "nama_mata_pelajaran_pegawai") { var grup	=	grup_kosa_kata_final.replace(/_pegawai/gi, ""); }
+																	else { var grup	=	grup_kosa_kata_final; }
+										              var selects 								= [grup, regex6[0]];
 										              var sql 										= "SELECT ??, nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran ON data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP ? order by nama_pegawai asc";
 										              connection.query(sql, selects, function  (err_final,rows){
 										                if (err_final) throw err_final;
@@ -481,7 +477,6 @@ exports.chat_user_siswa = function(req,res,next){
 							                 +"")
 							          return false;
 							        }
-
 							        var arr = [];
 							        for (var j = 0; j < rows_cari_nama.length; j++) {
 							          var nama3 = rows_cari_nama[j].nama_siswa;
