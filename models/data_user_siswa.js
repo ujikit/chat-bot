@@ -84,10 +84,20 @@ exports.chat_user_siswa = function(req,res,next){
 				    var rows_s = rows_s.split(":")
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
-				    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
-				            +rows_s+"|"
-				            +"success|"
-				            +"");
+						// DATA KOSONG SISWA
+						if (rows_s == "null" || rows_s == "") {
+							res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+											+"Mohon maaf, data yang kamu minta masih kosong.|"
+											+"success|"
+											+"");
+							return false
+						}
+						else {
+					    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+					            +rows_s+"|"
+					            +"success|"
+					            +"");
+						}
 				    //jika terdeteksi data.isi_pesan_chat_pengguna_choose ada datanya, maka tidak akan mengeksekusi perintah dibawahnya
 				    if (data.isi_pesan_chat_pengguna_choose !== null) { return false; }
 				    return false;
@@ -584,6 +594,9 @@ exports.chat_user_siswa = function(req,res,next){
 				  }
 				return false;
 			})
+		}
+		else {
+			console.log("error");
 		}
   }); // ./req.getConnection(function (err, connection)
 };
