@@ -61,9 +61,15 @@ exports.chat_user_siswa = function(req,res,next){
 
 			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
 			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
-			var offset = data[4]-1;
+			console.log(data);
+			// return false;
+			var offset 	= data[4]-1;
+			var grup		=	data[0]; // grup kosa kata
 			if (data[1] == "pegawai") {
-				var sqls 		= "SELECT "+data[0]+", nip_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP '"+data[2]+"' order by nama_pegawai asc LIMIT 1 OFFSET "+offset;
+				if (grup == "nama_mata_pelajaran_pegawai") {
+					var grup	=	grup.replace(/_pegawai/gi, "");
+				}
+				var sqls 		= "SELECT "+grup+", nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran ON data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP '"+data[2]+"' order by nama_pegawai asc LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
 				  if (rows === undefined) { }
 				  else if (data[3] < data[4] || data[4] == 0) {
@@ -127,6 +133,13 @@ exports.chat_user_siswa = function(req,res,next){
 			}
 		}
 		else if (data.isi_pesan_chat_pengguna_choose.length == 0) {
+			if (data.isi_pesan_chat_pengguna.split(" ").length == 1){
+				res.send("Mohon maaf, maksud dari pertanyaan '<b>"+data.isi_pesan_chat_pengguna+"</b>' apa ya ?<br><b>Ulangi pertanyaanmu lagi.</b>|"
+							 +"|"
+							 +"error|"
+							 +"");
+				return false;
+			}
 			var privilege = ["siswa"];
 			var parameter =	[privilege];
 			var sqls 		= "SELECT * FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ?";
@@ -136,9 +149,7 @@ exports.chat_user_siswa = function(req,res,next){
 			      var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa;
 			        var regex = new RegExp(kosa_kata, 'gi');
 			        var ress = parse.match(regex);
-			        if (ress !== null) {
-			          var res1 = ress;
-			        }
+			        if (ress !== null) { var res1 = ress; }
 					}
 					// NOT FOUND kosa kata dan SUGGEST ksoa kata siswa
 				  if (res1 === undefined) {
@@ -153,17 +164,13 @@ exports.chat_user_siswa = function(req,res,next){
 							  for (var j = 0; j < rows.length; j++) {
 							    var r = new RegExp(p[i], 'gi')
 							    var m = rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa.match(r)
-							    if (m !== null) {
-							      g.push(rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa)
-							    }
+							    if (m !== null) { g.push(rows[j].kosa_kata_pesan_chat_bot_kosa_kata_siswa) }
 							  }
 							  // console.log('===================');
 							}
 							var g = g.filter(function(elem, index, self) { return index === self.indexOf(elem); }) // hapus array duplikat
 				      for (var i = 0; i < g.length; i++) {
-				        var j = i+1;
-				        h.push(j+'. '+g[i])
-				      }
+				        var j = i+1; h.push(j+'. '+g[i]) }
 	            // HANDLING NULL SUGGEST SISWA
 							if (h.length === 0) {
 								var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
