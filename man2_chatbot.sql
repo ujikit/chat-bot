@@ -140,7 +140,7 @@ CREATE TABLE `data_siswa` (
 
 LOCK TABLES `data_siswa` WRITE;
 /*!40000 ALTER TABLE `data_siswa` DISABLE KEYS */;
-INSERT INTO `data_siswa` VALUES (4,'1045310829','10888','Addisty Ayu Rinjani','P','10ipa1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','','','','','','0000-00-00',''),(5,'4045310829','10900','Addisty Ria Puji','P','10ips1','siswa','Jakarta','Bandung','1999-05-11','0847283712832','2','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','','','','','','0000-00-00','');
+INSERT INTO `data_siswa` VALUES (4,'1045310829','10888','Addisty','P','10ipa1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','','','','','','0000-00-00',''),(5,'4045310829','10900','Addisty Ria Puji','P','10ips1','siswa','Jakarta','Bandung','1999-05-11','0847283712832','2','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','','','','','','0000-00-00','');
 /*!40000 ALTER TABLE `data_siswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +347,7 @@ CREATE TABLE `mata_pelajaran` (
   `nama_mata_pelajaran` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id_mata_pelajaran`),
   KEY `kd_mata_pelajaran` (`kd_mata_pelajaran`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,7 +356,7 @@ CREATE TABLE `mata_pelajaran` (
 
 LOCK TABLES `mata_pelajaran` WRITE;
 /*!40000 ALTER TABLE `mata_pelajaran` DISABLE KEYS */;
-INSERT INTO `mata_pelajaran` VALUES (1,'aqh','Al-Qur\'an Hadis'),(2,'aa','Akidah Akhlak'),(3,'fkh','Fikih'),(4,'ski','Sejarah Kebudayaan Islam'),(5,'pkn','Pendidikan Pancasila dan Kewarganegaraan'),(6,'mtk','Matematika'),(7,'bindo','Bahasa Indonesia'),(8,'bing','Bahasa Inggris'),(9,'senbud','Seni Budaya'),(10,'penjas','Pendidikan Jasmani, Olahraga dan Kesehat'),(11,'pkk','Prakarya dan Kewirausahaan'),(12,'mtkIPA','Matematika 2'),(13,'bio','Biologi'),(14,'fis','Fisika'),(15,'kim','Kimia'),(16,'geo','Geografi'),(17,'sej','Sejarah'),(18,'sos','Sosiologi'),(19,'eko','Ekonomi'),(20,'iltaf','Tafsir - Ilmu Tafsir'),(21,'ilhad','Hadis - Ilmu Hadis'),(22,'usfik','Fikih - Ushul Fikih'),(23,'ilkal','Ilmu Kalam'),(24,'akhAGAMA','Akhlak'),(25,'barabAGAMA','Bahasa Arab 2'),(26,'sasind','Bahasa dan Sastra Indonesia'),(27,'sasing','Bahasa dan Sastra Inggris'),(28,'bjer','Bahasa Jerman'),(29,'bjep','Bahasa Jepang'),(30,'antro','Antropologi'),(31,'bjawa','Bahasa Jawa'),(32,'ppmb','PPMB'),(33,'tik','Teknologi Informasi dan Komunikasi');
+INSERT INTO `mata_pelajaran` VALUES (1,'aqh','Al Quran Hadis'),(2,'aa','Akidah Akhlak'),(3,'fkh','Fikih'),(4,'ski','Sejarah Kebudayaan Islam'),(5,'pkn','Pendidikan Pancasila dan Kewarganegaraan'),(6,'mtk','Matematika'),(7,'bindo','Bahasa Indonesia'),(8,'bing','Bahasa Inggris'),(9,'senbud','Seni Budaya'),(10,'penjas','Pendidikan Jasmani, Olahraga dan Kesehat'),(11,'pkk','Prakarya dan Kewirausahaan'),(12,'mtkIPA','Matematika 2'),(13,'bio','Biologi'),(14,'fis','Fisika'),(15,'kim','Kimia'),(16,'geo','Geografi'),(17,'sej','Sejarah'),(18,'sos','Sosiologi'),(19,'eko','Ekonomi'),(20,'iltaf','Ilmu Tafsir'),(21,'ilhad','Ilmu Hadis'),(22,'usfik','Ushul Fikih'),(23,'ilkal','Ilmu Kalam'),(24,'akhAGAMA','Akhlak'),(25,'barabAGAMA','Bahasa Arab 2'),(26,'sasind','Bahasa dan Sastra Indonesia'),(27,'sasing','Bahasa dan Sastra Inggris'),(28,'bjer','Bahasa Jerman'),(29,'bjep','Bahasa Jepang'),(30,'antro','Antropologi'),(31,'bjawa','Bahasa Jawa'),(32,'ppmb','PPMB'),(33,'tik','Teknologi Informasi dan Komunikasi'),(34,'barab','Bahasa Arab');
 /*!40000 ALTER TABLE `mata_pelajaran` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,7 +376,7 @@ CREATE TABLE `mata_pelajaran_transaksi` (
   `kd_mata_pelajaran_transaksi` varchar(65) DEFAULT NULL,
   `nip_pegawai_mata_pelajaran_transaksi` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_mata_pelajaran_transaksi`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +385,7 @@ CREATE TABLE `mata_pelajaran_transaksi` (
 
 LOCK TABLES `mata_pelajaran_transaksi` WRITE;
 /*!40000 ALTER TABLE `mata_pelajaran_transaksi` DISABLE KEYS */;
-INSERT INTO `mata_pelajaran_transaksi` VALUES (1,'88',NULL,NULL,'10ipa1','bindo','296611082007011021'),(2,'22',NULL,NULL,'10ips1','bindo','296611082007011021');
+INSERT INTO `mata_pelajaran_transaksi` VALUES (1,'88',NULL,NULL,'10ipa1','bindo','296611082007011021'),(2,'22',NULL,NULL,'10ips1','bindo','296611082007011021'),(3,NULL,NULL,NULL,'10bahasa1','mtkIPA','197007152002121009'),(4,NULL,NULL,NULL,'10bahasa1','ski','196502211990032006');
 /*!40000 ALTER TABLE `mata_pelajaran_transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -822,7 +822,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_siswa` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata_siswa` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata_siswa` VALUES (1,'ampu','nama_mata_pelajaran_pegawai','pegawai,siswa'),(2,'ajar','nama_mata_pelajaran_pegawai','pegawai,siswa'),(3,'nama lengkap pegawai','nama_pegawai','pegawai,siswa'),(4,'jenis kelamin pegawai','jenis_kelamin_pegawai','pegawai,siswa'),(5,'alamat rumah pegawai','alamat_pegawai','pegawai,siswa'),(6,'nomor telepon pegawai','no_handphone_pegawai','pegawai,siswa'),(7,'nomor induk pegawai','nip_pegawai','pegawai,siswa'),(39,'nomor telepon siswa','no_handphone_siswa','pegawai,siswa'),(40,'nomor induk siswa','nis_siswa','pegawai,siswa'),(41,'nomor induk nasional siswa','nisn_siswa','pegawai,siswa'),(42,'alamat rumah siswa','alamat_siswa','pegawai,siswa'),(46,'tempat lahir siswa','tempat_lahir_siswa','pegawai,siswa'),(47,'tanggal lahir siswa','tanggal_lahir_siswa','pegawai,siswa'),(50,'nama ayah siswa','orangtua_nama_ayah_siswa','pegawai,siswa'),(51,'nama ibu siswa','orangtua_nama_ibu_siswa','pegawai,siswa'),(52,'alamat orangtua siswa','orangtua_alamat_siswa','pegawai,siswa'),(53,'nomor telepon orang tua siswa','orangtua_telepon_siswa','pegawai,siswa'),(54,'pekerjaan ayah siswa','orangtua_pekerjaan_ayah_siswa','pegawai,siswa'),(55,'pekerjaan ibu siswa','orangtua_pekerjaan_ibu_siswa','pegawai,siswa'),(56,'nama wali siswa','nama_wali','pegawai,siswa'),(57,'pekerjaan wali siswa','pekerjaan_wali','pegawai,siswa'),(58,'alamat wali siswa','alamat_wali','pegawai,siswa'),(59,'nomor telepon wali siswa','no_handphone_wali','pegawai,siswa'),(67,'detail pembayaran','0_detail_pembayaran','siswa'),(68,'daftar kelas dan wali kelas','0_daftar_kelas_dan_wali_kelas','pegawai,siswa'),(70,'jumlah siswa','0_jumlah_siswa','pegawai,siswa'),(71,'jumlah pegawai','0_jumlah_pegawai','pegawai,siswa'),(72,'pengampu mata pelajaran','pengampu_mapel','pegawai,siswa');
+INSERT INTO `pesan_chat_bot_kosa_kata_siswa` VALUES (1,'ampu','nama_pengampu_mapel','pegawai,siswa'),(2,'ajar','nama_pengampu_mapel','pegawai,siswa'),(3,'nama lengkap pegawai','nama_pegawai','pegawai,siswa'),(4,'jenis kelamin pegawai','jenis_kelamin_pegawai','pegawai,siswa'),(5,'alamat rumah pegawai','alamat_pegawai','pegawai,siswa'),(6,'nomor telepon pegawai','no_handphone_pegawai','pegawai,siswa'),(7,'nomor induk pegawai','nip_pegawai','pegawai,siswa'),(39,'nomor telepon siswa','no_handphone_siswa','pegawai,siswa'),(40,'nomor induk siswa','nis_siswa','pegawai,siswa'),(41,'nomor induk nasional siswa','nisn_siswa','pegawai,siswa'),(42,'alamat rumah siswa','alamat_siswa','pegawai,siswa'),(46,'tempat lahir siswa','tempat_lahir_siswa','pegawai,siswa'),(47,'tanggal lahir siswa','tanggal_lahir_siswa','pegawai,siswa'),(50,'nama ayah siswa','orangtua_nama_ayah_siswa','pegawai,siswa'),(51,'nama ibu siswa','orangtua_nama_ibu_siswa','pegawai,siswa'),(52,'alamat orangtua siswa','orangtua_alamat_siswa','pegawai,siswa'),(53,'nomor telepon orang tua siswa','orangtua_telepon_siswa','pegawai,siswa'),(54,'pekerjaan ayah siswa','orangtua_pekerjaan_ayah_siswa','pegawai,siswa'),(55,'pekerjaan ibu siswa','orangtua_pekerjaan_ibu_siswa','pegawai,siswa'),(56,'nama wali siswa','nama_wali','pegawai,siswa'),(57,'pekerjaan wali siswa','pekerjaan_wali','pegawai,siswa'),(58,'alamat wali siswa','alamat_wali','pegawai,siswa'),(59,'nomor telepon wali siswa','no_handphone_wali','pegawai,siswa'),(67,'detail pembayaran','0_detail_pembayaran','siswa'),(68,'daftar kelas dan wali kelas','0_daftar_kelas_dan_wali_kelas','pegawai,siswa'),(70,'jumlah siswa','0_jumlah_siswa','pegawai,siswa'),(71,'jumlah pegawai','0_jumlah_pegawai','pegawai,siswa'),(72,'pengampu mata pelajaran','pengampu_mapel','pegawai,siswa');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_siswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -919,4 +919,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-14 15:03:01
+-- Dump completed on 2018-08-29 14:57:01

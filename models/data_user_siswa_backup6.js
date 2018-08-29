@@ -654,146 +654,173 @@ exports.chat_user_siswa = function(req,res,next){
 								})
 								}
 								else if (grup == "mapel") {
-                  // Cari Nama Mapel
+                  // Cari nama mapel
 									var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran ORDER BY nama_mata_pelajaran ASC";
-										connection.query(sql,function (err_cari_nama,rows_cari_nama_mapel){
-										if (err_cari_nama) throw err_cari_nama;
-										for (var i = 0; i < rows_cari_nama_mapel.length; i++) {
-											var nama1 = rows_cari_nama_mapel[i].nama_mata_pelajaran;
-											var nama4 = nama1.split(" ");
-											var nama2 = new RegExp(nama4[0], 'gi');
-											var match	= parse.match(nama2);
-											if (match !== null) {
-												var parse2 = parse.split(" ");
-												var index_nama_mapel = parse2.indexOf(match[0]); //nomor letak array heryani
-												var splice = parse2.splice(index_nama_mapel);
-												var hps_arr_kosong = splice.filter(function(str) {
-													return /\S/.test(str);
-												}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-												var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
-												hps_arr_kosong.push("null");
+										connection.query(sql,function (err_cari_nama_kelas,rows_cari_nama_mata_pelajaran){
+											var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
+												connection.query(sql,function (err_cari_nama_kelas,	rows_cari_nama_kelas){
+
+
+											if (err_cari_nama_kelas) throw err_cari_nama_kelas;
+											for (var i = 0; i < rows_cari_nama_mata_pelajaran.length; i++) {
+												var nama1 = rows_cari_nama_mata_pelajaran[i].nama_mata_pelajaran;
+												var nama4 = nama1.split(" ");
+												var nama2 = new RegExp(nama4[0], 'gi');
+												var match	= parse.match(nama2);
+												if (match !== null) {
+													var parse2 = parse.split(" ");
+													var index = parse2.indexOf(match[0]); //nomor letak array heryani
+													var splice = parse2.splice(index);
+													var hps_arr_kosong = splice.filter(function(str) {
+														return /\S/.test(str);
+													}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+													var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
+													hps_arr_kosong.push("null");
+												}
 											}
-										}
-										// NOT FOUND 3 pegawai
-										if (index_nama_mapel === undefined) {
-											res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-														 +"|"
-														 +"error|"
-														 +"1_parameter")
-											return false;
-										}
-										var arr = [];
-										for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
-											var nama3 = rows_cari_nama_mapel[j].nama_mata_pelajaran;
-											for (var k = 0; k < hps_arr_kosong.length; k++) {
-												var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-												var regexx  = new RegExp(tt, 'gi');
-												var regexxx = nama3.match(regexx);
-												if (regexxx === null) {
-														hps_arr_kosong.pop();
-														var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-														arr.push(nama_fix);
-												} } }
+											// console.log(hps_arr_kosong);
+											// return false;
+                      //  NOT FOUND 3 NAMA MATA PELAJARAN
+											if (index === undefined) {
+												res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+															 +"|"
+															 +"error|"
+															 +"1_parameter")
+												return false;
+											}
+											var arr = [];
+											for (var j = 0; j < rows_cari_nama_mata_pelajaran.length; j++) {
+												var nama3 = rows_cari_nama_mata_pelajaran[j].nama_mata_pelajaran;
+												for (var k = 0; k < hps_arr_kosong.length; k++) {
+													var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+													var regexx  = new RegExp(tt, 'gi');
+													var regexxx = nama3.match(regexx);
+													if (regexxx === null) {
+															hps_arr_kosong.pop();
+															var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+															arr.push(nama_fix);
+													} } }
+													// console.log(arr);
+													// return false;
+													// OUTPUT var arr : [ 'bahasa indonesia', 'bahasa', '' ]
+                          // data didalam var arr akan diseleksi oleh nama mata pelajaran didalam database (dibawah)
+													for (var i = 0; i < arr.length; i++) {
+														var nama_fix2 = arr[i];
+														for (var j = 0; j < rows_cari_nama_mata_pelajaran.length; j++) {
+															var regex5 = new RegExp(nama_fix2, 'gi');
+															var fix_nama_mapel = rows_cari_nama_mata_pelajaran[j].nama_mata_pelajaran.match(regex5);
+                              // OUTPUT : [ 'Bahasa Indonesia' ]
+															if (fix_nama_mapel !== null) {
+																if (nama_fix2 === "") { return false }
+																else {
+																	var selects 								= [fix_nama_mapel[0]];
+																	var sql 										= "SELECT COUNT(*) from mata_pelajaran WHERE nama_mata_pelajaran REGEXP ?";
+																	connection.query(sql, selects, function  (err_final,rows_count_nama_mapel){
+																		var count_nama_mapel = JSON.stringify(rows_count_nama_mapel)
+																		var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
+																		var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
+																		if (count_nama_mapel == 1) {
+																			var selects 								= [fix_nama_mapel[0]];
+																			var sql 										= "SELECT nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ? ORDER BY nama_mata_pelajaran ASC";
+																			connection.query(sql, selects, function  (err_final,rows){
+																				if (err_final) throw err_final;
+																				var rowss_final 		= JSON.stringify(rows);
+																				var fix_nama_mapel	= rowss_final.split(":");
+																				var fix_nama_mapel	= fix_nama_mapel[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+																			});// ./rows
+																			// console.log(fix_nama_mapel);
+																			// return false;
+																		}
+																		else if (count_nama_mapel > 1) {
+																			console.log("nama mapel lebih dari satu");
+																		}
+																	});
 
-										for (var i = 0; i < arr.length; i++) {
-											var nama_fix2 = arr[i];
-											for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
-												var regex5 = new RegExp(nama_fix2, 'gi');
-												var fix_nama_mapel = rows_cari_nama_mapel[j].nama_mata_pelajaran.match(regex5);
-												if (fix_nama_mapel !== null) {
-													if (nama_fix2 === "") { return false }
-													else {
-														var selects 								= [fix_nama_mapel[0]];
-														var sql 										= "SELECT COUNT(*) from mata_pelajaran WHERE nama_mata_pelajaran REGEXP ?";
-														connection.query(sql, selects, function  (err_final,rows_count_nama_mapel){
-															var count_nama_mapel = JSON.stringify(rows_count_nama_mapel)
-															var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
-															var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
-															if (count_nama_mapel == 1) {
-																console.log(fix_nama_mapel[0]);
-															}
-															else if (count_nama_mapel > 1) {
-																console.log("lebih dari 1 mapel");
-															}
-														});
-													}
-
-
-
-                          // Cari Nama Kelas
-													var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
-														connection.query(sql,function (err_cari_nama,rows_cari_nama_kelas){
-														if (err_cari_nama) throw err_cari_nama;
-														for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
-															var nama1 = rows_cari_nama_kelas[i].nama_kelas_daftar;
-															var nama4 = nama1.split(" ");
-															var nama2 = new RegExp(nama4[0], 'gi');
-															var match	= parse.match(nama2);
-															if (match !== null) {
-																var parse2 = parse.split(" ");
-																var index_nama_kelas = parse2.indexOf(match[0]); //nomor letak array heryani
-																var splice = parse2.splice(index_nama_kelas);
-																var hps_arr_kosong = splice.filter(function(str) {
-																	return /\S/.test(str);
-																}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-																var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
-																hps_arr_kosong.push("null");
-															}
-														}
-														// NOT FOUND 3 pegawai
-														if (index_nama_kelas === undefined) {
-															res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-																		 +"|"
-																		 +"error|"
-																		 +"1_parameter")
-															return false;
-														}
-														var arr = [];
-														for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
-															var nama3 = rows_cari_nama_kelas[j].nama_kelas_daftar;
-															for (var k = 0; k < hps_arr_kosong.length; k++) {
-																var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-																var regexx  = new RegExp(tt, 'gi');
-																var regexxx = nama3.match(regexx);
-																if (regexxx === null) {
-																		hps_arr_kosong.pop();
-																		var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-																		arr.push(nama_fix);
-																} } }
-
-														for (var i = 0; i < arr.length; i++) {
-															var nama_fix2 = arr[i];
-															for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
-																var regex5 = new RegExp(nama_fix2, 'gi');
-																var fix_nama_kelas = rows_cari_nama_kelas[j].nama_kelas_daftar.match(regex5);
-																if (fix_nama_kelas !== null) {
-																	if (nama_fix2 === "") { return false }
-																	else {
-																		var selects 								= [fix_nama_kelas[0]];
-																		var sql 										= "SELECT COUNT(*) from kelas_daftar WHERE nama_kelas_daftar REGEXP ?";
-																		connection.query(sql, selects, function  (err_final,rows_count_nama_kelas){
-																			var count_nama_kelas = JSON.stringify(rows_count_nama_kelas)
-																			var count_nama_kelas = count_nama_kelas.replace(/[^0-9]+/, "")
-																			var count_nama_kelas = count_nama_kelas.replace(/[^0-9]+/, "")
-																			if (count_nama_kelas == 1) {
-																				console.log(fix_nama_kelas[0]);
-																			}
-																			else if (count_nama_kelas > 1) {
-																				console.log("lebih dari 1 nama kelas");
-																			}
-																		});
+																// Cari nama Kelas
+																if (err_cari_nama_kelas) throw err_cari_nama_kelas;
+																for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
+																	var nama1 = rows_cari_nama_kelas[i].nama_kelas_daftar;
+																	var nama4 = nama1.split(" ");
+																	var nama2 = new RegExp(nama4[0], 'gi');
+																	var match	= parse.match(nama2);
+																	if (match !== null) {
+																		var parse2 = parse.split(" ");
+																		var index = parse2.indexOf(match[0]); //nomor letak array heryani
+																		var splice = parse2.splice(index);
+																		var hps_arr_kosong = splice.filter(function(str) {
+																			return /\S/.test(str);
+																		}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+																		var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
+																		hps_arr_kosong.push("null");
 																	}
-
-																	console.log(fix_nama_mapel+' === '+fix_nama_kelas);
-
+																}
+																// console.log(hps_arr_kosong);
+																// return false;
+					                      //  NOT FOUND 3 NAMA MATA PELAJARAN
+																if (index === undefined) {
+																	res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+																				 +"|"
+																				 +"error|"
+																				 +"1_parameter")
 																	return false;
-																} } }
-														}); // ./Cari Nama Kelas
-													return false;
+																}
+																var arr = [];
+																for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
+																	var nama3 = rows_cari_nama_kelas[j].nama_kelas_daftar;
+																	for (var k = 0; k < hps_arr_kosong.length; k++) {
+																		var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+																		var regexx  = new RegExp(tt, 'gi');
+																		var regexxx = nama3.match(regexx);
+																		if (regexxx === null) {
+																				hps_arr_kosong.pop();
+																				var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+																				arr.push(nama_fix);
+																		} } }
+																		// console.log(arr);
+																		// return false;
+																		// OUTPUT var arr : [ 'bahasa indonesia', 'bahasa', '' ]
+					                          // data didalam var arr akan diseleksi oleh nama mata pelajaran didalam database (dibawah)
+																		for (var i = 0; i < arr.length; i++) {
+																			var nama_fix2 = arr[i];
+																			for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
+																				var regex5 = new RegExp(nama_fix2, 'gi');
+																				var fix_nama_kelas = rows_cari_nama_kelas[j].nama_kelas_daftar.match(regex5);
+					                              // OUTPUT : [ 'Bahasa Indonesia' ]
+																				if (fix_nama_kelas !== null) {
+																					if (nama_fix2 === "") { return false }
+																					else {
+																						var selects 								= [fix_nama_kelas[0]];
+																						var sql 										= "SELECT COUNT(*) from kelas_daftar WHERE nama_kelas_daftar REGEXP ?";
+																						connection.query(sql, selects, function  (err_final,rows_count_nama_kelas){
+																							var count_nama_kelas = JSON.stringify(rows_count_nama_kelas)
+																							var count_nama_kelas = count_nama_kelas.replace(/[^0-9]+/, "")
+																							var count_nama_kelas = count_nama_kelas.replace(/[^0-9]+/, "")
+																							if (count_nama_kelas == 1) {
+																								var selects 								= [fix_nama_kelas[0]];
+																								var sql 										= "SELECT nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP ? ORDER BY nama_kelas_daftar ASC";
+																								connection.query(sql, selects, function  (err_final,rows){
+																									if (err_final) throw err_final;
+																									var rowss_final 		= JSON.stringify(rows);
+																									var fix_nama_kelas	= rowss_final.split(":");
+																									var fix_nama_kelas	= fix_nama_kelas[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+																								});// ./rows
+																								// console.log(fix_nama_kelas);
+																								// return false;
+																							}
+																							else if (count_nama_kelas > 1) {
 
-												} } }
-										}); // ./Cari Nama Mapel
-									return false;
+																							}
+																						});
+																						console.log(fix_nama_mapel);
+																						return false;
+																					} } } }
+                                // ./Cari Nama Kelas
+
+																} } } }
+
+
+											})
+										})
 
 								}
 							}
