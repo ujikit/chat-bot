@@ -59,11 +59,7 @@
       else{
         $.ajax({
            type: "POST",
-           <% if (jabatan == 'guru'){ %>
-           url: "/dashboard/chat_user_pegawai",
-           <% } else if (jabatan == 'siswa') { %>
-           url: "/dashboard/chat_user_siswa",
-           <% } %>
+           url: "/dashboard/chat_user_app",
            data: $("#chat-form").serialize(), // serializes the form's elements.
            success: function(response){
              let personalChatMessage = $('.chat-page-history');
@@ -90,11 +86,13 @@
                   if (r[2] == "success") {
                     if (r[3] == "1_parameter") {
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                      $('.chat-typing').val('');
                       $('.chat-typing-choose').val('');
                     }
                     else if (r[3] == "2_parameters") { //suggest
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
+                      $('.chat-typing').val('');
                       $('.chat-typing-choose').val('');
                     }
                     else if (r[3] == "duplicate_name") {
@@ -102,16 +100,23 @@
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
                       var sek = r[4]+'>';
                       $('.chat-typing-choose').val(sek);
+                      $('.chat-typing').val('');
                     }
                   }
                   else if (r[2] == "error") {
                     if (r[3] == "1_parameter") {
+                      $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                      $('.chat-typing').val('');
+                      $('.chat-typing-choose').val('');
+                    }
+                    if (r[3] == "1_parameter_no_clear") {
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                       $('.chat-typing-choose').val('');
                     }
                     if (r[3] == "2_parameters") { // suggest
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                       $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                      $('.chat-typing').val('');
                     }
                   }
                   $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
