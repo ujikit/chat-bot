@@ -240,21 +240,10 @@ exports.chat_user = function(req,res,next){
 				        var j = i+1; h.push(j+'. '+g[i]) }
 	            // HANDLING NULL SUGGEST SISWA
 							if (h.length === 0) {
-								var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa";
-							  connection.query(sql, function  (err_rows,rows){
-									var v = []
-									for (var i = 0; i < rows.length; i++) {
-										var no = i + 1;
-										v.push("<br>"+no+". "+rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa+'<button>Tes</button>');
-									}
-                  // Pertanyaan tidak ada didatabase sama sekali
-									var v = JSON.stringify(v)
-									var v = v.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 									res.send("Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-												 +"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <b>"+v+"</b>|"
+												 +"|"
 												 +"error|"
-												 +"2_parameters");
-								})
+												 +"1_parameter");
 				 			return false;
 							}
 							// ./HANDLING NULL SUGGEST SISWA

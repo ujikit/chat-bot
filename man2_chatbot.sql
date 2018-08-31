@@ -813,7 +813,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_siswa` (
   `grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa` varchar(50) NOT NULL,
   `chat_privilege_kosa_kata` varchar(25) NOT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_siswa`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -919,4 +919,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-31 11:33:01
+-- Dump completed on 2018-08-31 19:15:01

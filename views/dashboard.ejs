@@ -1,70 +1,70 @@
   <%- include header %>
   <body>
-    <!-- Main component for a primary marketing message or call to action -->
-    <nav class="green darken-3" role="navigation">
-     <div class="nav-wrapper container">
-       <a id="logo-container" href="#" class="brand-logo">Logo</a>
-       <ul class="right hide-on-med-and-down">
-         <li><a href="#">Tata Cara</a></li>
-         <% if (jabatan == 'guru') { %>
-           <li><a href="/logout_pegawai">Keluar</a></li>
-         <% } else if (jabatan == 'siswa'){ %>
-           <li><a href="/logout_siswa">Keluar</a></li>
-         <% } %>
-       </ul>
-       <ul id="nav-mobile" class="sidenav">
-         <li><a href="#">Tata Cara</a></li>
-       </ul>
-       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-     </div>
-    </nav>
-    <h1>sd <%= session %></h1>
+  <!-- Main component for a primary marketing message or call to action -->
+  <nav class="green darken-3" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Logo</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">Tata Cara</a></li>
+        <% if (jabatan == 'guru') { %>
+          <li><a href="/logout_pegawai">Keluar</a></li>
+        <% } else if (jabatan == 'siswa'){ %>
+          <li><a href="/logout_siswa">Keluar</a></li>
+        <% } %>
+      </ul>
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">Tata Cara</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
 
+  <!-- <h1>sd <%= session %></h1> -->
 
- <!-- Dropdown Structure -->
- <ul id='dropdown1' class='dropdown-content'>
+  <!-- Dropdown Structure -->
+  <ul id='dropdown1' class='dropdown-content'>
    <li><a href="#!">Usulkan</a></li>
- </ul>
+  </ul>
 
-    <div class="container">
-      <div class="col s12 chat-page">
-        <div class="col s12">
-          <ul class="chat-page-history">
-         <!-- <p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p> -->
-         <!-- <div class="receiver"><p class="chat-receiver"><a class="dropdown-trigger btn" href="#" data-target="dropdown1">Drop Me!</a></p></div> -->
-         <!-- <div class="sender"><p class="chat-sender">TesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTes</p></div> -->
-          </ul>
-        </div>
-        <div class="col s12 chat-page-typing-and-sending">
-          <div class="row">
-            <div class="col s1 m1 l1 xl1"></div>
-            <form id="chat-form" method="post">
-              <div class="col s8 m8 l8 xl9 input-field">
-                <!-- <input class="chat-typing" type="text" name="" value="" placeholder="Masukan Pertanyaan.."> -->
-                <i class="material-icons prefix">textsms</i>
-                <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
-                <input  id="icon_prefix" type="text" class="chat-typing" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
-                <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
-              </div>
-              <div class="col s2 m2 l2 xl1">
-                <a class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></a>
-              </div>
-            </form>
-            <div class="col s1 m1 l1 xl1"></div>
-          </div>
+  <div class="container">
+    <div class="col s12 chat-page">
+      <div class="col s12">
+        <ul class="chat-page-history">
+       <!-- <p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p> -->
+       <!-- <div class="receiver"><p class="chat-receiver"><a class="dropdown-trigger btn" href="#" data-target="dropdown1">Drop Me!</a></p></div> -->
+       <!-- <div class="sender"><p class="chat-sender">TesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTes</p></div> -->
+        </ul>
+      </div>
+      <div class="col s12 chat-page-typing-and-sending">
+        <div class="row">
+          <div class="col s1 m1 l1 xl1"></div>
+          <form id="chat-form" method="post">
+            <div class="col s8 m8 l8 xl9 input-field">
+              <!-- <input class="chat-typing" type="text" name="" value="" placeholder="Masukan Pertanyaan.."> -->
+              <i class="material-icons prefix">textsms</i>
+              <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
+              <input  id="icon_prefix" type="text" class="chat-typing" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
+              <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
+            </div>
+            <div class="col s2 m2 l2 xl1">
+              <a class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></a>
+            </div>
+          </form>
+          <div class="col s1 m1 l1 xl1"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Modal Structure -->
-    <!-- <div id="modal-tampil-foto" class="modal">
-      <div class="modal-content">
-        <h4>Tampil Foto</h4>
-        <img class="duplicate-name-photo" style="width:170px"></img>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-      </div>
-    </div> -->
+  <!-- Modal Structure -->
+  <!-- <div id="modal-tampil-foto" class="modal">
+    <div class="modal-content">
+      <h4>Tampil Foto</h4>
+      <img class="duplicate-name-photo" style="width:170px"></img>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div> -->
 
-    <% include footer %>
+  <% include footer %>
