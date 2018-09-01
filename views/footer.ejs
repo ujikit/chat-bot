@@ -33,6 +33,7 @@
 
     $(document).keypress(function(e) {
       if(e.which == 13) {
+        e.preventDefault();
         submit();
       }
     });
@@ -44,11 +45,24 @@
 
     function submit(){
       let message = $(".chat-typing").val();
-      if(message.trim() == ''){
-        return false;
-      }
-      // xss attack
-      // else if ( message.match(/<(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)/gi) ) {
+      if(message.trim() == ''){ return false; }
+      // XSS Attack
+      // else if ( message.match(/[^a-zA-Z0-9\s\d\w?!']/gi) ) {
+      //   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
+      //   var itemCount = ($("[id^='message-']").length + 1);
+      //   $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><a style="color:#262626">' + message + '</a></p></li>');
+      //   $('.chat-typing').val(null);
+      //   $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+      //   $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+      //   setTimeout(function(){
+      //     $('.chat-sending').removeClass('disabled');
+      //     $('.load-chat').hide();
+      //     $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
+      //     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+      //     $('.chat-typing').val(null);
+      //   },1000);
+      //   return false;
+      // }
       else if ( message.match(/<[(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)]+/gi) ) {
         // $('.chat-page-history').append('<li class="receiver"><p class="chat-receiver">' + message + '</p></li>');
         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
@@ -56,6 +70,7 @@
         $('.chat-typing').val(null);
         return false;
       }
+      // ./ XSS attack
       else{
         $.ajax({
            type: "POST",

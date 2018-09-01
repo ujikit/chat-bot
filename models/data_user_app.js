@@ -757,7 +757,6 @@ exports.chat_user = function(req,res,next){
 												} } }
 										});
 									return false;
-
 								}
 							}
 				      }); // ./grup_kosa_kata_final
