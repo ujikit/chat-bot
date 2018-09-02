@@ -1,0 +1,72 @@
+  <%- include header %>
+  <div class="container">
+    <h3 class="header center" style="color:#262626">Cari Tutorial Video</h3>
+  </div>
+  <div class="container" style="margin-top:65px;">
+    <div class="row">
+      <form class="col s12 l12">
+        <div class="row">
+          <div class="input-field input-group col s12 l12">
+            <input id="icon_prefix" type="text" class="validate input_cari">
+            <label for="icon_prefix" class="">Cari tata cara penggunaan Chatbot</label>
+            <span class="suffix">
+              <a id="btn-cari-tutorial-video" class="waves-effect waves-light btn-small red"><i class="material-icons">search</i> Cari</a>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row" style="background:#d7e5cd">
+      <div id="hasil-cari-tutorial-video">
+        <div class="col s12 l12">
+  				<p class="center">Silahkan Cari Video Tutorial</p>
+  			</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <h3 class="header center" style="color:#262626;font-size:30px;"><i class="material-icons">stars</i> Video Populer</h3>
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m6 l6">
+          <div class="center col s12 l12">
+            <p style="font-size:20px;color:#262626;"><b>Memulai Dari Awal</b></p>
+            <video class="responsive-video" controls>
+              <source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="col s12 m6 l6">
+          <div class="center col s12 l12">
+            <p style="font-size:20px;color:#262626;"><b>Memulai Dari Awal</b></p>
+            <video class="responsive-video" controls>
+              <source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+  </div>
+
+  <% include footer %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#btn-cari-tutorial-video').on('click', function(){
+        cari();
+      })
+      $(document).keypress(function(e) {
+        if(e.which == 13) {
+          e.preventDefault();
+          cari();
+        }
+      });
+
+      function cari(){
+        var input_value_cari = $('.input_cari').val();
+        $('#hasil-cari-tutorial-video').load('/dashboard_tutorial_video_cari/'+input_value_cari);
+      }
+    })
+  </script>

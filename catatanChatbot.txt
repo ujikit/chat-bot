@@ -1,0 +1,26 @@
+** Yang COCOK didatabase **
+
+- tanya detail pembayaran (1 parameter)
+1). detail pembayaran
+
+- tanya nama pegawai / siswa / mapel (2 parameter)
+1). nama pegawai
+2). rukmi
+
+==================================================================================
+
+NOTE : 
+- ketika pengguna tanya "al quran hadits", kata "hadits" tak dianggap karena tidak sesuai di database, maka hanya terdeteksi kata "al quran" saja.
+- Adanya foto mempermudah dalam mengingat guru yang dicari
+
++ Kelebihan chatbotku : 
+- ada suggest kosa kata yag dicari
+- nama duplikat dapat diatasi
+- adanya foto
+
++ Adopsi dari Kajian Penelitian 
+- Sumber ke 8 ttg modul service yg terpisah utk menjawab pertanyaan, pengkaji menggunakan AIML utk membuat response chat, sedangkan saya membuat sendiri.
+
++ Saran
+- belum adanya pendeteksi kalimat yang salah yang diwarnai merah kalimat pada chatbot
+- chatbot belum bisa belajar sendiri

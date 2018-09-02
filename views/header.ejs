@@ -124,6 +124,20 @@
       width:100px;
     }
     /* ./Chat Bot */
+    /* Dashboard Tutorial Video */
+    .input-group {
+      display: table;
+    }
+    .input-group input, .suffix {
+      display: table-cell;
+    }
+    .suffix {
+      width:1%;
+    }
+    /* Video */
+    .responsive-video{
+      width: 400px;
+    }
   </style>
 </head>
 <body>
@@ -132,7 +146,8 @@
   <div class="nav-wrapper container">
     <a id="logo-container" href="#" class="brand-logo">Logo</a>
     <ul class="right hide-on-med-and-down">
-      <li><a href="#">Tata Cara</a></li>
+      <li><a href="/dashboard_user">Home</a></li>
+      <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
       <% if (jabatan == 'guru') { %>
         <li><a href="/logout_pegawai">Keluar</a></li>
       <% } else if (jabatan == 'siswa'){ %>
@@ -140,7 +155,8 @@
       <% } %>
     </ul>
     <ul id="nav-mobile" class="sidenav">
-      <li><a href="#">Tata Cara</a></li>
+      <li><a href="/dashboard_user">Home</a></li>
+      <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
     </ul>
     <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
   </div>

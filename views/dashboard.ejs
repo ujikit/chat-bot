@@ -1,6 +1,5 @@
   <%- include header %>
 
-
   <!-- <h1>sd <%= session %></h1> -->
 
   <!-- Dropdown Structure -->
@@ -50,3 +49,145 @@
   </div> -->
 
   <% include footer %>
+  <script>
+    $(document).ready(function(){
+      // Materialize JS
+      $('.sidenav').sidenav();
+      $('.modal').modal();
+      $('.dropdown-trigger').dropdown();
+      // ./Materialize JS
+      $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+      setTimeout(function(){
+        $('.load-chat').hide()
+        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Hallo, saya adalah <b>MANDAYA BOT</b>. Ada yang bisa saya bantu pengenai informasi seputar sekolah?</p></li>');
+      },1000);
+
+      // Submit suggest kosa kata
+      $(document).on('click', '.modal-trigger', function(){
+        suggest = $(this).attr('id')
+        $('#suggest-kosa-kata').val(suggest)
+      })
+      $('#button-submit-suggest').on('click', function() {
+        $.ajax({
+          type : 'POST',
+          url : '/dashboard/data_user_app/submit_suggest_kosa_kata',
+          data : $('#suggest-kosa-kata-form').serialize(),
+          success : function(response){
+            // alert(response)
+          }
+        })
+      })
+
+      $(document).keypress(function(e) {
+        if(e.which == 13) {
+          e.preventDefault();
+          submit();
+        }
+      });
+
+      $('.chat-sending').click(function(event) {
+        event.preventDefault();
+        submit();
+      }); // ./chat-sending clicked
+
+      function submit(){
+        let message = $(".chat-typing").val();
+        if(message.trim() == ''){ return false; }
+        // XSS Attack
+        // else if ( message.match(/[^a-zA-Z0-9\s\d\w?!']/gi) ) {
+        //   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
+        //   var itemCount = ($("[id^='message-']").length + 1);
+        //   $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><a style="color:#262626">' + message + '</a></p></li>');
+        //   $('.chat-typing').val(null);
+        //   $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+        //   $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+        //   setTimeout(function(){
+        //     $('.chat-sending').removeClass('disabled');
+        //     $('.load-chat').hide();
+        //     $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
+        //     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+        //     $('.chat-typing').val(null);
+        //   },1000);
+        //   return false;
+        // }
+        else if ( message.match(/<[(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)]+/gi) ) {
+          // $('.chat-page-history').append('<li class="receiver"><p class="chat-receiver">' + message + '</p></li>');
+          $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
+          $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+          $('.chat-typing').val(null);
+          return false;
+        }
+        // ./ XSS attack
+        else{
+          $.ajax({
+             type: "POST",
+             url: "/dashboard/chat_user_app",
+             data: $("#chat-form").serialize(), // serializes the form's elements.
+             success: function(response){
+               let personalChatMessage = $('.chat-page-history');
+               var r = response.split("|");
+
+               let session = "<%=session%>";
+               if (response.length === 0){
+                  personalChatMessage.append('\
+                  <li id="message-1" class="sender">\
+                  <p class="chat-sender">Halo dari MANDAYA BOT, Ada yang bisa kami bantu?</br></p>\
+                  </li>');
+               }
+               else{
+                                                                                                                                                  // <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+                  $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
+                  var itemCount = ($("[id^='message-']").length + 1);
+                  $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><i id="'+message+'" class="large material-icons modal-trigger" href="#modal1" style="color:#b7d0a5;font-size:17px;float:right">announcement</i><br><a style="color:#262626">' + message + '</a></p></li>');
+                  // $('.chat-typing').val(null);
+                  $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+                  $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+                  setTimeout(function(){
+                    $('.chat-sending').removeClass('disabled');
+                    $('.load-chat').hide();
+                    if (r[2] == "success") {
+                      if (r[3] == "1_parameter") {
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('.chat-typing').val('');
+                        $('.chat-typing-choose').val('');
+                      }
+                      else if (r[3] == "2_parameters") { //suggest
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
+                        $('.chat-typing').val('');
+                        $('.chat-typing-choose').val('');
+                      }
+                      else if (r[3] == "duplicate_name") {
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                        var sek = r[4]+'>';
+                        $('.chat-typing-choose').val(sek);
+                        $('.chat-typing').val('');
+                      }
+                    }
+                    else if (r[2] == "error") {
+                      if (r[3] == "1_parameter") {
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('.chat-typing').val('');
+                        $('.chat-typing-choose').val('');
+                      }
+                      if (r[3] == "1_parameter_no_clear") {
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('.chat-typing-choose').val('');
+                      }
+                      if (r[3] == "2_parameters") { // suggest
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                        $('.chat-typing').val('');
+                      }
+                    }
+                    $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+                  },1000);
+               }
+             }
+           });
+        }
+      }
+
+    }); /*DOCUMENT READY*/
+  </script>

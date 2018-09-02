@@ -72,9 +72,11 @@ app.get('/logout_siswa', cek_login_siswa.logout_siswa);
 // app.post('/dashboard/chat_user_siswa', data_user_siswa.chat_user_siswa);
 // Suggest
 app.post('/dashboard/data_user_app/submit_suggest_kosa_kata', data_user_app.data_user_suggest);
-// app.get('/dashboard/chat_user_pegawai', data_user_pegawai.chat_user_pegawai);
-// app.get('/dashboard/chat_bot_history', data_user.chat_bot_history);
-// app.post('/dashboard/chat_bot', data_user.chat_bot);
+
+// GET VIEWS
+app.get('/dashboard_tutorial_video', data_user_app.dashboard_tutorial_video);
+app.get('/dashboard_tutorial_video_cari/:id', data_user_app.dashboard_tutorial_video_cari);
+
 
 //Middleware
 var listener = app.listen(8888, function(){

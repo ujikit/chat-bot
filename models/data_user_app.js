@@ -15,6 +15,7 @@ let connection = mysql.createConnection({
 });
 // ./Connection
 
+// VIEWS
 exports.dashboard_user = function(req, res){
 	// let userId = req.session.userId;
 	// if(userId == null){
@@ -25,15 +26,80 @@ exports.dashboard_user = function(req, res){
 	// 	// res.redirect("/");
 	//   return;
 	// }
-	// var sql 		= "SELECT jabatan_siswa from data_siswa where nis_siswa='"+userId+"'";
+	// var sql 		= "SELECT jabatan_siswa FROM data_siswa WHERE nis_siswa='"+userId+"'";
 	// connection.query(sql, function  (err_final,rows){
 	// 	res.render('dashboard.ejs',{session:userId, jabatan:rows[0].jabatan_siswa});
 	// })
-	var sql 		= "SELECT * from data_siswa where nis_siswa='10888'"; //userID
+	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
 	connection.query(sql, function  (err_final,rows){
 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa});
 	})
 };
+exports.dashboard_tutorial_video = function(req, res){
+	// let userId = req.session.userId;
+	// if(userId == null){
+	// 	res.send("Login dulu ya!</b>|"
+	// 				 +"|"
+	// 				 +"success|"
+	// 				 +"1_parameter")
+	// 	// res.redirect("/");
+	//   return;
+	// }
+	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
+	connection.query(sql, function  (err_final,rows){
+		res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa});
+	})
+};
+exports.dashboard_tutorial_video_cari = function(req, res){
+	var cari_judul_tutorial_video = req.params.id;
+	console.log(cari_judul_tutorial_video+' == '+cari_judul_tutorial_video);
+	let userId = req.session.userId;
+	// if(userId == null){
+	// 	res.send("Login dulu ya!</b>|"
+	// 				 +"|"
+	// 				 +"success|"
+	// 				 +"1_parameter")
+	// 	// res.redirect("/");
+	//   return;
+	// }
+	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
+	connection.query(sql, function  (err_cari_siswa,rows_cari_siswa){
+		if (err_cari_siswa) throw err_cari_siswa;
+
+	var sql 		= "SELECT * FROM tutorial_chat_bot_video WHERE nama_tutorial_chat_bot_video REGEXP '"+cari_judul_tutorial_video+"'"; //userID
+	connection.query(sql, function  (err_cari_video,rows_cari_video){
+		if (err_cari_video) throw err_cari_video;
+		if (rows_cari_video.length == 0) {
+			res.send('\
+			<div class="col s12 l12">\
+				<p class="center">Video Tutorial yang Kamu Cari Tidak Ditemukan.</p>\
+			</div>\
+			')
+		}
+		else {
+			var arr_hasil_judul = [];
+			for (var i = 0; i < rows_cari_video.length; i++) {
+				var no = i + 1;
+				arr_hasil_judul.push('\
+				<div class="col s12 l4">\
+					<p style="font-size:20px;color:#262626;"><b>'+no+'. Memulai Dari Awal</b></p>\
+					<video class="responsive-video" controls>\
+						<source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">\
+					</video>\
+				</div>\
+				');
+			}
+			var arr_hasil_judul = JSON.stringify(arr_hasil_judul);
+			var arr_hasil_judul	=	arr_hasil_judul.replace(/(\\t|\\|\["|"]|",")/g, '')
+			console.log(arr_hasil_judul);
+			res.send(arr_hasil_judul)
+		}
+		return false;
+	})
+	})
+	return false;
+};
+// ./ VIEWS
 
 // Response Chat
 exports.chat_user = function(req,res,next){
@@ -364,7 +430,7 @@ exports.chat_user = function(req,res,next){
 											    res.send("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 											           +"|"
 											           +"error|"
-											           +"1_parameter")
+											           +"1_parameter_no_clear")
 											    return false;
 											  }
 											  var arr = [];
@@ -388,7 +454,7 @@ exports.chat_user = function(req,res,next){
 											        if (nama_fix2 === "") { return false }
 											        else {
 											          var selects 								= [regex6[0]];
-											          var sql 										= "SELECT COUNT(*) from data_pegawai WHERE nama_pegawai REGEXP ?";
+											          var sql 										= "SELECT COUNT(*) FROM data_pegawai WHERE nama_pegawai REGEXP ?";
 											          connection.query(sql, selects, function  (err_final,rows_count_pegawai){
 											            var count_pegawai = JSON.stringify(rows_count_pegawai)
 											            var count_pegawai = count_pegawai.replace(/[^0-9]+/, "")
@@ -491,7 +557,7 @@ exports.chat_user = function(req,res,next){
 								          res.send("Mohon maaf, <b>nama pengguna</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 								                 +"|"
 								                 +"error|"
-								                 +"1_parameter")
+								                 +"1_parameter_no_clear")
 								          return false;
 								        }
 								        var arr = [];
@@ -516,7 +582,7 @@ exports.chat_user = function(req,res,next){
 								              if (nama_fix2 === "") { return false }
 								              else {
 								                var selects 								= [regex6[0]];
-								                var sql 										= "SELECT COUNT(*) from data_siswa WHERE nama_siswa REGEXP ?";
+								                var sql 										= "SELECT COUNT(*) FROM data_siswa WHERE nama_siswa REGEXP ?";
 								                connection.query(sql, selects, function  (err_final,rows_count_siswa){
 								                  var count_siswa = JSON.stringify(rows_count_siswa)
 								                  var count_siswa = count_siswa.replace(/[^0-9]+/, "")
@@ -594,7 +660,7 @@ exports.chat_user = function(req,res,next){
 							}
 							else {
 								if (grup == "pembayaran") {
-									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar where nis_siswa_pembayaran='10888' ORDER BY lunas_pembayaran DESC"; // userID
+									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar WHERE nis_siswa_pembayaran='10888' ORDER BY lunas_pembayaran DESC"; // userID
 							    connection.query(sql, function  (err_rows,rows){
 										var dataArray = []
 										for (var i = 0; i < rows.length; i++) {
@@ -693,7 +759,7 @@ exports.chat_user = function(req,res,next){
 													if (nama_fix2 === "") { return false }
 													else {
 														var selects 								= [regex6[0]];
-														var sql 										= "SELECT COUNT(*) from mata_pelajaran WHERE nama_mata_pelajaran REGEXP ?";
+														var sql 										= "SELECT COUNT(*) FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ?";
 														connection.query(sql, selects, function  (err_count_nama_mapel,rows_count_nama_mapel){
 															if (err_count_nama_mapel) throw err_count_nama_mapel;
 															var count_nama_mapel = JSON.stringify(rows_count_nama_mapel)

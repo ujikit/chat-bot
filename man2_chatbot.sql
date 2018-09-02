@@ -878,6 +878,31 @@ LOCK TABLES `pesan_chat_pengguna` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tutorial_chat_bot_video`
+--
+
+DROP TABLE IF EXISTS `tutorial_chat_bot_video`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tutorial_chat_bot_video` (
+  `id_tutorial_chat_bot_video` int(11) NOT NULL AUTO_INCREMENT,
+  `kd_tutorial_chat_bot_video` varchar(25) NOT NULL,
+  `nama_tutorial_chat_bot_video` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_tutorial_chat_bot_video`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tutorial_chat_bot_video`
+--
+
+LOCK TABLES `tutorial_chat_bot_video` WRITE;
+/*!40000 ALTER TABLE `tutorial_chat_bot_video` DISABLE KEYS */;
+INSERT INTO `tutorial_chat_bot_video` VALUES (1,'1_tut_vid_lngkhwlchbt','Langkah Awal Chabot'),(2,'2_tut_vid_lngkhwlchbt','Langkah Yo Chabot');
+/*!40000 ALTER TABLE `tutorial_chat_bot_video` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `verifikasi_password`
 --
 
@@ -919,4 +944,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-01 19:51:01
+-- Dump completed on 2018-09-02 13:52:00
