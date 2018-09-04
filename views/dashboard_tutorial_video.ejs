@@ -18,17 +18,49 @@
     </div>
     <div class="row" style="background:#d7e5cd">
       <div id="hasil-cari-tutorial-video">
-        <div class="col s12 l12">
-  				<p class="center">Silahkan Cari Video Tutorial</p>
-  			</div>
+        <!-- <div class="row">
+          <div class="col s12 m4 l4">
+            <div class="center col s12 l12">
+              <p style="font-size:20px;color:#262626;"><b>Memulai Dari Awal</b></p>
+              <video class="responsive-video" controls>
+                <source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="col s12 m4 l4">
+            <div class="center col s12 l12">
+              <p style="font-size:20px;color:#262626;"><b>Memulai Dari Awal</b></p>
+              <video class="responsive-video" controls>
+                <source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="col s12 m4 l4">
+            <div class="center col s12 l12">
+              <p style="font-size:20px;color:#262626;"><b>Memulai Dari Awal</b></p>
+              <video class="responsive-video" controls>
+                <source src="http://localhost/_Project/chat_bot/media/video-tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div> -->
+        <% for(var i = 0; i < rows_chatbot_video.length; i++){
+          no = i + 1;
+        %>
+          <div class="col s12 l4">
+    				<p style="font-size:20px;color:#262626;"><b><%= no %>. <%= rows_chatbot_video[i].nama_tutorial_chatbot_video %></b></p>
+    				<video class="responsive-video" controls>
+    					<source src="http://localhost/_Project/chat_bot/media/video_tutorial/<%= rows_chatbot_video[i].kd_tutorial_chatbot_video %>.mp4" type="video/mp4">
+    				</video>
+    			</div>
+        <% } %>
       </div>
     </div>
   </div>
 
-  <div class="container">
+  <!-- <div class="container">
     <div class="section">
       <h3 class="header center" style="color:#262626;font-size:30px;"><i class="material-icons">stars</i> Video Populer</h3>
-      <!--   Icon Section   -->
       <div class="row">
         <div class="col s12 m6 l6">
           <div class="center col s12 l12">
@@ -49,7 +81,7 @@
       </div>
     </div>
     <br><br>
-  </div>
+  </div> -->
 
   <% include footer %>
   <script type="text/javascript">

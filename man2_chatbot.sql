@@ -838,7 +838,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
   `nomor_induk_pesan_chat_bot_kosa_kata_suggest` varchar(25) DEFAULT NULL,
   `kata_kunci_pesan_chat_bot_kosa_kata_suggest` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_suggest`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -847,6 +847,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
 
 LOCK TABLES `pesan_chat_bot_kosa_kata_suggest` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` DISABLE KEYS */;
+INSERT INTO `pesan_chat_bot_kosa_kata_suggest` VALUES (1,'10888','berapa harga kertas di kantin'),(2,'10888','nama lengkap petugas satpam');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -878,28 +879,28 @@ LOCK TABLES `pesan_chat_pengguna` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tutorial_chat_bot_video`
+-- Table structure for table `tutorial_chatbot_video`
 --
 
-DROP TABLE IF EXISTS `tutorial_chat_bot_video`;
+DROP TABLE IF EXISTS `tutorial_chatbot_video`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tutorial_chat_bot_video` (
-  `id_tutorial_chat_bot_video` int(11) NOT NULL AUTO_INCREMENT,
-  `kd_tutorial_chat_bot_video` varchar(25) NOT NULL,
-  `nama_tutorial_chat_bot_video` varchar(100) NOT NULL,
-  PRIMARY KEY (`id_tutorial_chat_bot_video`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+CREATE TABLE `tutorial_chatbot_video` (
+  `id_tutorial_chatbot_video` int(11) NOT NULL AUTO_INCREMENT,
+  `kd_tutorial_chatbot_video` varchar(25) NOT NULL,
+  `nama_tutorial_chatbot_video` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_tutorial_chatbot_video`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tutorial_chat_bot_video`
+-- Dumping data for table `tutorial_chatbot_video`
 --
 
-LOCK TABLES `tutorial_chat_bot_video` WRITE;
-/*!40000 ALTER TABLE `tutorial_chat_bot_video` DISABLE KEYS */;
-INSERT INTO `tutorial_chat_bot_video` VALUES (1,'1_tut_vid_lngkhwlchbt','Langkah Awal Chabot'),(2,'2_tut_vid_lngkhwlchbt','Langkah Yo Chabot');
-/*!40000 ALTER TABLE `tutorial_chat_bot_video` ENABLE KEYS */;
+LOCK TABLES `tutorial_chatbot_video` WRITE;
+/*!40000 ALTER TABLE `tutorial_chatbot_video` DISABLE KEYS */;
+INSERT INTO `tutorial_chatbot_video` VALUES (1,'1_tut_vid_lngkhwlchbt','Langkah Awal Chatbot'),(2,'2_tut_vid_dplksnm','Duplikasi Nama'),(3,'3_tut_vid_srnprtnyn','Saran Pertanyaan Ke Sistem');
+/*!40000 ALTER TABLE `tutorial_chatbot_video` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -944,4 +945,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-03 16:57:02
+-- Dump completed on 2018-09-04 17:30:01

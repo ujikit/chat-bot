@@ -46,8 +46,11 @@ exports.dashboard_tutorial_video = function(req, res){
 	//   return;
 	// }
 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
-	connection.query(sql, function  (err_final,rows){
-		res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa});
+	connection.query(sql, function  (err_siswa,rows_siswa){
+	var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
+	connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
+		res.render('dashboard_tutorial_video.ejs',{session:rows_siswa[0].nis_siswa, jabatan:rows_siswa[0].jabatan_siswa, rows_chatbot_video:rows_chatbot_video});
+	})
 	})
 };
 exports.dashboard_tutorial_video_cari = function(req, res){
@@ -66,25 +69,18 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 	connection.query(sql, function  (err_cari_siswa,rows_cari_siswa){
 		if (err_cari_siswa) throw err_cari_siswa;
 
-	var sql 		= "SELECT * FROM tutorial_chat_bot_video WHERE nama_tutorial_chat_bot_video REGEXP '"+cari_judul_tutorial_video+"'"; //userID
+	var sql 		= "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'"; //userID
 	connection.query(sql, function  (err_cari_video,rows_cari_video){
 		if (err_cari_video) throw err_cari_video;
-		if (rows_cari_video.length == 0) {
-			res.send('\
-			<div class="col s12 l12">\
-				<p class="center">Video Tutorial yang Kamu Cari Tidak Ditemukan.</p>\
-			</div>\
-			')
-		}
-		else {
+		if (rows_cari_video.length !== 0) {
 			var arr_hasil_judul = [];
 			for (var i = 0; i < rows_cari_video.length; i++) {
 				var no = i + 1;
 				arr_hasil_judul.push('\
 				<div class="col s12 l4">\
-					<p style="font-size:20px;color:#262626;"><b>'+no+'. Memulai Dari Awal</b></p>\
+					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video+'</b></p>\
 					<video class="responsive-video" controls>\
-						<source src="http://localhost/_Project/chat_bot/media/video_tutorial/1_tut_vid_lngkhwlchbt.mp4" type="video/mp4">\
+						<source src="http://localhost/_Project/chat_bot/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
 					</video>\
 				</div>\
 				');
@@ -93,6 +89,13 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 			var arr_hasil_judul	=	arr_hasil_judul.replace(/(\\t|\\|\["|"]|",")/g, '')
 			console.log(arr_hasil_judul);
 			res.send(arr_hasil_judul)
+		}
+		else {
+			res.send('\
+			<div class="col s12 l12">\
+				<p class="center">Video Tutorial yang Kamu Cari Tidak Ditemukan.</p>\
+			</div>\
+			')
 		}
 		return false;
 	})
