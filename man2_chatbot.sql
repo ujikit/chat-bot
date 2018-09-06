@@ -923,7 +923,7 @@ CREATE TABLE `verifikasi_password` (
   `jam_terpakai_verifikasi_password_baru` time DEFAULT NULL,
   `status_verifikasi_password_baru` char(1) DEFAULT NULL,
   PRIMARY KEY (`id_verifikasi_password_baru`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -932,7 +932,7 @@ CREATE TABLE `verifikasi_password` (
 
 LOCK TABLES `verifikasi_password` WRITE;
 /*!40000 ALTER TABLE `verifikasi_password` DISABLE KEYS */;
-INSERT INTO `verifikasi_password` VALUES (1,'197311181999031002','asds','pegawai','2018-07-16','10:13:05',NULL,NULL,NULL,NULL,'N');
+INSERT INTO `verifikasi_password` VALUES (1,'197311181999031002','asds','pegawai','2018-07-16','10:13:05',NULL,NULL,NULL,NULL,'N'),(11,'10888','qweewq','siswa','2018-09-06','18:11:56',NULL,NULL,NULL,NULL,NULL),(12,'197311181999031002','aaaa','pegawai','2018-09-06','18:11:56',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `verifikasi_password` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -945,4 +945,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-04 17:30:01
+-- Dump completed on 2018-09-06 18:15:01

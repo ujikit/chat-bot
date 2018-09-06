@@ -4,7 +4,6 @@
 //var methodOverride = require('method-override');
 // Express
 var express             = require('express');
-var index               = require('./controllers/index');
 var http                = require('http');
 var path                = require('path');
 var session             = require('express-session');
@@ -13,6 +12,8 @@ var app                 = express();
 var mysql               = require('mysql');
 var bodyParser          = require("body-parser");
 // ./Express
+// Index
+var index               = require('./models/index');
 // Pegawai
 var cek_login_pegawai   = require('./models/cek_login_pegawai');
 // var data_user_pegawai   = require('./models/data_user_pegawai');
@@ -58,7 +59,7 @@ app.use(session({
 app.get('/', index.index);//login
 
 // USER CRUD
-// app.post('/forgot_password', cek_login.forgot_password);
+app.post('/forgot_password', index.forgot_password);
 
 // Pegawai
 app.post('/login_pegawai', cek_login_pegawai.login_pegawai);

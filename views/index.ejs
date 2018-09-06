@@ -95,7 +95,7 @@
                         </button>
                         </div>
                         <div class="col l12 s12 lupa-password">
-                          <a href="#modal-lupa-password-pegawai" id="lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                          <a href="#modal-lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
                         </div>
                       </div>
                     </form>
@@ -121,7 +121,7 @@
                         </button>
                         </div>
                         <div class="col l12 s12 lupa-password">
-                          <a href="#modal-lupa-password-siswa" id="lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                          <a href="#modal-lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
                         </div>
                       </div>
                     </form>
@@ -134,39 +134,63 @@
       </div>
   </div>
 
-<!-- Modal Structure -->
-<!-- <div id="modal-lupa-password-siswa" class="modal modal-fixed-footer">
-  <div class="modal-content">
-    <center>
-      <div class="row">
-        <div class="col l12">
-          <h5>Halaman Lupa Password</h5>
+  <!-- Modal Structure -->
+  <!-- PEGAWAI -->
+  <div id="modal-lupa-password-pegawai" class="modal">
+    <form id="suggest-kosa-kata-form-pegawai" method="post">
+      <div class="modal-content">
+        <div class="container">
+          <center>
+            <p style="font-size:30px;">Lupa Password ?</p>
+            <p style="margin-top:-20px;">Masukan Nomor Induk Pegawai untuk meminta password baru.</p>
+            <div class="row" style="margin-top:25px;">
+              <input type="hidden" name="category" value="pegawai">
+              <div class="input-field col l12 s12">
+                <input name="forgot_username" id="icon_telephone" type="text" class="validate">
+                <label for="icon_telephone">Masukan Nomor Induk Pegawai (NIP)</label>
+              </div>
+              <div class="input-field col l12 s12">
+                <input name="forgot_password" id="icon_telephone" type="password" class="validate">
+                <label for="icon_telephone">Masukan Password Baru</label>
+              </div>
+            </div>
+          </center>
         </div>
       </div>
-    </center>
-    <form method="post" action="/forgot_password">
-      <div class="row" style="margin-top:20px;">
-        <input type="hidden" name="privilage_forgot_password" value="siswa">
-        <div class="input-field col l12 s12">
-          <input name="username_forgot_password" id="icon_prefix" type="text" class="validate">
-          <label for="icon_prefix">Masukan Username</label>
-        </div>
-        <div class="input-field col l12 s12">
-          <input name="password_forgot_password" id="icon_telephone" type="tel" class="validate">
-          <label for="icon_telephone">Masukan Password Baru</label>
-        </div>
-        <div class="col l12 s12">
-        <button class="btn waves-effect green darken-3 waves-light" type="submit" name="action" style="width:100%;height:13%;margin-top:20px;">Submit
-          <i class="material-icons right">send</i>
-        </button>
-        </div>
+      <div class="modal-footer">
+        <a href="#!" id="button-submit-forgot-password-pegawai" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Ganti</a>
+        <a href="#!" class="modal-close waves-effect waves-red red lighten-5 btn-flat">Tutup</a>
       </div>
     </form>
   </div>
-  <div class="modal-footer">
-    <p class="center" style="font-size:10px;">Powered by : MAN 2 YK</p>
+  <!-- SISWA -->
+  <div id="modal-lupa-password-siswa" class="modal">
+    <form id="suggest-kosa-kata-form-siswa" method="post">
+      <div class="modal-content">
+        <div class="container">
+          <center>
+            <p style="font-size:30px;">Lupa Password ?</p>
+            <p style="margin-top:-20px;">Masukan Nomor Induk Siswa untuk meminta password baru.</p>
+            <div class="row" style="margin-top:25px;">
+              <input type="hidden" name="category" value="siswa">
+              <div class="input-field col l12 s12">
+                <input name="forgot_username" id="icon_telephone" type="text" class="validate">
+                <label for="icon_telephone">Masukan Nomor Induk Siswa (NIP)</label>
+              </div>
+              <div class="input-field col l12 s12">
+                <input name="forgot_password" id="icon_telephone" type="password" class="validate">
+                <label for="icon_telephone">Masukan Password Baru</label>
+              </div>
+            </div>
+          </center>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" id="button-submit-forgot-password-siswa" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Ganti</a>
+        <a href="#!" class="modal-close waves-effect waves-red red lighten-5 btn-flat">Tutup</a>
+      </div>
+    </form>
   </div>
-</div> -->
 
 <script src="/third-party/jquery-3.3.1.min.js"></script>
 <script src="/third-party/materialize/js/materialize.min.js"></script>
@@ -174,51 +198,29 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('.tabs').tabs();
-    $('.modal-trigger').leanModal();
+    $('.modal').modal();
 
-    $('#lupa-password-pegawai').click(function(){
-      window.location.href = "http://localhost/_Project/man2/login_guru_atau_bk.php";
+    $('#button-submit-forgot-password-pegawai').on('click', function(){
+      $.ajax({
+        type : 'POST',
+        url : '/forgot_password',
+        data : $('#suggest-kosa-kata-form-pegawai').serialize(),
+        success : function(response){
+          alert(response)
+        }
+      })
     })
-    $('#lupa-password-siswa').click(function(){
-      window.location.href = "http://localhost/_Project/man2/login_siswa.php";
+    $('#button-submit-forgot-password-siswa').on('click', function(){
+      $.ajax({
+        type : 'POST',
+        url : '/forgot_password',
+        data : $('#suggest-kosa-kata-form-siswa').serialize(),
+        success : function(response){
+          alert(response)
+        }
+      })
     })
-    // // Login Pegawai
-    // $('#button-login-chatbot-pegawai').click(function(event){
-    //   event.preventDefault();
-    //   $.ajax({
-    //      type: "POST",
-    //      url: "/login_pegawai",
-    //      data: $("#form-login-chatbot-pegawai").serialize(), // serializes the form's elements.
-    //      success: function(response){
-    //         if (response.type == 'error') {
-    //           window.location.replace("http://localhost:8888/");
-    //           // $('.message-response').append(response.name);
-    //           alert(response.name)
-    //           return false;
-    //        }
-    //        else {
-    //          window.location.replace("http://localhost:8888/dashboard_pegawai");
-    //        }
-    //      }
-    //   })
-    // })
-    // // Login Siswa
-    // $('#button-login-chatbot-siswa').click(function(event){
-    //   event.preventDefault();
-    //   $.ajax({
-    //      type: "POST",
-    //      url: "/login_siswa",
-    //      data: $("#form-login-chatbot-siswa").serialize(), // serializes the form's elements.
-    //      success: function(response){
-    //        if (response.type == 'error') {
-    //          alert(response.name)
-    //        }
-    //        else {
-    //          window.location.replace("http://localhost:8888/dashboard_siswa");
-    //        }
-    //      }
-    //   })
-    // })
+
   });
 </script>
 

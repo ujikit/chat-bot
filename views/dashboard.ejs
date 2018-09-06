@@ -38,15 +38,24 @@
   </div>
 
   <!-- Modal Structure -->
-  <!-- <div id="modal-tampil-foto" class="modal">
-    <div class="modal-content">
-      <h4>Tampil Foto</h4>
-      <img class="duplicate-name-photo" style="width:170px"></img>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div> -->
+  <div id="modal1" class="modal">
+    <form id="suggest-kosa-kata-form" method="post">
+      <div class="modal-content">
+        <div class="container">
+          <center>
+            <h4>Sarankan Kata Kunci</h4>
+            <p>Segala saran yang kamu berikan akan membantu kami dalam meningkatkan pelayanan pertanyaan.</p>
+            <input id="suggest-kosa-kata" name="suggest_kosa_kata" placeholder="Masukan saran pertanyaan.." type="text" class="validate" style="margin-top:10px;">
+            <input type="hidden" name="suggest_nomor_induk" value="<%=session%>">
+          </center>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" id="button-submit-suggest" class="modal-close waves-effect waves-green green lighten-5 btn-flat"><i class="material-icons right" style="color:#262626">insert_emoticon</i>Sarankan</a>
+        <a href="#!" class="modal-close waves-effect waves-red red lighten-5 btn-flat">Tutup</a>
+      </div>
+    </form>
+  </div>
 
   <% include footer %>
   <script>
@@ -135,7 +144,6 @@
                   </li>');
                }
                else{
-                                                                                                                                                  // <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
                   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
                   var itemCount = ($("[id^='message-']").length + 1);
                   $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><i id="'+message+'" class="large material-icons modal-trigger" href="#modal1" style="color:#b7d0a5;font-size:17px;float:right">announcement</i><br><a style="color:#262626">' + message + '</a></p></li>');
