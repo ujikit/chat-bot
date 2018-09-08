@@ -112,11 +112,12 @@ exports.chat_user = function(req,res,next){
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
-      pengirim_pesan_chat_pengguna  	: input.pengirim_pesan_chat_pengguna,
-      penerima_pesan_chat_pengguna  	: 'bot',
-      isi_pesan_chat_pengguna       	: sanitizer.escape(input.isi_pesan_chat_pengguna),
-      isi_pesan_chat_pengguna_choose  : input.isi_pesan_chat_pengguna_choose,
-      waktu_pesan_chat_pengguna     	: new Date(dt.now())
+      pengirim_pesan_chat_pengguna  			: input.pengirim_pesan_chat_pengguna,
+      penerima_pesan_chat_pengguna  			: 'bot',
+      isi_pesan_chat_pengguna       			: sanitizer.escape(input.isi_pesan_chat_pengguna),
+      isi_pesan_chat_pengguna_choose  		: input.isi_pesan_chat_pengguna_choose,
+      isi_pesan_chat_pengguna_blank_name  : input.isi_pesan_chat_pengguna_blank_name,
+      waktu_pesan_chat_pengguna     			: new Date(dt.now())
     };
 		// RESPONSE
 		var pesan  	= input.isi_pesan_chat_pengguna;
@@ -124,11 +125,265 @@ exports.chat_user = function(req,res,next){
 		var parse0 	=	json.replace(/[!?]/gi, "");
 		var parse  	= JSON.parse(parse0);
 
-		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
+		if (data.isi_pesan_chat_pengguna_blank_name.length >= 1 && data.isi_pesan_chat_pengguna_choose.length == 0) {
+			var data 		= data.isi_pesan_chat_pengguna_blank_name+data.isi_pesan_chat_pengguna;
+			var data 		= data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
+			var offset 	= data[4]-1;
+			var grup		=	data[0]; // grup kosa kata
+			if (data[1] == "pegawai") {
+				if (grup == "nama_mata_pelajaran_pegawai") {
+					var grup	=	grup.replace(/_pegawai/gi, "");
+				}
+				var sqls 		= "SELECT "+grup+", nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran ON data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP '"+data[2]+"' ORDER BY nama_pegawai ASC";
+				connection.query(sqls, function  (err_final,rows){
+					if (rows.length == 0) {
+						res.send("Nama Pegawai Tidak Tersedia.</b>|"
+									 +"|"
+									 +"error|"
+									 +"1_parameter")
+						return false;
+					}
+					else if (rows.length >= 1) {
+						var selects = [data[2]];
+						var sql 		= "SELECT nama_pegawai, nip_pegawai FROM data_pegawai WHERE nama_pegawai REGEXP ? ORDER BY nama_pegawai ASC";
+						connection.query(sql, selects, function  (err_final,rows){
+							var nama_nip_pegawai = JSON.stringify(rows)
+							var nama_nip_baru = []
+							for (var i = 0; i < rows.length; i++) {
+								var j = i+1;
+								nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
+							}
+							nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
+							var nama_nip_baru = JSON.stringify(nama_nip_baru)
+							var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+							res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
+											+"Coba pilih nomor yang telah disediakan : |"
+											+"success|"
+											+"duplicate_name|"
+											+data[0]+'>pegawai>'+data[2]+'>'+rows.length);
+						})
+					}
+				  else {
+				    var rows_s = JSON.stringify(rows)
+				    var rows_s = rows_s.split(":")
+				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+				    var rows_s = rows_s.replace(/nippegawai/gi, "");
+						// DATA KOSONG SISWA
+						if (rows_s == "null" || rows_s == "") {
+							res.send("Mohon maaf, data yang kamu minta masih kosong.|"
+											+"|"
+											+"error|"
+											+"1_parameter");
+							return false
+						}
+						else {
+					    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+					            +rows_s+"|"
+					            +"success|"
+					            +"2_parameters");
+						}
+				  }
+				})
+			}
+			else if (data[1] == "siswa") {
+				var sqls 		= "SELECT "+data[0]+", nis_siswa FROM data_siswa WHERE nama_siswa REGEXP '"+data[2]+"' ORDER BY nama_siswa ASC";
+				connection.query(sqls, function  (err_final,rows){
+					if (rows.length == 0) {
+						res.send("Nama Siswa Tidak Tersedia.</b>|"
+									 +"|"
+									 +"error|"
+									 +"1_parameter")
+						return false;
+					}
+					else if (rows.length >= 1) {
+						var selects = [data[2]];
+						var sql 		= "SELECT nama_siswa, nis_siswa FROM data_siswa WHERE nama_siswa REGEXP ? ORDER BY nama_siswa ASC";
+						connection.query(sql, selects, function  (err_final,rows){
+							var nama_nis_siswa = JSON.stringify(rows)
+							var nama_nip_baru = []
+							for (var i = 0; i < rows.length; i++) {
+								var j = i+1;
+								nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+							}
+							nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
+							var nama_nip_baru = JSON.stringify(nama_nip_baru)
+							// console.log(grup_kosa_kata_final+'>'+regex6[0]+'>'+count_siswa);
+							var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+							res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
+											+"Coba pilih nomor yang telah disediakan : |"
+											+"success|"
+											+"duplicate_name|"
+											+data[0]+'>siswa>'+data[2]+'>'+rows.length);
+						})
+					}
+					else {
+						var rows_s = JSON.stringify(rows)
+						var rows_s = rows_s.split(":")
+						var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
+						var rows_s = rows_s.replace(/nissiswa/gi, "");
 
-			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
-			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
-			// return false;
+						res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+						+rows_s+"|"
+						+"success|"
+						+"2_parameters");
+						return false;
+					}
+				})
+			}
+			else if (data[1] == "kelas") {
+					var sqls 		= "SELECT kd_kelas_daftar, nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP '"+data[2]+"' ORDER BY nama_kelas_daftar ASC";
+					connection.query(sqls, function  (err_final,rows){
+						if (rows.length == 0) {
+							res.send("Nama Kelas Tidak Tersedia.</b>|"
+										 +"|"
+										 +"error|"
+										 +"1_parameter")
+							return false;
+						}
+						else if (rows.length >= 1) {
+							var parameter = [data[2]];
+							var sql = "SELECT nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP ? ORDER BY nama_kelas_daftar ASC";
+								connection.query(sql, parameter, function (err_cari_kd_kelas,rows_cari_kd_kelas){
+									var daftar_duplikasi_nama_kelas	=	[]
+									for (var i = 0; i < rows_cari_kd_kelas.length; i++) {
+										var no = i + 1;
+										daftar_duplikasi_nama_kelas.push('<br>'+no+'. '+rows_cari_kd_kelas[i].nama_kelas_daftar);
+									}
+									daftar_duplikasi_nama_kelas.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b>")
+									var daftar_duplikasi_nama_kelas = JSON.stringify(daftar_duplikasi_nama_kelas)
+									var daftar_duplikasi_nama_kelas = daftar_duplikasi_nama_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+									res.send('Terdapat <b>duplikasi nama kelas</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_kelas+"|"
+									+"Coba pilih nomor yang telah disediakan : |"
+									+"success|"
+									+"duplicate_name|"
+									+data[0]+'>kelas>'+data[2]+'>'+rows.length);
+								})
+								return false;
+						}
+						else {
+							var kd_kelas_daftar 	= rows[0].kd_kelas_daftar;
+							var nama_kelas_daftar = rows[0].nama_kelas_daftar;
+
+							if (data[0] == "0_daftar_nama_seluruh_siswa_kelas") {
+								var sql = "SELECT nis_siswa, nama_siswa FROM nilai_siswa_transaksi_smt1_pengetahuan INNER JOIN data_siswa ON nilai_siswa_transaksi_smt1_pengetahuan.nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan = data_siswa.nis_siswa WHERE kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan REGEXP '"+kd_kelas_daftar+"' GROUP BY nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY nama_siswa ASC";
+									connection.query(sql, function (err_cari_kelas_transaksi,rows_nama_seluruh_siswa_kelas){
+										if (err_cari_kelas_transaksi) throw err_cari_kelas_transaksi;
+										if (rows_nama_seluruh_siswa_kelas.length !== 0) {
+											var daftar_nama_seluruh_siswa_kelas	=	[]
+											for (var i = 0; i < rows_nama_seluruh_siswa_kelas.length; i++) {
+												var no = i + 1;
+												daftar_nama_seluruh_siswa_kelas.push('<br>'+no+'. <b>('+rows_nama_seluruh_siswa_kelas[i].nis_siswa+')</b> '+rows_nama_seluruh_siswa_kelas[i].nama_siswa);
+											}
+											var daftar_nama_seluruh_siswa_kelas = JSON.stringify(daftar_nama_seluruh_siswa_kelas)
+											var daftar_nama_seluruh_siswa_kelas = daftar_nama_seluruh_siswa_kelas.replace(/[^a-zA-Z0-9.\s+<>:='(_)/&#-]/g, "")
+											res.send('Daftar seluruh nama siswa kelas <b>'+nama_kelas_daftar+'</b> adalah : <br>'+daftar_nama_seluruh_siswa_kelas+"|"
+											+"|"
+											+"success|"
+											+"1_parameter");
+											return false;
+										}
+										else {
+											res.send("Kelas <b>"+nama_kelas_daftar+"</b> tidak ada siswanya.|"
+											+"|"
+											+"error|"
+											+"1_parameter");
+										}
+								})
+							}
+							else {
+								var sql = "SELECT * FROM mata_pelajaran_transaksi INNER JOIN data_pegawai ON mata_pelajaran_transaksi.nip_pegawai_mata_pelajaran_transaksi = data_pegawai.nip_pegawai INNER JOIN mata_pelajaran ON mata_pelajaran.kd_mata_pelajaran = mata_pelajaran_transaksi.kd_mata_pelajaran_transaksi WHERE kd_kelas_daftar_mata_pelajaran_transaksi REGEXP '"+kd_kelas_daftar+"' ORDER BY kd_kelas_daftar_mata_pelajaran_transaksi ASC";
+									connection.query(sql, function (err,rows){
+										if (err) throw err;
+										var daftar_mapel_dan_pengampu_mapel_per_kelas	=	[]
+										for (var i = 0; i < rows.length; i++) {
+											var no = i + 1;
+											daftar_mapel_dan_pengampu_mapel_per_kelas.push('<br><br>'+no+'. Data ke -'+no+'<br> <b>Nama Mata Pelajaran</b> : '+rows[i].nama_mata_pelajaran+' <br><b>Nama Pengampu</b> : '+rows[i].nama_pegawai);
+										}
+										var daftar_mapel_dan_pengampu_mapel_per_kelas = JSON.stringify(daftar_mapel_dan_pengampu_mapel_per_kelas)
+										var daftar_mapel_dan_pengampu_mapel_per_kelas = daftar_mapel_dan_pengampu_mapel_per_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+										if (daftar_mapel_dan_pengampu_mapel_per_kelas !== "") {
+											res.send('Pengampu mata pelajaran kelas <b>'+nama_kelas_daftar+'</b> adalah : '+daftar_mapel_dan_pengampu_mapel_per_kelas+"|"
+											+"|"
+											+"success|"
+											+"1_parameter");
+										}
+										else {
+											res.send("Pengampu mata pelajaran kelas <b>"+nama_kelas_daftar+"</b> tidak ada pengampunya|"
+											+"|"
+											+"error|"
+											+"1_parameter");
+										}
+								})
+								return false;
+							}
+						}
+					})
+			}
+			else if (data[1] == "mapel") {
+				var sqls 		= "SELECT kd_mata_pelajaran, nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP '"+data[2]+"' ORDER BY nama_mata_pelajaran ASC";
+				connection.query(sqls, function  (err_final,rows){
+					if (rows.length == 0) {
+						res.send("Nama Mata Pelajaran Tidak Tersedia.</b>|"
+									 +"|"
+									 +"error|"
+									 +"1_parameter")
+						return false;
+					}
+					else if (rows.length >= 1) {
+						var parameter = [data[2]]
+						var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ? ORDER BY nama_mata_pelajaran ASC";
+							connection.query(sql, parameter, function (err_cari_kd_mapel,rows_cari_kd_mapel){
+								var daftar_duplikasi_nama_mapel	=	[]
+								for (var i = 0; i < rows_cari_kd_mapel.length; i++) {
+									var no = i + 1;
+									daftar_duplikasi_nama_mapel.push('<br>'+no+'. '+rows_cari_kd_mapel[i].nama_mata_pelajaran);
+								}
+								daftar_duplikasi_nama_mapel.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b>")
+								var daftar_duplikasi_nama_mapel = JSON.stringify(daftar_duplikasi_nama_mapel)
+								var daftar_duplikasi_nama_mapel = daftar_duplikasi_nama_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+								res.send('Terdapat <b>duplikasi nama mata pelajaran</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_mapel+"|"
+								+"Coba pilih nomor yang telah disediakan : |"
+								+"success|"
+								+"duplicate_name|"
+								+data[0]+'>mapel>'+data[2]+'>'+rows.length);
+							})
+							return false;
+					}
+					else {
+						var kd_mata_pelajaran = rows[0].kd_mata_pelajaran;
+						var nama_mata_pelajaran = rows[0].nama_mata_pelajaran;
+
+							var sql = "SELECT * FROM mata_pelajaran_transaksi INNER JOIN data_pegawai ON mata_pelajaran_transaksi.nip_pegawai_mata_pelajaran_transaksi = data_pegawai.nip_pegawai WHERE kd_mata_pelajaran_transaksi REGEXP '"+kd_mata_pelajaran+"' ORDER BY kd_kelas_daftar_mata_pelajaran_transaksi ASC";
+								connection.query(sql, function (err_cari_mapel_transaksi,rows_cari_mapel_transaksi){
+									if (err_cari_mapel_transaksi) throw err_cari_mapel_transaksi;
+									var daftar_kelas_pengampu_mapel	=	[]
+									for (var i = 0; i < rows_cari_mapel_transaksi.length; i++) {
+										var no = i + 1;
+										daftar_kelas_pengampu_mapel.push('<br><br>'+no+'. Data ke -'+no+'<br> <b>Nama Kelas</b> : '+rows_cari_mapel_transaksi[i].kd_kelas_daftar_mata_pelajaran_transaksi+' <br><b>Nama Pengampu</b> : '+rows_cari_mapel_transaksi[i].nama_pegawai);
+									}
+									var daftar_kelas_pengampu_mapel = JSON.stringify(daftar_kelas_pengampu_mapel)
+									var daftar_kelas_pengampu_mapel = daftar_kelas_pengampu_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+									if (daftar_kelas_pengampu_mapel !== "") {
+										res.send('Pengampu mata pelajaran <b>'+nama_mata_pelajaran+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
+										+"|"
+										+"success|"
+										+"1_parameter");
+									}
+									else {
+										res.send("Pengampu mata pelajaran dengan nama mata pelajaran <b>"+nama_mata_pelajaran+"</b> tidak ada pengampunya|"
+										+"|"
+										+"error|"
+										+"1_parameter");
+									}
+							})
+							return false;
+					}
+				})
+			}
+		}
+		else if (data.isi_pesan_chat_pengguna_choose.length >= 1 && data.isi_pesan_chat_pengguna_blank_name.length == 0) {
+			var data 		= data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
+			var data 		= data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
 			var offset 	= data[4]-1;
 			var grup		=	data[0]; // grup kosa kata
 			if (data[1] == "pegawai") {
@@ -156,30 +411,18 @@ exports.chat_user = function(req,res,next){
 				    var rows_s = rows_s.split(":")
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
-						// DATA KOSONG SISWA
-						if (rows_s == "null" || rows_s == "") {
-							res.send("Mohon maaf, data yang kamu minta masih kosong.|"
-											+"|"
-											+"error|"
-											+"1_parameter");
-							return false
-						}
-						else {
-					    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
-					            +rows_s+"|"
-					            +"success|"
-					            +"2_parameters");
-						}
-				    //jika terdeteksi data.isi_pesan_chat_pengguna_choose ada datanya, maka tidak akan mengeksekusi perintah dibawahnya
-				    if (data.isi_pesan_chat_pengguna_choose !== null) { return false; }
-				    return false;
+
+				    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				            +rows_s+"|"
+				            +"success|"
+				            +"2_parameters");
 				  }
 				})
 			} // ./ duplikat pegawai
 			else if (data[1] == "siswa") {
 				var sqls 		= "SELECT "+data[0]+", nis_siswa FROM data_siswa WHERE nama_siswa REGEXP '"+data[2]+"' ORDER BY nama_siswa ASC LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
-					if (rows === undefined) {
+					if (rows === undefined) { // Jika yang diinputkan selain angka pada pemilihan, misal Huruff
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
 									 +"error|"
@@ -222,7 +465,7 @@ exports.chat_user = function(req,res,next){
 			else if (data[1] == "mapel") {
 				var sqls 		= "SELECT kd_mata_pelajaran, nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP '"+data[2]+"' ORDER BY nama_mata_pelajaran ASC LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
-					if (rows === undefined) {
+					if (rows === undefined) { // Jika yang diinputkan selain angka pada pemilihan, misal Huruff
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
 									 +"error|"
@@ -274,7 +517,7 @@ exports.chat_user = function(req,res,next){
 			else if (data[1] == "kelas") {
 					var sqls 		= "SELECT kd_kelas_daftar, nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP '"+data[2]+"' ORDER BY nama_kelas_daftar ASC LIMIT 1 OFFSET "+offset;
 					connection.query(sqls, function  (err_final,rows){
-						if (rows === undefined) {
+						if (rows === undefined) { // Jika yang diinputkan selain angka pada pemilihan, misal Huruff
 							res.send("Pilihan Tidak Tersedia.</b>|"
 										 +"|"
 										 +"error|"
@@ -351,7 +594,7 @@ exports.chat_user = function(req,res,next){
 					})
 			} // ./ duplikat kelas
 		}
-		else if (data.isi_pesan_chat_pengguna_choose.length == 0) {
+		else if (data.isi_pesan_chat_pengguna_choose.length == 0 && data.isi_pesan_chat_pengguna_blank_name.length == 0) {
 			var privilege = ["siswa"];
 			var parameter =	[privilege];
 			var sqls 		= "SELECT * FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ?";
@@ -503,10 +746,11 @@ exports.chat_user = function(req,res,next){
 											}
 											// NOT FOUND 3 nama kelas
 											if (index === undefined) {
-												res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi</b> dan masukan <b>nama kelas</b> dengan benar.|"
-															 +"|"
-															 +"error|"
-															 +"1_parameter_no_clear")
+												res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
+																+"Masukan Nama Kelas : |"
+																+"error|"
+																+"blank_name|"
+																+grup_kosa_kata_final+'>kelas');
 												return false;
 											}
 											var arr = [];
@@ -619,10 +863,11 @@ exports.chat_user = function(req,res,next){
 											  }
 											  // NOT FOUND 3 pegawai
 											  if (index === undefined) {
-											    res.send("Mohon maaf, <b>nama orang</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-											           +"|"
-											           +"error|"
-											           +"1_parameter_no_clear")
+													res.send("Mohon maaf, <b>nama pegawai</b> yang dicari tidak ditemukan.<br>|"
+																	+"Masukan Nama Pegawai : |"
+																	+"error|"
+																	+"blank_name|"
+																	+grup_kosa_kata_final+'>pegawai');
 											    return false;
 											  }
 											  var arr = [];
@@ -746,10 +991,11 @@ exports.chat_user = function(req,res,next){
 								        }
 					              // NOT FOUND 3 SISWA
 								        if (index === undefined) {
-								          res.send("Mohon maaf, <b>nama orang</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-								                 +"|"
-								                 +"error|"
-								                 +"1_parameter_no_clear")
+													res.send("Mohon maaf, <b>nama siswa</b> yang dicari tidak ditemukan.<br>|"
+																	+"Masukan Nama Siswa : |"
+																	+"error|"
+																	+"blank_name|"
+																	+grup_kosa_kata_final+'>siswa');
 								          return false;
 								        }
 								        var arr = [];
@@ -924,10 +1170,11 @@ exports.chat_user = function(req,res,next){
 											}
 											// NOT FOUND 3 nama kelas
 											if (index === undefined) {
-												res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi</b> dan masukan <b>nama kelas</b> dengan benar.|"
-															 +"|"
-															 +"error|"
-															 +"1_parameter_no_clear")
+												res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
+																+"Masukan Nama Kelas : |"
+																+"error|"
+																+"blank_name|"
+																+grup_kosa_kata_final+'>kelas');
 												return false;
 											}
 											var arr = [];
@@ -991,8 +1238,9 @@ exports.chat_user = function(req,res,next){
 																	return false;
 																}
 																else if (count_nama_kelas > 1) {
-																	var sql = "SELECT nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP '"+regex6[0]+"' ORDER BY nama_kelas_daftar ASC";
-																	  connection.query(sql, selects, function (err_cari_kd_kelas,rows_cari_kd_kelas){
+																	var parameter = [regex6[0]];
+																	var sql = "SELECT nama_kelas_daftar FROM kelas_daftar WHERE nama_kelas_daftar REGEXP ? ORDER BY nama_kelas_daftar ASC";
+																	  connection.query(sql, parameter, function (err_cari_kd_kelas,rows_cari_kd_kelas){
 																			var daftar_duplikasi_nama_kelas	=	[]
 																			for (var i = 0; i < rows_cari_kd_kelas.length; i++) {
 																				var no = i + 1;
@@ -1040,10 +1288,11 @@ exports.chat_user = function(req,res,next){
 										}
 										// NOT FOUND 3 nama mata pelajaran
 										if (index === undefined) {
-											res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br><b>Ulangi pertanyaanmu lagi</b> dan masukan <b>nama mata pelajaran</b> dengan benar.|"
-														 +"|"
-														 +"error|"
-														 +"1_parameter_no_clear")
+											res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br>|"
+															+"Masukan Nama Mata Pelajaran : |"
+															+"error|"
+															+"blank_name|"
+															+grup_kosa_kata_final+'>mapel');
 											return false;
 										}
 										var arr = [];
@@ -1105,9 +1354,9 @@ exports.chat_user = function(req,res,next){
 																return false;
 															}
 															else if (count_nama_mapel > 1) {
-																console.log(grup_kosa_kata_final+'>'+grup+'>'+regex6[0]+'>'+count_nama_mapel);
-																var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP '"+regex6[0]+"' ORDER BY nama_mata_pelajaran ASC";
-																  connection.query(sql, selects, function (err_cari_kd_mapel,rows_cari_kd_mapel){
+																var parameter = [regex6[0]]
+																var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ? ORDER BY nama_mata_pelajaran ASC";
+																  connection.query(sql, parameter, function (err_cari_kd_mapel,rows_cari_kd_mapel){
 																		var daftar_duplikasi_nama_mapel	=	[]
 																		for (var i = 0; i < rows_cari_kd_mapel.length; i++) {
 																			var no = i + 1;
