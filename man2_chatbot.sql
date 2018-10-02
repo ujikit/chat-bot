@@ -24,17 +24,17 @@ DROP TABLE IF EXISTS `data_pegawai`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_pegawai` (
   `id_pegawai` int(11) NOT NULL AUTO_INCREMENT,
-  `nip_pegawai` varchar(20) DEFAULT NULL,
-  `nama_pegawai` varchar(65) DEFAULT NULL,
+  `nip_pegawai` char(18) DEFAULT NULL,
+  `nama_pegawai` varchar(100) DEFAULT NULL,
   `jabatan_pegawai` varchar(15) DEFAULT NULL,
   `kd_mata_pelajaran_pegawai` varchar(20) DEFAULT NULL,
   `jenis_kelamin_pegawai` enum('L','P') NOT NULL,
-  `username_pegawai` varchar(20) DEFAULT NULL,
-  `password_pegawai` varchar(255) DEFAULT NULL,
+  `username_pegawai` char(18) DEFAULT NULL,
+  `password_pegawai` char(60) DEFAULT NULL,
   `alamat_pegawai` varchar(255) DEFAULT NULL,
-  `tempat_lahir_pegawai` varchar(30) DEFAULT NULL,
+  `tempat_lahir_pegawai` varchar(50) DEFAULT NULL,
   `tanggal_lahir_pegawai` date DEFAULT NULL,
-  `no_handphone_pegawai` varchar(15) DEFAULT NULL,
+  `no_handphone_pegawai` varchar(13) DEFAULT NULL,
   PRIMARY KEY (`id_pegawai`),
   KEY `jabatan_pegawai` (`jabatan_pegawai`),
   KEY `nama_mata_pelajaran_pegawai` (`kd_mata_pelajaran_pegawai`)
@@ -52,38 +52,6 @@ INSERT INTO `data_pegawai` VALUES (1,'1111','admin','admin',NULL,'','admin','$2y
 UNLOCK TABLES;
 
 --
--- Table structure for table `data_sekolah`
---
-
-DROP TABLE IF EXISTS `data_sekolah`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `data_sekolah` (
-  `id_data_sekolah` varchar(11) NOT NULL,
-  `nama_sekolah_data_sekolah` varchar(25) DEFAULT NULL,
-  `nip_kepala_sekolah_data_sekolah` varchar(20) DEFAULT NULL,
-  `nama_kepala_sekolah_data_sekolah` varchar(255) DEFAULT NULL,
-  `tanggal_jadi_kepala_sekolah_data_sekolah` date DEFAULT NULL,
-  `tahun_pelajaran_sekolah_data_sekolah` varchar(15) DEFAULT NULL,
-  `foto_kepala_sekolah_data_sekolah` varchar(15) DEFAULT NULL,
-  `alamat_sekolah_data_sekolah` varchar(255) DEFAULT NULL,
-  `asal_kota_sekolah_data_sekolah` varchar(255) DEFAULT NULL,
-  `email_sekolah_data_sekolah` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`id_data_sekolah`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `data_sekolah`
---
-
-LOCK TABLES `data_sekolah` WRITE;
-/*!40000 ALTER TABLE `data_sekolah` DISABLE KEYS */;
-INSERT INTO `data_sekolah` VALUES ('man2jogja','MAN 2 Yogyakarta','7826314225','Drs. H. In Amullah M.A.','2018-02-14','2018',NULL,'Jl. K.H Ahmad Dahlan No. 130 Yogyakarta','Yogyakarta','Jl. K.H Ahmad Dahlan No. 130 Yogyakarta');
-/*!40000 ALTER TABLE `data_sekolah` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `data_siswa`
 --
 
@@ -92,19 +60,19 @@ DROP TABLE IF EXISTS `data_siswa`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_siswa` (
   `id_siswa` int(7) NOT NULL AUTO_INCREMENT,
-  `nisn_siswa` varchar(25) DEFAULT NULL,
-  `nis_siswa` varchar(20) DEFAULT NULL,
-  `nama_siswa` varchar(65) DEFAULT NULL,
+  `nisn_siswa` char(10) DEFAULT NULL,
+  `nis_siswa` char(4) DEFAULT NULL,
+  `nama_siswa` varchar(100) DEFAULT NULL,
   `jenis_kelamin_siswa` enum('L','P') DEFAULT NULL,
   `kd_kelas_daftar_siswa` varchar(15) DEFAULT NULL,
   `jabatan_siswa` varchar(25) NOT NULL,
-  `alamat_siswa` varchar(20) DEFAULT NULL,
-  `tempat_lahir_siswa` varchar(25) DEFAULT NULL,
+  `alamat_siswa` varchar(225) DEFAULT NULL,
+  `tempat_lahir_siswa` varchar(50) DEFAULT NULL,
   `tanggal_lahir_siswa` date DEFAULT NULL,
-  `no_handphone_siswa` varchar(15) DEFAULT NULL,
-  `anak_ke_siswa` varchar(3) DEFAULT NULL,
-  `username_siswa` varchar(20) DEFAULT NULL,
-  `password_siswa` varchar(255) DEFAULT NULL,
+  `no_handphone_siswa` varchar(13) DEFAULT NULL,
+  `anak_ke_siswa` varchar(2) DEFAULT NULL,
+  `username_siswa` char(4) DEFAULT NULL,
+  `password_siswa` char(60) DEFAULT NULL,
   `agama_siswa` varchar(20) DEFAULT NULL,
   `status_dalam_keluarga_siswa` varchar(15) DEFAULT NULL,
   `diterima_tanggal_siswa` date DEFAULT NULL,
@@ -113,21 +81,21 @@ CREATE TABLE `data_siswa` (
   `sekolah_asal_alamat_siswa` varchar(255) DEFAULT NULL,
   `stl_tahun_siswa` varchar(5) DEFAULT NULL,
   `stl_nomor_siswa` varchar(50) DEFAULT NULL,
-  `orangtua_nama_ayah_siswa` varchar(65) DEFAULT NULL,
-  `orangtua_nama_ibu_siswa` varchar(65) DEFAULT NULL,
+  `orangtua_nama_ayah_siswa` varchar(100) DEFAULT NULL,
+  `orangtua_nama_ibu_siswa` varchar(100) DEFAULT NULL,
   `orangtua_alamat_siswa` varchar(255) DEFAULT NULL,
-  `orangtua_telepon_siswa` varchar(15) DEFAULT NULL,
+  `orangtua_telepon_siswa` varchar(13) DEFAULT NULL,
   `orangtua_pekerjaan_ayah_siswa` varchar(25) DEFAULT NULL,
   `orangtua_pekerjaan_ibu_siswa` varchar(25) DEFAULT NULL,
-  `username_wali` varchar(20) DEFAULT NULL,
-  `password_wali` varchar(255) DEFAULT NULL,
-  `nama_wali` varchar(65) DEFAULT NULL,
+  `username_wali` char(4) DEFAULT NULL,
+  `password_wali` char(60) DEFAULT NULL,
+  `nama_wali` varchar(100) DEFAULT NULL,
   `pekerjaan_wali` varchar(25) DEFAULT NULL,
   `jenis_kelamin_wali` enum('L','P') DEFAULT NULL,
   `alamat_wali` varchar(255) DEFAULT NULL,
   `tempat_lahir_wali` varchar(25) DEFAULT NULL,
   `tanggal_lahir_wali` date DEFAULT NULL,
-  `no_handphone_wali` varchar(15) DEFAULT NULL,
+  `no_handphone_wali` varchar(13) DEFAULT NULL,
   PRIMARY KEY (`id_siswa`),
   KEY `jabatan_siswa` (`jabatan_siswa`),
   KEY `nis_siswa` (`nis_siswa`)
@@ -140,123 +108,8 @@ CREATE TABLE `data_siswa` (
 
 LOCK TABLES `data_siswa` WRITE;
 /*!40000 ALTER TABLE `data_siswa` DISABLE KEYS */;
-INSERT INTO `data_siswa` VALUES (4,'1045310829','10888','Addisty','P','10ipa1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10888','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','','','','','','0000-00-00',''),(5,'4045310829','10900','Addisty Ria Puji','P','10ips1','siswa','Jakarta','Bandung','1999-05-11','0847283712832','2','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','10900','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','','','','','','0000-00-00',''),(6,'10453210829','108897','Achmad Ramzi Adriansyah','L','10ipa1','siswa','Gamping','Karanganyar','2018-09-25','0847283712832','4','108897','$2y$10$/8gpp6xZJevpMfT8MGzdduYqHr4mf7FlERDkZHE5r1gs.O7sKNov2','Islam','Anak','0000-00-00','','','','','','','','','','','','108897','$2y$10$/8gpp6xZJevpMfT8MGzdduYqHr4mf7FlERDkZHE5r1gs.O7sKNov2','','','','','','0000-00-00',''),(7,'4031220829','10990','Tujiman','L','10ips1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','10990','$2y$10$gjCayWENPMFlYuz8o7txZ.fQizh1knfYuxNewrCn4bdbVHV2sKjEy','Islam','Anak','0000-00-00','','','','','','','','','','','','10990','$2y$10$gjCayWENPMFlYuz8o7txZ.fQizh1knfYuxNewrCn4bdbVHV2sKjEy','','','','','','0000-00-00','');
+INSERT INTO `data_siswa` VALUES (4,'1045310829','1088','Addisty','P','10ipa1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','1088','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','1088','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.','','','','','','0000-00-00',''),(5,'4045310829','1090','Addisty Ria Puji','P','10ips1','siswa','Jakarta','Bandung','1999-05-11','0847283712832','2','1090','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','Islam','Anak','0000-00-00',NULL,'','','','','','','','','','','1090','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.','','','','','','0000-00-00',''),(6,'1045321082','1088','Achmad Ramzi Adriansyah','L','10ipa1','siswa','Gamping','Karanganyar','2018-09-25','0847283712832','4','1088','$2y$10$/8gpp6xZJevpMfT8MGzdduYqHr4mf7FlERDkZHE5r1gs.O7sKNov2','Islam','Anak','0000-00-00','','','','','','','','','','','','1088','$2y$10$/8gpp6xZJevpMfT8MGzdduYqHr4mf7FlERDkZHE5r1gs.O7sKNov2','','','','','','0000-00-00',''),(7,'4031220829','1099','Tujiman','L','10ips1','siswa','Gamping','Karanganyar','1999-07-18','0847283712832','4','1099','$2y$10$gjCayWENPMFlYuz8o7txZ.fQizh1knfYuxNewrCn4bdbVHV2sKjEy','Islam','Anak','0000-00-00','','','','','','','','','','','','1099','$2y$10$gjCayWENPMFlYuz8o7txZ.fQizh1knfYuxNewrCn4bdbVHV2sKjEy','','','','','','0000-00-00','');
 /*!40000 ALTER TABLE `data_siswa` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `data_wali`
---
-
-DROP TABLE IF EXISTS `data_wali`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `data_wali` (
-  `id_wali` int(11) NOT NULL AUTO_INCREMENT,
-  `nis_siswa_wali` varchar(25) DEFAULT NULL,
-  `username_wali` varchar(25) DEFAULT NULL,
-  `password_wali` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id_wali`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `data_wali`
---
-
-LOCK TABLES `data_wali` WRITE;
-/*!40000 ALTER TABLE `data_wali` DISABLE KEYS */;
-INSERT INTO `data_wali` VALUES (3,'10888','10888wali','$2y$10$r4hTh/2Gpanz1MUY4J46COngTaWfWoI7p03ItED/W1onMN.MBvmi.'),(4,'10900','10900wali','$2y$10$IxxSsj8y7fHt/4MH.yjPKu0c8pSbnw9WpwK6bT8Z9IArkhIGhs7L.'),(5,'108897','108897wali','$2y$10$/8gpp6xZJevpMfT8MGzdduYqHr4mf7FlERDkZHE5r1gs.O7sKNov2'),(6,'10990','10990wali','$2y$10$gjCayWENPMFlYuz8o7txZ.fQizh1knfYuxNewrCn4bdbVHV2sKjEy');
-/*!40000 ALTER TABLE `data_wali` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `data_website`
---
-
-DROP TABLE IF EXISTS `data_website`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `data_website` (
-  `id_data_website` int(11) NOT NULL AUTO_INCREMENT,
-  `hubungi_kami_data_website` varchar(15) DEFAULT NULL,
-  `email_data_website` varchar(100) DEFAULT NULL,
-  `marquee_data_website` tinytext,
-  `judul_konten_slide_data_website` tinytext,
-  `isi_konten_slide_data_website` text,
-  `gambar_slide_data_website` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_data_website`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `data_website`
---
-
-LOCK TABLES `data_website` WRITE;
-/*!40000 ALTER TABLE `data_website` DISABLE KEYS */;
-INSERT INTO `data_website` VALUES (1,NULL,NULL,NULL,NULL,NULL,NULL),(2,NULL,NULL,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `data_website` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `guru_kompetensi_dasar_smt1`
---
-
-DROP TABLE IF EXISTS `guru_kompetensi_dasar_smt1`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `guru_kompetensi_dasar_smt1` (
-  `id_guru_kompetensi_dasar_smt1` int(11) NOT NULL AUTO_INCREMENT,
-  `guru_kompetensi_dasar_pengetahuan_noKI_smt1` varchar(25) DEFAULT NULL,
-  `guru_kompetensi_dasar_pengetahuan_noKD_smt1` varchar(25) DEFAULT NULL,
-  `guru_kompetensi_dasar_pengetahuan_noDKD_smt1` text,
-  `guru_kompetensi_dasar_nip_pegawai_smt1` varchar(20) DEFAULT NULL,
-  `guru_kompetensi_dasar_kd_mata_pelajaran_smt1` varchar(20) DEFAULT NULL,
-  `guru_kompetensi_dasar_kd_kelas_daftar_smt1` varchar(15) DEFAULT NULL,
-  `guru_kompetensi_dasar_semester_smt1` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id_guru_kompetensi_dasar_smt1`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `guru_kompetensi_dasar_smt1`
---
-
-LOCK TABLES `guru_kompetensi_dasar_smt1` WRITE;
-/*!40000 ALTER TABLE `guru_kompetensi_dasar_smt1` DISABLE KEYS */;
-INSERT INTO `guru_kompetensi_dasar_smt1` VALUES (1,'3','3.1','Menghitung Bintang','3237762664300033','aa','10ipa1',1),(2,'3','3.2','','3237762664300033','aa','10ipa1',1),(3,'3','3.3','','3237762664300033','aa','10ipa1',1),(4,'3','3.4','','3237762664300033','aa','10ipa1',1),(5,'3','3.5','','3237762664300033','aa','10ipa1',1),(6,'3','3.6','','3237762664300033','aa','10ipa1',1),(7,'3','3.7','','3237762664300033','aa','10ipa1',1),(8,'3','3.8','','3237762664300033','aa','10ipa1',1),(9,'3','3.9','','3237762664300033','aa','10ipa1',1),(10,'3','3.10','','3237762664300033','aa','10ipa1',1),(11,'3','3.1','','296611082007011021','bindo','10ipa1',1),(12,'3','3.2','','296611082007011021','bindo','10ipa1',1),(13,'3','3.3','','296611082007011021','bindo','10ipa1',1),(14,'3','3.4','','296611082007011021','bindo','10ipa1',1),(15,'3','3.5','','296611082007011021','bindo','10ipa1',1),(16,'3','3.6','','296611082007011021','bindo','10ipa1',1),(17,'3','3.7','','296611082007011021','bindo','10ipa1',1),(18,'3','3.8','','296611082007011021','bindo','10ipa1',1),(19,'3','3.9','','296611082007011021','bindo','10ipa1',1),(20,'3','3.10','','296611082007011021','bindo','10ipa1',1),(21,'3','3.1','','296611082007011021','bindo','10ips1',1),(22,'3','3.2','','296611082007011021','bindo','10ips1',1),(23,'3','3.3','','296611082007011021','bindo','10ips1',1),(24,'3','3.4','','296611082007011021','bindo','10ips1',1),(25,'3','3.5','','296611082007011021','bindo','10ips1',1),(26,'3','3.6','','296611082007011021','bindo','10ips1',1),(27,'3','3.7','','296611082007011021','bindo','10ips1',1),(28,'3','3.8','','296611082007011021','bindo','10ips1',1),(29,'3','3.9','','296611082007011021','bindo','10ips1',1),(30,'3','3.10','','296611082007011021','bindo','10ips1',1);
-/*!40000 ALTER TABLE `guru_kompetensi_dasar_smt1` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `guru_kompetensi_dasar_smt2`
---
-
-DROP TABLE IF EXISTS `guru_kompetensi_dasar_smt2`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `guru_kompetensi_dasar_smt2` (
-  `id_guru_kompetensi_dasar_smt2` int(11) NOT NULL AUTO_INCREMENT,
-  `guru_kompetensi_dasar_pengetahuan_noKI_smt2` varchar(25) DEFAULT NULL,
-  `guru_kompetensi_dasar_pengetahuan_noKD_smt2` varchar(25) DEFAULT NULL,
-  `guru_kompetensi_dasar_pengetahuan_noDKD_smt2` text,
-  `guru_kompetensi_dasar_nip_pegawai_smt2` varchar(20) DEFAULT NULL,
-  `guru_kompetensi_dasar_kd_mata_pelajaran_smt2` varchar(20) DEFAULT NULL,
-  `guru_kompetensi_dasar_kd_kelas_daftar_smt2` varchar(15) DEFAULT NULL,
-  `guru_kompetensi_dasar_semester_smt2` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id_guru_kompetensi_dasar_smt2`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `guru_kompetensi_dasar_smt2`
---
-
-LOCK TABLES `guru_kompetensi_dasar_smt2` WRITE;
-/*!40000 ALTER TABLE `guru_kompetensi_dasar_smt2` DISABLE KEYS */;
-INSERT INTO `guru_kompetensi_dasar_smt2` VALUES (1,'3','3.11','','3237762664300033','aa','10ipa1',2),(2,'3','3.12','','3237762664300033','aa','10ipa1',2),(3,'3','3.13','','3237762664300033','aa','10ipa1',2),(4,'3','3.14','','3237762664300033','aa','10ipa1',2),(5,'3','3.15','','3237762664300033','aa','10ipa1',2),(6,'3','3.16','','3237762664300033','aa','10ipa1',2),(7,'3','3.17','','3237762664300033','aa','10ipa1',2),(8,'3','3.18','','3237762664300033','aa','10ipa1',2),(9,'3','3.19','','3237762664300033','aa','10ipa1',2),(10,'3','3.20','','3237762664300033','aa','10ipa1',2),(11,'3','3.11','','296611082007011021','bindo','10ipa1',2),(12,'3','3.12','','296611082007011021','bindo','10ipa1',2),(13,'3','3.13','','296611082007011021','bindo','10ipa1',2),(14,'3','3.14','','296611082007011021','bindo','10ipa1',2),(15,'3','3.15','','296611082007011021','bindo','10ipa1',2),(16,'3','3.16','','296611082007011021','bindo','10ipa1',2),(17,'3','3.17','','296611082007011021','bindo','10ipa1',2),(18,'3','3.18','','296611082007011021','bindo','10ipa1',2),(19,'3','3.19','','296611082007011021','bindo','10ipa1',2),(20,'3','3.20','','296611082007011021','bindo','10ipa1',2),(21,'3','3.11','','296611082007011021','bindo','10ips1',2),(22,'3','3.12','','296611082007011021','bindo','10ips1',2),(23,'3','3.13','','296611082007011021','bindo','10ips1',2),(24,'3','3.14','','296611082007011021','bindo','10ips1',2),(25,'3','3.15','','296611082007011021','bindo','10ips1',2),(26,'3','3.16','','296611082007011021','bindo','10ips1',2),(27,'3','3.17','','296611082007011021','bindo','10ips1',2),(28,'3','3.18','','296611082007011021','bindo','10ips1',2),(29,'3','3.19','','296611082007011021','bindo','10ips1',2),(30,'3','3.20','','296611082007011021','bindo','10ips1',2);
-/*!40000 ALTER TABLE `guru_kompetensi_dasar_smt2` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -319,7 +172,7 @@ DROP TABLE IF EXISTS `kelas_transaksi`;
 CREATE TABLE `kelas_transaksi` (
   `id_kelas_transaksi` int(11) NOT NULL AUTO_INCREMENT,
   `kd_kelas_daftar_kelas_transaksi` varchar(20) DEFAULT NULL,
-  `nip_pegawai_wali_kelas_transaksi` varchar(25) DEFAULT NULL,
+  `nip_pegawai_wali_kelas_transaksi` char(18) DEFAULT NULL,
   PRIMARY KEY (`id_kelas_transaksi`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -369,12 +222,12 @@ DROP TABLE IF EXISTS `mata_pelajaran_transaksi`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mata_pelajaran_transaksi` (
   `id_mata_pelajaran_transaksi` int(11) NOT NULL AUTO_INCREMENT,
-  `kkm_rendah_mata_pelajaran_transaksi` varchar(7) DEFAULT NULL,
-  `kkm_tengah_mata_pelajaran_transaksi` varchar(7) DEFAULT NULL,
-  `kkm_tinggi_mata_pelajaran_transaksi` varchar(7) DEFAULT NULL,
+  `kkm_rendah_mata_pelajaran_transaksi` varchar(3) DEFAULT NULL,
+  `kkm_tengah_mata_pelajaran_transaksi` varchar(3) DEFAULT NULL,
+  `kkm_tinggi_mata_pelajaran_transaksi` varchar(3) DEFAULT NULL,
   `kd_kelas_daftar_mata_pelajaran_transaksi` varchar(15) DEFAULT NULL,
   `kd_mata_pelajaran_transaksi` varchar(65) DEFAULT NULL,
-  `nip_pegawai_mata_pelajaran_transaksi` varchar(50) DEFAULT NULL,
+  `nip_pegawai_mata_pelajaran_transaksi` char(18) DEFAULT NULL,
   PRIMARY KEY (`id_mata_pelajaran_transaksi`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -673,9 +526,9 @@ DROP TABLE IF EXISTS `pembayaran`;
 CREATE TABLE `pembayaran` (
   `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT,
   `kd_pembayaran` varchar(25) DEFAULT NULL,
-  `cicil_total_pembayaran` varchar(255) DEFAULT NULL,
-  `kekurangan_pembayaran` varchar(255) DEFAULT NULL,
-  `nis_siswa_pembayaran` varchar(20) DEFAULT NULL,
+  `cicil_total_pembayaran` varchar(11) DEFAULT NULL,
+  `kekurangan_pembayaran` varchar(11) DEFAULT NULL,
+  `nis_siswa_pembayaran` char(5) DEFAULT NULL,
   `tanggal_lunas_pembayaran` datetime DEFAULT NULL,
   `tanggal_terakhir_pembayaran` datetime DEFAULT NULL,
   `lunas_pembayaran` enum('Y','N') DEFAULT NULL,
@@ -691,7 +544,7 @@ CREATE TABLE `pembayaran` (
 
 LOCK TABLES `pembayaran` WRITE;
 /*!40000 ALTER TABLE `pembayaran` DISABLE KEYS */;
-INSERT INTO `pembayaran` VALUES (61,'d_ulang',NULL,'565.000','10888',NULL,NULL,'N'),(62,'seragam','500.000','1.000.000','10888','0000-00-00 00:00:00','2018-07-21 12:47:45','N'),(63,'uang_operasional',NULL,'1.800.000','10888',NULL,NULL,'N'),(64,'spp',NULL,'1.500.000','10888',NULL,NULL,'N'),(65,'d_ulang',NULL,'565.000','10900',NULL,NULL,'N'),(66,'seragam',NULL,'1.500.000','10900',NULL,NULL,'N'),(67,'uang_operasional',NULL,'1.800.000','10900',NULL,NULL,'N'),(68,'spp',NULL,'1.500.000','10900',NULL,NULL,'N'),(69,'d_ulang',NULL,'565.000','',NULL,NULL,'N'),(70,'seragam',NULL,'1.500.000','',NULL,NULL,'N'),(71,'uang_operasional',NULL,'1.800.000','',NULL,NULL,'N'),(72,'spp',NULL,'1.500.000','',NULL,NULL,'N'),(73,'d_ulang',NULL,'565.000','108897',NULL,NULL,'N'),(74,'seragam',NULL,'1.500.000','108897',NULL,NULL,'N'),(75,'uang_operasional',NULL,'1.800.000','108897',NULL,NULL,'N'),(76,'spp',NULL,'1.500.000','108897',NULL,NULL,'N'),(77,'d_ulang',NULL,'565.000','10990',NULL,NULL,'N'),(78,'seragam',NULL,'1.500.000','10990',NULL,NULL,'N'),(79,'uang_operasional',NULL,'1.800.000','10990',NULL,NULL,'N'),(80,'spp',NULL,'1.500.000','10990',NULL,NULL,'N');
+INSERT INTO `pembayaran` VALUES (61,'d_ulang',NULL,'565.000','10888',NULL,NULL,'N'),(62,'seragam','500.000','1.000.000','10888','0000-00-00 00:00:00','2018-07-21 12:47:45','N'),(63,'uang_operasional',NULL,'1.800.000','10888',NULL,NULL,'N'),(64,'spp',NULL,'1.500.000','10888',NULL,NULL,'N'),(65,'d_ulang',NULL,'565.000','10900',NULL,NULL,'N'),(66,'seragam',NULL,'1.500.000','10900',NULL,NULL,'N'),(67,'uang_operasional',NULL,'1.800.000','10900',NULL,NULL,'N'),(68,'spp',NULL,'1.500.000','10900',NULL,NULL,'N'),(69,'d_ulang',NULL,'565.000','',NULL,NULL,'N'),(70,'seragam',NULL,'1.500.000','',NULL,NULL,'N'),(71,'uang_operasional',NULL,'1.800.000','',NULL,NULL,'N'),(72,'spp',NULL,'1.500.000','',NULL,NULL,'N'),(73,'d_ulang',NULL,'565.000','10889',NULL,NULL,'N'),(74,'seragam',NULL,'1.500.000','10889',NULL,NULL,'N'),(75,'uang_operasional',NULL,'1.800.000','10889',NULL,NULL,'N'),(76,'spp',NULL,'1.500.000','10889',NULL,NULL,'N'),(77,'d_ulang',NULL,'565.000','10990',NULL,NULL,'N'),(78,'seragam',NULL,'1.500.000','10990',NULL,NULL,'N'),(79,'uang_operasional',NULL,'1.800.000','10990',NULL,NULL,'N'),(80,'spp',NULL,'1.500.000','10990',NULL,NULL,'N');
 /*!40000 ALTER TABLE `pembayaran` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -720,34 +573,6 @@ LOCK TABLES `pembayaran_daftar` WRITE;
 /*!40000 ALTER TABLE `pembayaran_daftar` DISABLE KEYS */;
 INSERT INTO `pembayaran_daftar` VALUES (1,'d_ulang','Daftar Ulang','565.000'),(2,'seragam','Perlengkapan Seragam','1.500.000'),(3,'uang_operasional','Peningkatan Mutu Madrasah','1.800.000'),(4,'spp','Sumbangan Pembinaan Pendidikan (SPP)','1.500.000');
 /*!40000 ALTER TABLE `pembayaran_daftar` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pesan`
---
-
-DROP TABLE IF EXISTS `pesan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pesan` (
-  `id_pesan` int(11) NOT NULL AUTO_INCREMENT,
-  `pengirim_pesan` varchar(50) DEFAULT NULL,
-  `penerima_pesan` varchar(50) DEFAULT NULL,
-  `judul_pesan` text,
-  `isi_pesan` text,
-  `waktu_pesan` datetime DEFAULT NULL,
-  `cek_pesan` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`id_pesan`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pesan`
---
-
-LOCK TABLES `pesan` WRITE;
-/*!40000 ALTER TABLE `pesan` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pesan` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -835,7 +660,7 @@ DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata_suggest`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pesan_chat_bot_kosa_kata_suggest` (
   `id_pesan_chat_bot_kosa_kata_suggest` int(11) NOT NULL AUTO_INCREMENT,
-  `nomor_induk_pesan_chat_bot_kosa_kata_suggest` varchar(25) DEFAULT NULL,
+  `nomor_induk_pesan_chat_bot_kosa_kata_suggest` varchar(18) DEFAULT NULL,
   `kata_kunci_pesan_chat_bot_kosa_kata_suggest` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_suggest`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
@@ -849,33 +674,6 @@ LOCK TABLES `pesan_chat_bot_kosa_kata_suggest` WRITE;
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` DISABLE KEYS */;
 INSERT INTO `pesan_chat_bot_kosa_kata_suggest` VALUES (1,'10888','berapa harga kertas di kantin'),(2,'10888','nama lengkap petugas satpam');
 /*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pesan_chat_pengguna`
---
-
-DROP TABLE IF EXISTS `pesan_chat_pengguna`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pesan_chat_pengguna` (
-  `id_pesan_chat_pengguna` int(11) NOT NULL AUTO_INCREMENT,
-  `pengirim_pesan_chat_pengguna` varchar(50) NOT NULL,
-  `penerima_pesan_chat_pengguna` varchar(50) NOT NULL,
-  `isi_pesan_chat_pengguna` text NOT NULL,
-  `waktu_pesan_chat_pengguna` datetime NOT NULL,
-  `cek_pesan_chat_pengguna` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id_pesan_chat_pengguna`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pesan_chat_pengguna`
---
-
-LOCK TABLES `pesan_chat_pengguna` WRITE;
-/*!40000 ALTER TABLE `pesan_chat_pengguna` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pesan_chat_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -912,8 +710,8 @@ DROP TABLE IF EXISTS `verifikasi_password`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `verifikasi_password` (
   `id_verifikasi_password_baru` int(11) NOT NULL AUTO_INCREMENT,
-  `username_verifikasi_password_baru` varchar(50) DEFAULT NULL,
-  `password_baru_verifikasi_password_baru` varchar(255) DEFAULT NULL,
+  `username_verifikasi_password_baru` varchar(18) DEFAULT NULL,
+  `password_baru_verifikasi_password_baru` char(60) DEFAULT NULL,
   `jabatan_verifikasi_password_baru` varchar(25) DEFAULT NULL,
   `tanggal_ganti_verifikasi_password_baru` date DEFAULT NULL,
   `jam_ganti_verifikasi_password_baru` time DEFAULT NULL,
@@ -921,7 +719,7 @@ CREATE TABLE `verifikasi_password` (
   `jam_verifikasi_verifikasi_password_baru` time DEFAULT NULL,
   `tanggal_terpakai_verifikasi_password_baru` date DEFAULT NULL,
   `jam_terpakai_verifikasi_password_baru` time DEFAULT NULL,
-  `status_verifikasi_password_baru` char(1) DEFAULT NULL,
+  `status_verifikasi_password_baru` enum('Y','N') DEFAULT NULL,
   PRIMARY KEY (`id_verifikasi_password_baru`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -945,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-08 21:48:01
+-- Dump completed on 2018-10-02 11:18:01

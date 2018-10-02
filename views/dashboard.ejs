@@ -24,12 +24,12 @@
               <!-- <input class="chat-typing" type="text" name="" value="" placeholder="Masukan Pertanyaan.."> -->
               <i class="material-icons prefix">textsms</i>
               <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
-              <input  id="icon_prefix" type="text" class="chat-typing" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
+              <input id="icon_prefix" type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
               <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
               <input type="hidden" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose">
             </div>
             <div class="col s2 m2 l2 xl1">
-              <a class="btn-floating btn-medium waves-effect waves-light red chat-sending"><i class="small material-icons right">send</i></a>
+              <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
             </div>
           </form>
           <div class="col s1 m1 l1 xl1"></div>
@@ -61,7 +61,6 @@
   <% include footer %>
   <script>
     $(document).ready(function(){
-
       $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
       setTimeout(function(){
         $('.load-chat').hide()
@@ -171,6 +170,9 @@
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val(sek);
                         $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
+                        // var sek = setInterval(function(){
+                        //    $('input[name*="isi_pesan_chat_pengguna"]').toggleClass("blank_name");
+                        // },500)
                       }
                     }
                     else if (r[2] == "error") {

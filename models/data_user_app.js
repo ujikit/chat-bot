@@ -30,9 +30,9 @@ exports.dashboard_user = function(req, res){
 	// connection.query(sql, function  (err_final,rows){
 	// 	res.render('dashboard.ejs',{session:userId, jabatan:rows[0].jabatan_siswa});
 	// })
-	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
+	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='1088'"; //userID
 	connection.query(sql, function  (err_final,rows){
-		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa});
+		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_siswa:rows[0].nama_siswa});
 	})
 };
 exports.dashboard_tutorial_video = function(req, res){
@@ -49,7 +49,7 @@ exports.dashboard_tutorial_video = function(req, res){
 	connection.query(sql, function  (err_siswa,rows_siswa){
 	var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 	connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
-		res.render('dashboard_tutorial_video.ejs',{session:rows_siswa[0].nis_siswa, jabatan:rows_siswa[0].jabatan_siswa, rows_chatbot_video:rows_chatbot_video});
+		res.render('dashboard_tutorial_video.ejs',{session:rows_siswa[0].nis_siswa, jabatan:rows_siswa[0].jabatan_siswa, rows_chatbot_video:rows_chatbot_video, nama_siswa:rows_chatbot_video[0].nama_siswa});
 	})
 	})
 };
@@ -1061,17 +1061,17 @@ exports.chat_user = function(req,res,next){
 								                    var sql 		= "SELECT nama_siswa, nis_siswa FROM data_siswa WHERE nama_siswa REGEXP ? ORDER BY nama_siswa ASC";
 								                    connection.query(sql, selects, function  (err_final,rows){
 								                      var nama_nis_siswa = JSON.stringify(rows)
-								                      var nama_nip_baru = []
+								                      var nama_nis_baru = []
 								                      for (var i = 0; i < rows.length; i++) {
 								                        var j = i+1;
-								                        nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+								                        nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 								                      }
-																			nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
-								                      var nama_nip_baru = JSON.stringify(nama_nip_baru)
+																			nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
+								                      var nama_nis_baru = JSON.stringify(nama_nis_baru)
 																			// console.log(grup_kosa_kata_final+'>'+regex6[0]+'>'+count_siswa);
-								                      var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+								                      var nama_nis_baru = nama_nis_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 																			var grup_duplikat =	jabatan_cari;
-								                      res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
+								                      res.send("Terdapat <b>duplikasi nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nis_baru+"|"
 								                              +"Coba pilih nomor yang telah disediakan : |"
 								                              +"success|"
 								                              +"duplicate_name|"

@@ -158,7 +158,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" id="button-submit-forgot-password-pegawai" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Ganti</a>
+        <a href="#!" id="button-submit-forgot-password-pegawai" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Minta</a>
         <a href="#!" class="modal-close waves-effect waves-red red lighten-5 btn-flat">Tutup</a>
       </div>
     </form>
@@ -186,7 +186,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" id="button-submit-forgot-password-siswa" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Ganti</a>
+        <a href="#!" id="button-submit-forgot-password-siswa" class="modal-close waves-effect waves-green green lighten-5 btn-flat">Minta</a>
         <a href="#!" class="modal-close waves-effect waves-red red lighten-5 btn-flat">Tutup</a>
       </div>
     </form>
@@ -199,7 +199,6 @@
   $(document).ready(function(){
     $('.tabs').tabs();
     $('.modal').modal();
-
     $('#button-submit-forgot-password-pegawai').on('click', function(){
       $.ajax({
         type : 'POST',

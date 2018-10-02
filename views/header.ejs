@@ -112,13 +112,21 @@
       height: 70px;
     }
     .chat-typing{
-      outline:none;
-      border-radius: 30px;
+      font-size: 16.5px;
+      height: 65%;
       width: 100%;
-      height: 30px;
+      padding: 12px 20px;
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 2px solid #b7d0a5;
+    }
+    .chat-typing:focus{
+      outline: none;
+      border-bottom: 2px solid #4db6ac;
     }
     .chat-sending{
       margin-top: 15px;
+      background: #2E7D32;
     }
     .load-chat{
       width:100px;
@@ -138,6 +146,11 @@
     .responsive-video{
       width: 400px;
     }
+    .nav-mobile-profile{
+      margin-top: 25px;
+      margin-bottom: 10px;
+      margin-left: 15px;
+    }
   </style>
 </head>
 <body>
@@ -156,15 +169,27 @@
         <li><a href="/logout_siswa">Keluar</a></li>
       <% } %>
     </ul>
-    <ul id="nav-mobile" class="sidenav">
-      <li><a href="/dashboard_user">Home</a></li>
-      <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
-      <% if (jabatan == 'guru') { %>
-        <li><a href="/logout_pegawai">Keluar</a></li>
-      <% } else if (jabatan == 'siswa'){ %>
-        <li><a href="/logout_siswa">Keluar</a></li>
-      <% } %>
-    </ul>
+    <div id="nav-mobile" class="sidenav">
+      <div class="nav-mobile-profile">
+        <div class="row">
+          <div class="col s4">
+            <img src="http://localhost/_Project/man2/frontend/img/foto/siswa/<%= session %>" alt="photo profile" class="circle responsive-img" style="width:60px;">
+          </div>
+          <div class="col s8">
+            <p href="#" style="color:black"><%= nama_siswa %></p>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <li><a href="/dashboard_user">Home</a></li>
+        <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
+        <% if (jabatan == 'guru') { %>
+          <li><a href="/logout_pegawai">Keluar</a></li>
+        <% } else if (jabatan == 'siswa'){ %>
+          <li><a href="/logout_siswa">Keluar</a></li>
+        <% } %>
+      </ul>
+    </div>
     <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
   </div>
 </nav>
