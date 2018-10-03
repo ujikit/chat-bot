@@ -28,7 +28,8 @@ exports.login_pegawai = function(req, res){
       var sql_pegawai  = "SELECT nip_pegawai,password_pegawai,jabatan_pegawai FROM data_pegawai WHERE username_pegawai='"+username+"'";
       connection.query(sql_pegawai, function (err, result) {
 				if (result.length == 0) {
-					res.json({name:'Pengguna Tidak Ada!', type:'error'})
+					req.flash('error_login_pegawai', 'Username Tidak Ditemukan !')
+					res.redirect('/')
 				}
 				else {
 					var password_pegawai = result[0].password_pegawai;
@@ -38,14 +39,13 @@ exports.login_pegawai = function(req, res){
 						if (error_bcrypt) throw error_bcrypt;
 							if (result_bcrypt === true) {
 								req.session.userId = result[0].nip_pegawai;
-								console.log('Login Id : '+req.session.userId);
+								req.session.jabatan = result[0].jabatan_pegawai;
+								console.log('Jabatan :  '+req.session.jabatan);
 								console.log(date+" -- "+hour);
-								req.session.userId = result[0].nip_pegawai;
-								res.redirect('/dashboard_pegawai');
+								res.redirect('/dashboard_user');
 							}
 							else if (result_bcrypt == false) {
-								// res.json({name:'password salah!', type:'error'})
-								console.log("pegawai - password salah");
+								req.flash('error_login_pegawai', 'Password Salah')
 								res.redirect('/');
 							}
 							return false;

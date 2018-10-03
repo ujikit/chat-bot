@@ -4,9 +4,7 @@ let date = dt.format('Y-m-d');
 let time = dt.format('H:M:S');
 
 exports.index = function(req, res){
-    var message = '';
-  res.render('index',{message: message});
-
+  res.render('index');
 };
 
 exports.forgot_password = function(req, res){

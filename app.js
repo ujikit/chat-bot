@@ -1,13 +1,10 @@
-/**
-* Module dependencies.
-*/
-//var methodOverride = require('method-override');
 // Express
 var express             = require('express');
 var http                = require('http');
 var path                = require('path');
 var session             = require('express-session');
 var connection          = require('express-myconnection');
+var flash               = require('express-flash');
 var app                 = express();
 var mysql               = require('mysql');
 var bodyParser          = require("body-parser");
@@ -42,18 +39,24 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(flash());
 app.use('/third-party', express.static(__dirname + '/third-party'));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-          secret: 'keyboard cat',
-          resave: false,
-          saveUninitialized: true,
-          cookie: {
-            maxAge: 600000
-            // secure : true
-          }
-        }));
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 600000
+    // secure : true
+  }
+}));
+// Logout Function (Anti Back Button)
+app.use(function(req, res, next) {
+  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  next();
+});
 
 // development only
 app.get('/', index.index);//login
@@ -77,7 +80,6 @@ app.post('/dashboard/data_user_app/submit_suggest_kosa_kata', data_user_app.data
 // GET VIEWS
 app.get('/dashboard_tutorial_video', data_user_app.dashboard_tutorial_video);
 app.get('/dashboard_tutorial_video_cari/:id', data_user_app.dashboard_tutorial_video_cari);
-
 
 //Middleware
 var listener = app.listen(8888, function(){

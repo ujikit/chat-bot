@@ -3,6 +3,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <link href="/third-party/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/third-party/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
   <style media="screen">
@@ -75,56 +76,76 @@
               <div class="row">
                 <div class="container">
                   <div id="pegawai">
-                    <form method="post" action="/login_pegawai" id="form-login-chatbot-pegawai">
-                      <center>
+                    <center>
+                      <form method="post" action="/login_pegawai" id="form-login-chatbot-pegawai">
                         <img src="http://localhost/_Project/man2/frontend/img/guru.png" alt="logo man2" style="width:34%">
-                      </center>
-                      <div class="row" style="margin-top:20px;">
-                        <input type="hidden" name="privilage" value="pegawai">
-                        <div class="input-field col l12 s12">
-                          <input name="username" id="icon_prefix" type="text" class="validate" autocomplete="on">
-                          <label for="icon_prefix">Masukan Username</label>
+                        <div class="row" style="margin-top:20px;">
+                          <input type="hidden" name="privilage" value="pegawai">
+                          <div class="input-field col l12 s12">
+                            <input name="username" type="text" class="validate" autocomplete="on">
+                            <label for="icon_prefix">Masukan Username</label>
+                          </div>
+                          <div class="input-field col l12 s12">
+                            <input name="password" type="password" class="validate">
+                            <label for="icon_telephone">Masukan Password</label>
+                          </div>
+                          <div class="col l12 s12">
+                          <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">
+                            Masuk
+                            <i class="material-icons right">send</i>
+                          </button>
+                          <% if ( messages.error_login_pegawai ) { %>
+                            <div style="margin-top:10px;">
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <p><%= messages.error_login_pegawai %> </p>
+                              </div>
+                            </div>
+                          <% } %>
+                          </div>
+                          <div class="col l12 s12 lupa-password">
+                            <a href="#modal-lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                          </div>
                         </div>
-                        <div class="input-field col l12 s12">
-                          <input name="password" id="icon_telephone" type="password" class="validate">
-                          <label for="icon_telephone">Masukan Password</label>
-                        </div>
-                        <div class="col l12 s12">
-                        <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">Masuk
-                          <i class="material-icons right">send</i>
-                        </button>
-                        </div>
-                        <div class="col l12 s12 lupa-password">
-                          <a href="#modal-lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
-                        </div>
-                      </div>
-                    </form>
+                      </form>
+                    </center>
                   </div>
                   <div id="siswa">
-                    <form method="post" action="/login_siswa" id="form-login-chatbot-siswa">
-                      <center>
-                        <img src="http://localhost/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
-                      </center>
-                      <div class="row" style="margin-top:20px;">
-                        <input type="hidden" name="privilage" value="siswa">
-                        <div class="input-field col l12 s12">
-                          <input name="username" id="icon_prefix" type="text" class="validate" autocomplete="on">
-                          <label for="icon_prefix">Masukan Username</label>
+                    <center>
+                      <form method="post" action="/login_siswa" id="form-login-chatbot-siswa">
+                        <center>
+                          <img src="http://localhost/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
+                        </center>
+                        <div class="row" style="margin-top:20px;">
+                          <input type="hidden" name="privilage" value="siswa">
+                          <div class="input-field col l12 s12">
+                            <input name="username" type="text" class="validate" autocomplete="on">
+                            <label for="icon_prefix">Masukan Username</label>
+                          </div>
+                          <div class="input-field col l12 s12">
+                            <input name="password" type="password" class="validate">
+                            <label for="icon_telephone">Masukan Password</label>
+                          </div>
+                          <div class="col l12 s12">
+                          <button id="button-login-chatbot-siswa" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">
+                            Masuk
+                            <i class="material-icons right">send</i>
+                          </button>
+                          <% if ( messages.error_login_siswa ) { %>
+                            <div style="margin-top:10px;">
+                              <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <p><%= messages.error_login_siswa %> </p>
+                              </div>
+                            </div>
+                          <% } %>
+                          </div>
+                          <div class="col l12 s12 lupa-password">
+                            <a href="#modal-lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
+                          </div>
                         </div>
-                        <div class="input-field col l12 s12">
-                          <input name="password" id="icon_telephone" type="password" class="validate">
-                          <label for="icon_telephone">Masukan Password</label>
-                        </div>
-                        <div class="col l12 s12">
-                        <button id="button-login-chatbot-siswa" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">Masuk
-                          <i class="material-icons right">send</i>
-                        </button>
-                        </div>
-                        <div class="col l12 s12 lupa-password">
-                          <a href="#modal-lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
-                        </div>
-                      </div>
-                    </form>
+                      </form>
+                    </center>
                   </div>
                 </div>
               </div>
@@ -146,11 +167,11 @@
             <div class="row" style="margin-top:25px;">
               <input type="hidden" name="category" value="pegawai">
               <div class="input-field col l12 s12">
-                <input name="forgot_username" id="icon_telephone" type="text" class="validate">
+                <input name="forgot_username" type="text" class="validate">
                 <label for="icon_telephone">Masukan Nomor Induk Pegawai (NIP)</label>
               </div>
               <div class="input-field col l12 s12">
-                <input name="forgot_password" id="icon_telephone" type="password" class="validate">
+                <input name="forgot_password" type="password" class="validate">
                 <label for="icon_telephone">Masukan Password Baru</label>
               </div>
             </div>
@@ -174,11 +195,11 @@
             <div class="row" style="margin-top:25px;">
               <input type="hidden" name="category" value="siswa">
               <div class="input-field col l12 s12">
-                <input name="forgot_username" id="icon_telephone" type="text" class="validate">
+                <input name="forgot_username" type="text" class="validate">
                 <label for="icon_telephone">Masukan Nomor Induk Siswa (NIS)</label>
               </div>
               <div class="input-field col l12 s12">
-                <input name="forgot_password" id="icon_telephone" type="password" class="validate">
+                <input name="forgot_password" type="password" class="validate">
                 <label for="icon_telephone">Masukan Password Baru</label>
               </div>
             </div>
@@ -194,6 +215,7 @@
 
 <script src="/third-party/jquery-3.3.1.min.js"></script>
 <script src="/third-party/materialize/js/materialize.min.js"></script>
+<script src="/third-party/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){

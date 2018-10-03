@@ -28,7 +28,8 @@ exports.login_siswa = function(req, res){
 				var sql_siswa  = "SELECT nis_siswa,password_siswa,jabatan_siswa FROM data_siswa WHERE username_siswa='"+username+"'";
 				connection.query(sql_siswa, function (err, result) {
 					if (result.length == 0) {
-						res.json({name:'Pengguna Tidak Ada!', type:'error'})
+						req.flash('error_login_siswa', 'Username Tidak Ditemukan !')
+						res.redirect('/')
 					}
 					else {
 						var password_siswa = result[0].password_siswa;
@@ -36,16 +37,17 @@ exports.login_siswa = function(req, res){
 						hash = hash.replace(/^\$2y(.+)$/i, '$2a$1');
 						bcrypt.compare(password, hash, function(error_bcrypt, result_bcrypt) {
 							if (error_bcrypt) throw error_bcrypt;
+							console.log(result_bcrypt);
 						    if (result_bcrypt === true) {
 									req.session.userId = result[0].nis_siswa;
-									console.log('Login Id : '+req.session.userId);
+									req.session.jabatan = result[0].jabatan_siswa;
+									console.log('Jabatan :  '+req.session.jabatan);
 									console.log(date+" -- "+hour);
-									req.session.userId = result[0].nis_siswa;
-									res.redirect('/dashboard_siswa');
+									res.redirect('/dashboard_user');
 						    }
 								else if (result_bcrypt == false) {
-									// res.json({name:'password salah!', type:'error'})
-									res.redirect('/');
+									req.flash('error_login_siswa', 'Password Salah')
+									res.redirect('/')
 								}
 								return false;
 						});
@@ -81,8 +83,7 @@ exports.login_siswa = function(req, res){
 
 exports.logout_siswa = function(req,res,next){
 	req.session.destroy(function (err) {
-	  if (err) return next(err)
-		console.log(err);
+	  if (err) throw err
 	  res.redirect('/')
 	})
 };
