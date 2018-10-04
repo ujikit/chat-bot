@@ -76,10 +76,12 @@
               <div class="row">
                 <div class="container">
                   <div id="pegawai">
-                    <center>
                       <form method="post" action="/login_pegawai" id="form-login-chatbot-pegawai">
-                        <img src="http://localhost/_Project/man2/frontend/img/guru.png" alt="logo man2" style="width:34%">
+                        <center>
+                          <img src="http://localhost/_Project/man2/frontend/img/guru.png" alt="logo man2" style="width:34%">
+                        </center>
                         <div class="row" style="margin-top:20px;">
+                          <center>
                           <input type="hidden" name="privilage" value="pegawai">
                           <div class="input-field col l12 s12">
                             <input name="username" type="text" class="validate" autocomplete="on">
@@ -103,20 +105,20 @@
                             </div>
                           <% } %>
                           </div>
+                          </center>
                           <div class="col l12 s12 lupa-password">
                             <a href="#modal-lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
                           </div>
                         </div>
                       </form>
-                    </center>
                   </div>
                   <div id="siswa">
-                    <center>
                       <form method="post" action="/login_siswa" id="form-login-chatbot-siswa">
                         <center>
                           <img src="http://localhost/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
                         </center>
                         <div class="row" style="margin-top:20px;">
+                          <center>
                           <input type="hidden" name="privilage" value="siswa">
                           <div class="input-field col l12 s12">
                             <input name="username" type="text" class="validate" autocomplete="on">
@@ -140,12 +142,12 @@
                             </div>
                           <% } %>
                           </div>
+                        </center>
                           <div class="col l12 s12 lupa-password">
                             <a href="#modal-lupa-password-siswa" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
                           </div>
                         </div>
                       </form>
-                    </center>
                   </div>
                 </div>
               </div>
@@ -215,7 +217,7 @@
 
 <script src="/third-party/jquery-3.3.1.min.js"></script>
 <script src="/third-party/materialize/js/materialize.min.js"></script>
-<script src="/third-party/bootstrap/js/bootstrap.min.js"></script>
+<script src="/third-party/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){

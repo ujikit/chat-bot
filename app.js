@@ -9,16 +9,12 @@ var app                 = express();
 var mysql               = require('mysql');
 var bodyParser          = require("body-parser");
 // ./Express
-// Index
+
+// Models
 var index               = require('./models/index');
-// Pegawai
 var cek_login_pegawai   = require('./models/cek_login_pegawai');
-// var data_user_pegawai   = require('./models/data_user_pegawai');
-// Siswa
-var cek_login_siswa   = require('./models/cek_login_siswa');
-// var data_user_siswa     = require('./models/data_user_siswa');
-// App
-var data_user_app    = require('./models/data_user_app');
+var cek_login_siswa     = require('./models/cek_login_siswa');
+var data_user_app       = require('./models/data_user_app');
 
 app.use(connection(mysql, {
     host: 'localhost',
@@ -34,7 +30,6 @@ global.db = connection;
 
 // all environments
 app.set('views', __dirname + '/views');
-// app.set('views', __dirname + '/views/siswa');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -52,34 +47,30 @@ app.use(session({
     // secure : true
   }
 }));
-// Logout Function (Anti Back Button)
+// Logout Function (Anti Back Button After Logout)
 app.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   next();
 });
 
-// development only
-app.get('/', index.index);//login
-
-// USER CRUD
-app.post('/forgot_password', index.forgot_password);
-
-// Pegawai
+// POST Request
+// POST
 app.post('/login_pegawai', cek_login_pegawai.login_pegawai);
-app.get('/logout_pegawai', cek_login_pegawai.logout_pegawai);
-app.get('/dashboard_user', data_user_app.dashboard_user);//call for dashboard page after login
-app.post('/dashboard/chat_user_app', data_user_app.chat_user);
-//Siswa
 app.post('/login_siswa', cek_login_siswa.login_siswa);
-app.get('/logout_siswa', cek_login_siswa.logout_siswa);
-// app.get('/dashboard_siswa', data_user_app.dashboard_siswa);
-// app.post('/dashboard/chat_user_siswa', data_user_siswa.chat_user_siswa);
-// Suggest
+app.post('/dashboard/chat_user_app', data_user_app.chat_user);
 app.post('/dashboard/data_user_app/submit_suggest_kosa_kata', data_user_app.data_user_suggest);
+app.post('/forgot_password', index.forgot_password);
+// GET
+app.get('/', index.index);
+app.get('/dashboard_tutorial_video_cari/:id', data_user_app.dashboard_tutorial_video_cari);
+app.get('/logout_siswa', cek_login_siswa.logout_siswa);
+app.get('/logout_pegawai', cek_login_pegawai.logout_pegawai);
+// ./POST Request
 
 // GET VIEWS
+app.get('/dashboard_user', data_user_app.dashboard_user);
 app.get('/dashboard_tutorial_video', data_user_app.dashboard_tutorial_video);
-app.get('/dashboard_tutorial_video_cari/:id', data_user_app.dashboard_tutorial_video_cari);
+// ./GET VIEWS
 
 //Middleware
 var listener = app.listen(8888, function(){

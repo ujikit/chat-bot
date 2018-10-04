@@ -18,15 +18,14 @@ let connection = mysql.createConnection({
 // VIEWS
 exports.dashboard_user = function(req, res){
 	let userId = req.session.userId;
-	let jabatan = req.session.jabatan;
 	if(userId == null){ res.redirect("/"); return false; }
-	if (jabatan == "siswa") {
+	if (req.session.jabatan == "siswa") {
 		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
 			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
 		})
 	}
-	else if (jabatan == "guru") {
+	else if (req.session.jabatan == "guru") {
 		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
 			res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
@@ -36,20 +35,29 @@ exports.dashboard_user = function(req, res){
 exports.dashboard_tutorial_video = function(req, res){
 	let userId = req.session.userId;
 	if(userId == null){ res.redirect("/"); return false; }
-	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-	connection.query(sql, function  (err_siswa,rows_siswa){
-	var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
-	connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
-		res.render('dashboard_tutorial_video.ejs',{session:rows_siswa[0].nis_siswa, jabatan:rows_siswa[0].jabatan_siswa, rows_chatbot_video:rows_chatbot_video, nama_siswa:rows_chatbot_video[0].nama_siswa});
-	})
-	})
+
+	if (req.session.jabatan == "siswa") {
+		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+			var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
+			connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
+			res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa, rows_chatbot_video:rows_chatbot_video});
+		})
+		})
+	}
+	else if (req.session.jabatan == "guru") {
+		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+		var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
+		connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
+			res.render('dashboard_tutorial_video.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai, rows_chatbot_video:rows_chatbot_video});
+		})
+		})
+	}
 };
+
 exports.dashboard_tutorial_video_cari = function(req, res){
 	var cari_judul_tutorial_video = req.params.id;
-	let userId = req.session.userId;
-	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-	connection.query(sql, function  (err_cari_siswa,rows_cari_siswa){
-		if (err_cari_siswa) throw err_cari_siswa;
 
 	var sql 		= "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'"; //userID
 	connection.query(sql, function  (err_cari_video,rows_cari_video){
@@ -79,7 +87,6 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 			')
 		}
 		return false;
-	})
 	})
 	return false;
 };
@@ -1374,9 +1381,7 @@ exports.chat_user = function(req,res,next){
 
 // Insert Chat
 exports.data_user_suggest = function(req,res,next){
-	let userId = req.session.userId;
-	if(userId == null){ res.redirect("/"); return false; }
-  let input = JSON.parse(JSON.stringify(req.body));
+  var input = JSON.parse(JSON.stringify(req.body));
 	var suggest_kosa_kata = input.suggest_kosa_kata;
 	var suggest_nomor_induk = input.suggest_nomor_induk;
 	req.getConnection(function (err, connection) {
@@ -1384,7 +1389,7 @@ exports.data_user_suggest = function(req,res,next){
 		var sql 		= "INSERT INTO pesan_chat_bot_kosa_kata_suggest (kata_kunci_pesan_chat_bot_kosa_kata_suggest, nomor_induk_pesan_chat_bot_kosa_kata_suggest) values (?,?)";
 		connection.query(sql, parameter, function  (err_rows,rows){
 			if (err_rows) throw err_rows;
-			res.send("berhasil")
+			res.send("berhasil menyimpan suggest")
 			return false;
 		})
 	})
