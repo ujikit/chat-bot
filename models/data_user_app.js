@@ -17,27 +17,29 @@ let connection = mysql.createConnection({
 
 // VIEWS
 exports.dashboard_user = function(req, res){
-	let userId = req.session.userId;
-	if(userId == null){ res.redirect("/"); return false; }
-	if (req.session.jabatan == "siswa") {
-		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
-			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
-		})
-	}
-	else if (req.session.jabatan == "guru") {
-		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
-			res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
-		})
-	}
+	// let userId = req.session.userId;
+	// if(userId == null){ res.redirect("/"); return false; }
+	// if (req.session.jabatan == "siswa") {
+	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='1088'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
+	// 	})
+	// }
+	// else if (req.session.jabatan == "guru") {
+	// 	var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='1088'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 		res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
+	// 	})
+	// }
+  // development
+	res.render('dashboard.ejs',{session:'1088', jabatan:'siswa', nama_pengguna:'addisty'});
 };
 exports.dashboard_tutorial_video = function(req, res){
 	let userId = req.session.userId;
 	if(userId == null){ res.redirect("/"); return false; }
 
 	if (req.session.jabatan == "siswa") {
-		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='1088'"; //userID
 		connection.query(sql, function  (err_final,rows){
 			var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 			connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
@@ -46,7 +48,7 @@ exports.dashboard_tutorial_video = function(req, res){
 		})
 	}
 	else if (req.session.jabatan == "guru") {
-		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='1088'"; //userID
 		connection.query(sql, function  (err_final,rows){
 		var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 		connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
@@ -92,10 +94,26 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 };
 // ./ VIEWS
 
+// Insert Chat
+exports.data_user_suggest = function(req,res,next){
+  var input = JSON.parse(JSON.stringify(req.body));
+	var suggest_kosa_kata = input.suggest_kosa_kata;
+	var suggest_nomor_induk = input.suggest_nomor_induk;
+	req.getConnection(function (err, connection) {
+		var parameter = [suggest_kosa_kata, suggest_nomor_induk];
+		var sql 		= "INSERT INTO pesan_chat_bot_kosa_kata_suggest (kata_kunci_pesan_chat_bot_kosa_kata_suggest, nomor_induk_pesan_chat_bot_kosa_kata_suggest) values (?,?)";
+		connection.query(sql, parameter, function  (err_rows,rows){
+			if (err_rows) throw err_rows;
+			res.send("berhasil menyimpan suggest")
+			return false;
+		})
+	})
+};
+
 // Response Chat
 exports.chat_user = function(req,res,next){
-	let userId = req.session.userId;
-	if(userId == null){ res.redirect("/"); return false; }
+	// let userId = req.session.userId;
+	// if(userId == null){ res.redirect("/"); return false; }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
@@ -582,20 +600,23 @@ exports.chat_user = function(req,res,next){
 			} // ./ duplikat kelas
 		}
 		else if (data.isi_pesan_chat_pengguna_choose.length == 0 && data.isi_pesan_chat_pengguna_blank_name.length == 0) {
-			var parameter =	[req.session.jabatan];
+			// var parameter =	[req.session.jabatan];
+      // development
+			var parameter =	['pegawai'];
 			var sqls 		= "SELECT * FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ?";
 			connection.query(sqls, parameter, function  (err,rows){
 				if (err) throw err;
 			    for (var i = 0; i < rows.length; i++){
 			      var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata_siswa;
-			        var regex = new RegExp(kosa_kata, 'gi');
-			        var ress = parse.match(regex);
-			        if (ress !== null) { var res1 = ress; }
+		        var regex = new RegExp(kosa_kata, 'gi');
+		        var ress = parse.match(regex);
+		        if (ress !== null) { var res1 = ress; }
 					}
-					// NOT FOUND kosa kata dan SUGGEST ksoa kata siswa
 				  if (res1 === undefined) {
-				    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa ORDER BY kosa_kata_pesan_chat_bot_kosa_kata_siswa ASC";
-				    connection.query(sql, function  (err_rows,rows){
+				    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ? GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa ORDER BY kosa_kata_pesan_chat_bot_kosa_kata_siswa ASC";
+				    connection.query(sql, parameter, function  (err_rows,rows){
+						// console.log(rows)
+						// return false
 				      var g = []
 				      var h = []
 							var p = parse.replace(/(pegawai|siswa|dan)/gi, "")
@@ -612,7 +633,6 @@ exports.chat_user = function(req,res,next){
 							var g = g.filter(function(elem, index, self) { return index === self.indexOf(elem); }) // hapus array duplikat
 				      for (var i = 0; i < g.length; i++) {
 				        var j = i+1; h.push(j+'. '+g[i]) }
-	            // HANDLING NULL SUGGEST SISWA
 							if (h.length === 0) {
 									res.send("Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 												 +"|"
@@ -620,7 +640,6 @@ exports.chat_user = function(req,res,next){
 												 +"1_parameter");
 				 			return false;
 							}
-							// ./HANDLING NULL SUGGEST SISWA
 				      var g = JSON.stringify(h);
 				      var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
 				      var i	= h.replace(/,/gi, "<br>")
@@ -1084,7 +1103,7 @@ exports.chat_user = function(req,res,next){
 							}
 							else {
 								if (grup == "pembayaran") {
-									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar WHERE nis_siswa_pembayaran='"+userId+"' ORDER BY lunas_pembayaran DESC"; // userID
+									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar WHERE nis_siswa_pembayaran='1088' ORDER BY lunas_pembayaran DESC"; // userID
 							    connection.query(sql, function  (err_rows,rows){
 										var dataArray = []
 										for (var i = 0; i < rows.length; i++) {
@@ -1377,20 +1396,4 @@ exports.chat_user = function(req,res,next){
 			console.log("error");
 		}
   }); // ./req.getConnection(function (err, connection)
-};
-
-// Insert Chat
-exports.data_user_suggest = function(req,res,next){
-  var input = JSON.parse(JSON.stringify(req.body));
-	var suggest_kosa_kata = input.suggest_kosa_kata;
-	var suggest_nomor_induk = input.suggest_nomor_induk;
-	req.getConnection(function (err, connection) {
-		var parameter = [suggest_kosa_kata, suggest_nomor_induk];
-		var sql 		= "INSERT INTO pesan_chat_bot_kosa_kata_suggest (kata_kunci_pesan_chat_bot_kosa_kata_suggest, nomor_induk_pesan_chat_bot_kosa_kata_suggest) values (?,?)";
-		connection.query(sql, parameter, function  (err_rows,rows){
-			if (err_rows) throw err_rows;
-			res.send("berhasil menyimpan suggest")
-			return false;
-		})
-	})
 };
