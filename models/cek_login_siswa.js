@@ -59,27 +59,22 @@ exports.login_siswa = function(req, res){
  });
 };
 
-// exports.forgot_password = function(req,res,next){
-// 	req.getConnection(function (err, connection) {
-// 	var message = '';
-// 	var sess = req.session;
-// 	if(req.method == "POST"){
-// 	  var username 	= req.body.username_forgot_password;
-// 	  var password 	= req.body.password_forgot_password;
-// 	  var privilage = req.body.privilage_forgot_password;
-// 		if (privilage == "siswa") {
-// 			var sql_siswa  = "INSERT into verifikasi_password (username_verifikasi_password_baru, password_baru_verifikasi_password_baru, jabatan_verifikasi_password_baru, tanggal_ganti_verifikasi_password_baru, jam_ganti_verifikasi_password_baru, status_verifikasi_password_baru) values ('"+username+"','"+password+"','"+privilage+"','"+date+"','"+hour+"','N')";
-// 			connection.query(sql_siswa, function (err, result) {
-// 				console.log(err);
-// 				console.log(result);
-// 			})
-// 		}
-// 		else if (privilage == "siswa") {
-// 			console.log("pass siswa");
-// 		}
-// 	}
-// 	})
-// };
+exports.forgot_password = function(req,res,next){
+	req.getConnection(function (err, connection) {
+	var message = '';
+	var sess = req.session;
+	if(req.method == "POST"){
+	  var username 	= req.body.username_forgot_password;
+	  var password 	= req.body.password_forgot_password;
+	  var privilage = req.body.privilage_forgot_password;
+			var sql_siswa = "INSERT into verifikasi_password (username_verifikasi_password_baru, password_baru_verifikasi_password_baru, jabatan_verifikasi_password_baru, tanggal_ganti_verifikasi_password_baru, jam_ganti_verifikasi_password_baru, status_verifikasi_password_baru) values ('"+username+"','"+password+"','"+privilage+"','"+date+"','"+hour+"','N')";
+			connection.query(sql_siswa, function (err, result) {
+				if (err) throw err
+				console.log(result)
+			})
+		}
+	})
+};
 
 exports.logout_siswa = function(req,res,next){
 	req.session.destroy(function (err) {

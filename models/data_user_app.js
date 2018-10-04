@@ -17,16 +17,16 @@ let connection = mysql.createConnection({
 
 // VIEWS
 exports.dashboard_user = function(req, res){
-	// let userId = req.session.userId;
+	let userId = req.session.userId;
 	// if(userId == null){ res.redirect("/"); return false; }
 	// if (req.session.jabatan == "siswa") {
-	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='1088'"; //userID
+	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
 	// 	connection.query(sql, function  (err_final,rows){
 	// 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
 	// 	})
 	// }
 	// else if (req.session.jabatan == "guru") {
-	// 	var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='1088'"; //userID
+	// 	var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
 	// 	connection.query(sql, function  (err_final,rows){
 	// 		res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
 	// 	})
@@ -39,7 +39,7 @@ exports.dashboard_tutorial_video = function(req, res){
 	if(userId == null){ res.redirect("/"); return false; }
 
 	if (req.session.jabatan == "siswa") {
-		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='1088'"; //userID
+		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
 			var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 			connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
@@ -48,7 +48,7 @@ exports.dashboard_tutorial_video = function(req, res){
 		})
 	}
 	else if (req.session.jabatan == "guru") {
-		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='1088'"; //userID
+		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
 		var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 		connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
@@ -112,8 +112,10 @@ exports.data_user_suggest = function(req,res,next){
 
 // Response Chat
 exports.chat_user = function(req,res,next){
+  // development
+	let userId = '1088';
 	// let userId = req.session.userId;
-	// if(userId == null){ res.redirect("/"); return false; }
+	if(userId == null){ res.redirect("/"); return false; }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
@@ -600,9 +602,9 @@ exports.chat_user = function(req,res,next){
 			} // ./ duplikat kelas
 		}
 		else if (data.isi_pesan_chat_pengguna_choose.length == 0 && data.isi_pesan_chat_pengguna_blank_name.length == 0) {
+			// development
+			var parameter =	['siswa'];
 			// var parameter =	[req.session.jabatan];
-      // development
-			var parameter =	['pegawai'];
 			var sqls 		= "SELECT * FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ?";
 			connection.query(sqls, parameter, function  (err,rows){
 				if (err) throw err;
@@ -615,8 +617,6 @@ exports.chat_user = function(req,res,next){
 				  if (res1 === undefined) {
 				    var sql = "SELECT kosa_kata_pesan_chat_bot_kosa_kata_siswa FROM pesan_chat_bot_kosa_kata_siswa WHERE chat_privilege_kosa_kata REGEXP ? GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata_siswa ORDER BY kosa_kata_pesan_chat_bot_kosa_kata_siswa ASC";
 				    connection.query(sql, parameter, function  (err_rows,rows){
-						// console.log(rows)
-						// return false
 				      var g = []
 				      var h = []
 							var p = parse.replace(/(pegawai|siswa|dan)/gi, "")
@@ -1103,7 +1103,7 @@ exports.chat_user = function(req,res,next){
 							}
 							else {
 								if (grup == "pembayaran") {
-									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar WHERE nis_siswa_pembayaran='1088' ORDER BY lunas_pembayaran DESC"; // userID
+									var sql = "SELECT * FROM pembayaran INNER JOIN pembayaran_daftar on pembayaran.kd_pembayaran = pembayaran_daftar.kd_pembayaran_daftar WHERE nis_siswa_pembayaran='"+userId+"' ORDER BY lunas_pembayaran DESC"; // userID
 							    connection.query(sql, function  (err_rows,rows){
 										var dataArray = []
 										for (var i = 0; i < rows.length; i++) {
