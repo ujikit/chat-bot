@@ -655,56 +655,6 @@ INSERT INTO `pembayaran_daftar` VALUES (1,'d_ulang','Daftar Ulang','565.000'),(2
 UNLOCK TABLES;
 
 --
--- Table structure for table `pesan_chat_bot_kosa_kata`
---
-
-DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pesan_chat_bot_kosa_kata` (
-  `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT,
-  `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
-  `data_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_pesan_chat_bot_kosa_kata`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pesan_chat_bot_kosa_kata`
---
-
-LOCK TABLES `pesan_chat_bot_kosa_kata` WRITE;
-/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata` VALUES (1,'','nomor induk'),(2,'','nama lengkap'),(8,'','nomor telepon'),(29,'','jabatan'),(33,'','ampu'),(34,'','ajar'),(39,'','alamat rumah'),(40,'','jumlah');
-/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pesan_chat_bot_kosa_kata_pegawai`
---
-
-DROP TABLE IF EXISTS `pesan_chat_bot_kosa_kata_pegawai`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pesan_chat_bot_kosa_kata_pegawai` (
-  `id_pesan_chat_bot_kosa_kata_pegawai` int(11) NOT NULL AUTO_INCREMENT,
-  `kosa_kata_pesan_chat_bot_kosa_kata_pegawai` varchar(50) NOT NULL,
-  `grup_kosa_kata_pesan_chat_bot_kosa_kata_pegawai` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_pesan_chat_bot_kosa_kata_pegawai`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pesan_chat_bot_kosa_kata_pegawai`
---
-
-LOCK TABLES `pesan_chat_bot_kosa_kata_pegawai` WRITE;
-/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_pegawai` DISABLE KEYS */;
-INSERT INTO `pesan_chat_bot_kosa_kata_pegawai` VALUES (1,'nomor induk','nip_pegawai'),(2,'nama lengkap','nama_pegawai'),(8,'nomor telepon','no_handphone_pegawai'),(29,'jabatan','jabatan_pegawai'),(33,'ampu','nama_mata_pelajaran'),(34,'ajar','nama_mata_pelajaran'),(39,'alamat rumah','alamat_pegawai'),(40,'jumlah','umum');
-/*!40000 ALTER TABLE `pesan_chat_bot_kosa_kata_pegawai` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `pesan_chat_bot_kosa_kata_siswa`
 --
 
@@ -819,4 +769,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-18 15:03:02
+-- Dump completed on 2018-10-18 21:36:02

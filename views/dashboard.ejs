@@ -26,7 +26,7 @@
               <input id="icon_prefix" type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
               <!-- development -->
               <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
-              <input type="text" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose">
+              <!-- <input type="text" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose"> -->
             </div>
             <div class="col s2 m2 l2 xl1">
               <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
@@ -122,14 +122,14 @@
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
+
                       }
                       else if (r[3] == "2_parameters") { //suggest
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
                         //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
+
                       }
                       else if (r[3] == "duplicate_name") {
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
@@ -137,10 +137,6 @@
                         var sek = r[4]+'>';
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val(sek);
                         //development $('.chat-typing').val('');
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
-                        // var sek = setInterval(function(){
-                        //    $('input[name*="isi_pesan_chat_pengguna"]').toggleClass("blank_name");
-                        // },500)
                       }
                     }
                     else if (r[2] == "error") {
@@ -148,7 +144,7 @@
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
+
                       }
                       else if (r[3] == "2_parameters") { // suggest
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
@@ -158,15 +154,15 @@
                       else if (r[3] == "1_parameter_no_clear") {
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
+
                       }
-                      else if (r[3] == "blank_name") {
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
-                        var sek = r[4]+'>';
-                        $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val(sek);
-                        //development $('.chat-typing').val('');
-                      }
+                      // else if (r[3] == "blank_name") {
+                      //   $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                      //   $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                      //   var sek = r[4]+'>';
+                      //   $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val(sek);
+                      //   //development $('.chat-typing').val('');
+                      // }
                     }
                     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
                   },1000);
