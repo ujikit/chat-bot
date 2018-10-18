@@ -6,7 +6,6 @@
   <ul id='dropdown1' class='dropdown-content'>
    <li><a href="#!">Usulkan</a></li>
   </ul>
-
   <div class="container">
     <div class="col s12 chat-page">
       <div class="col s12">
@@ -25,8 +24,9 @@
               <i class="material-icons prefix">textsms</i>
               <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
               <input id="icon_prefix" type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
-              <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
-              <input type="hidden" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose">
+              <!-- development -->
+              <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
+              <input type="text" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose">
             </div>
             <div class="col s2 m2 l2 xl1">
               <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
@@ -61,35 +61,20 @@
   <% include footer %>
   <script>
     $(document).ready(function(){
+      // Chat
       $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
       setTimeout(function(){
         $('.load-chat').hide()
         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Hallo, aku adalah <b>MANDAYA BOT</b>. Ada yang bisa aku bantu mengenai informasi seputar sekolah?</p></li>');
       },1000);
 
-      // Submit suggest kosa kata
-      $(document).on('click', '.modal-trigger', function(){
-        suggest = $(this).attr('id')
-        $('#suggest-kosa-kata').val(suggest)
-      })
-      $('#button-submit-suggest').on('click', function() {
-        $.ajax({
-          type : 'POST',
-          url : '/dashboard/data_user_app/submit_suggest_kosa_kata',
-          data : $('#suggest-kosa-kata-form').serialize(),
-          success : function(response){
-            // alert(response)
-          }
-        })
-      })
-
+      // chat-sending clicked //
       $(document).keypress(function(e) {
         if(e.which == 13) {
           e.preventDefault();
           submit();
         }
       });
-
       $('.chat-sending').click(function(event) {
         event.preventDefault();
         submit();
@@ -99,24 +84,7 @@
         let message = $(".chat-typing").val();
         if(message.trim() == ''){ return false; }
         // XSS Attack
-        // else if ( message.match(/[^a-zA-Z0-9\s\d\w?!']/gi) ) {
-        //   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
-        //   var itemCount = ($("[id^='message-']").length + 1);
-        //   $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><a style="color:#262626">' + message + '</a></p></li>');
-        //   $('.chat-typing').val(null);
-        //   $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
-        //   $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
-        //   setTimeout(function(){
-        //     $('.chat-sending').removeClass('disabled');
-        //     $('.load-chat').hide();
-        //     $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
-        //     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
-        //     $('.chat-typing').val(null);
-        //   },1000);
-        //   return false;
-        // }
         else if ( message.match(/<[(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)]+/gi) ) {
-          // $('.chat-page-history').append('<li class="receiver"><p class="chat-receiver">' + message + '</p></li>');
           $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
           $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
           $('.chat-typing').val(null);
@@ -152,14 +120,14 @@
                     if (r[2] == "success") {
                       if (r[3] == "1_parameter") {
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
                       }
                       else if (r[3] == "2_parameters") { //suggest
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
                       }
@@ -168,7 +136,7 @@
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
                         var sek = r[4]+'>';
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val(sek);
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
                         // var sek = setInterval(function(){
                         //    $('input[name*="isi_pesan_chat_pengguna"]').toggleClass("blank_name");
@@ -178,14 +146,14 @@
                     else if (r[2] == "error") {
                       if (r[3] == "1_parameter") {
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val('');
                       }
                       else if (r[3] == "2_parameters") { // suggest
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                       }
                       else if (r[3] == "1_parameter_no_clear") {
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
@@ -197,7 +165,7 @@
                         $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
                         var sek = r[4]+'>';
                         $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val(sek);
-                        $('.chat-typing').val('');
+                        //development $('.chat-typing').val('');
                       }
                     }
                     $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
@@ -207,6 +175,23 @@
            });
         }
       }
+
+      // // Function // //
+      // Submit suggest kosa kata
+      $(document).on('click', '.modal-trigger', function(){
+        suggest = $(this).attr('id')
+        $('#suggest-kosa-kata').val(suggest)
+      })
+      $('#button-submit-suggest').on('click', function() {
+        $.ajax({
+          type : 'POST',
+          url : '/dashboard/data_user_app/submit_suggest_kosa_kata',
+          data : $('#suggest-kosa-kata-form').serialize(),
+          success : function(response){
+            // alert(response)
+          }
+        })
+      })
 
     }); /*DOCUMENT READY*/
   </script>
