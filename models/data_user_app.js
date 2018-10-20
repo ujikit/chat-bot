@@ -1,4 +1,5 @@
 let bcrypt = require('bcrypt-nodejs');
+let _ = require('lodash');
 // node-datetime
 let dateTime = require('node-datetime');
 let dt = dateTime.create(); dt.format('m/d/Y H:M:S');
@@ -379,13 +380,10 @@ exports.chat_user = function(req,res,next){
 					    else { var d = 0 }
 					    json.push(d)
 					  }
-					}
+					} // output | [1]
 
-					var tempArray = [];
-					for (index = 0; index < json.length; index += data.length) {
-					  myChunk = json.slice(index, index+data.length);
-					  tempArray.push(myChunk)
-					}
+					var tempArray = _.chunk(json,data.length)
+					// output | [2]
 
 					var tempMatchPerKata = []
 					for (var i = 0; i < data.length; i++) {
@@ -393,31 +391,26 @@ exports.chat_user = function(req,res,next){
 					    var s = tempArray[j][i]
 					    tempMatchPerKata.push(s)
 					  }
-					}
+					} // output | [3]
 
-					// Menjadikan Array diPecah Jadi 3
-					var tempArrayd = []
-					for (index = 0; index < tempMatchPerKata.length; index += parse2.length) {
-					  myChunk = tempMatchPerKata.slice(index, index+parse2.length);
-					  tempArrayd.push(myChunk)
-					}
+					var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
+					// output | [4]
 
 					var fix = {tes:[]}
 					for (var i = 0; i < tempArrayd.length; i++) {
 					  fix.tes.push
 					  ({
-					    [i]:  {
-					            "id" : i,
-					            "total_match" : tempArrayd[i].filter(i => i === 1).length,
-					            "kalimat" : data[i]
-					          }
+	            "id" : i,
+	            "total_match" : tempArrayd[i].filter(i => i === 1).length, //menghitung jumlah dari array yang berisi "1"
+	            "kalimat" : data[i]
 					  })
 					}
 
 					var totalMatch = []
 					for (var i = 0; i < fix.tes.length; i++) {
-					  totalMatch.push(fix.tes[i][i].total_match)
+					  totalMatch.push(fix.tes[i].total_match)
 					} // array | daftar total match kata pertanyaan degan seluruh kalimat
+					// output | [5]
 
 					var max_match_kata = totalMatch.reduce(function(a, b) {
 					    return Math.max(a, b);
@@ -435,8 +428,8 @@ exports.chat_user = function(req,res,next){
 					var aa = []
 					for (var i = 0; i < fix.tes.length; i++) {
 					  for (var j = 0; j < filtered.length; j++) {
-					    if (fix.tes[i][i].total_match == filtered[j]) {
-					      aa.push(fix.tes[i][i].kalimat)
+					    if (fix.tes[i].total_match == filtered[j]) {
+					      aa.push(fix.tes[i].kalimat)
 					    }
 					  }
 					} // pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna

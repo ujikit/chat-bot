@@ -19,6 +19,8 @@ Chatbot Ujikit is release under the MIT version.
     2. ketikan perintah command : npm install
     3. ketikan perintah command : node app.js
 
+## Get Ready (development)
+    1. Masuk Browser dan Ketikan Url : localhost:8888/dashboard_user
 
 ## Browser Compatibility
 

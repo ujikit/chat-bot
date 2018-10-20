@@ -1,0 +1,66 @@
+OUTPUT
+
+1. variabel "json" berisi, pertanyaan pengguna contoh : "nomor telepon" yang akan dijadikan array "parse2" yang dicocokan ke seluruh pertanyaan yang ada pada database, semisal ada output :
+
+#### console.log(asd+' == '+data[j])
+
+Maka akan menampilkan :
+
+#### output 1
+null == daftar pengampu mata pelajaran
+nomor == nomor telepon pegawai
+nomor == nomor induk pegawai
+nomor == nomor telepon siswa
+nomor == nomor telepon orang tua siswa
+nomor == nomor telepon wali siswa
+null == nama lengkap siswa
+null == daftar pengampu mata pelajaran
+telepon == nomor telepon pegawai
+null == nomor induk pegawai
+telepon == nomor telepon siswa
+telepon == nomor telepon orang tua siswa
+telepon == nomor telepon wali siswa
+null == nama lengkap siswa
+
+#### output 2
+0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0
+
+2. variabel "tempArray" memecah data pada variabel "json" sesuai dengan total seluruh pertanyaan yang ada pada database
+
+## output
+  =======  nomor  =======  ======  telepon  ======
+[ [ 0, 1, 1, 1, 1, 1, 0 ], [ 0, 1, 0, 1, 1, 1, 0 ] ]
+
+3. Variabel untuk menggabungkan array diatas, supaya bisa dihitung berapa jumlah pertanyaan dr pengguna yang cocok pada database. Looping dan menghasilkan variabel "tempMatchPerKata" memasangkan antara :
+
+index[0][0] & index[1][0] = 0,0
+index[0][1] & index[1][1] = 1,1
+index[0][2] & index[1][2] = 1,0
+index[0][3] & index[1][3] = 1,1
+index[0][4] & index[1][4] = 1,1
+index[0][5] & index[1][5] = 1,1
+index[0][6] & index[1][6] = 0,0
+
+#### Hasil akhir
+[ 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0 ]
+
+hasil akhir tersebut dichunk lagi untuk proses perhitungan final pertanyaan dr pengguna yang siap dicocokan dengan pertanyaan pd database
+
+4. variabel "tempArrayd" berisi tentang potongan / chunk dari variabel "tempMatchPerKata" sesuai dengan panjang pertanyaan yang dikonversi menjadi array pada pengguna.
+
+#### Output
+[ [ 0, 0 ],
+  [ 1, 1 ],
+  [ 1, 0 ],
+  [ 1, 1 ],
+  [ 1, 1 ],
+  [ 1, 1 ],
+  [ 0, 0 ] ]
+
+  5. variabel "fix.tes" berisi tentang data json yang menampung hitungan pertanyaan dari pengguna yang cocok pada pertanyaan database
+
+  #### arti
+  -> tempArrayd[i].filter(i => i === 1).length
+  menghitung array pada output Nomor 4, yang bernilai "1"
+  #### output
+  [ 0, 2, 1, 2, 2, 2, 0 ]
