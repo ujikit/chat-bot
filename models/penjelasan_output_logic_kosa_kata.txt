@@ -62,5 +62,13 @@ hasil akhir tersebut dichunk lagi untuk proses perhitungan final pertanyaan dr p
   #### arti
   -> tempArrayd[i].filter(i => i === 1).length
   menghitung array pada output Nomor 4, yang bernilai "1"
+
   #### output
   [ 0, 2, 1, 2, 2, 2, 0 ]
+
+  6. Mengumpulkan seluruh nomor maksimal pada variabel "totalMatch", dengan parameter maksimal variabel "max_match_kata" dan kemudian hasil akan ditampung oleh variabel "filtered".
+
+  #### output
+  [ 2, 2, 2, 2 ]
+
+  7. Menyeleksi kalimat pertanyaan pada database yang cocok dengan pertanyaan pada pengguna dengan kondisi. Jika total_match pada variabel "tes" cocok dengan nomor yang ada pada variabel "filetered", maka akan dipush kedalam variabel "aa".
