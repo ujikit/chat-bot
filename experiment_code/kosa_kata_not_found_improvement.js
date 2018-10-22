@@ -30,7 +30,7 @@ var data = [ 'daftar pengampu mata pelajaran',
   'daftar nama seluruh siswa kelas',
   'nama lengkap siswa' ]
 
-var parse = "alamat wali"
+var parse = "nomor telepon"
 var parse2 = parse.split(" ")
 
 var json = []
@@ -85,9 +85,8 @@ for (var i = 0; i < fix.tes.length; i++) {
   totalMatch.push(fix.tes[i][i].total_match)
 } // array | daftar total match kata pertanyaan degan seluruh kalimat
 
-var max_match_kata = totalMatch.reduce(function(a, b) {
-    return Math.max(a, b);
-}) // array | mencari max pada array total match
+
+var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
 if (max_match_kata == 0) {
   console.log("seasd");
@@ -97,6 +96,8 @@ if (max_match_kata == 0) {
 var filtered = totalMatch.filter((value) => {
   return value >= max_match_kata;
 }); // array | mencari total seluruh total pada array yang siap diproses selanjutnya
+console.log(filtered);
+return 0
 
 var aa = []
 for (var i = 0; i < fix.tes.length; i++) {
