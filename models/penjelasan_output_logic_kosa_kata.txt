@@ -57,18 +57,18 @@ hasil akhir tersebut dichunk lagi untuk proses perhitungan final pertanyaan dr p
   [ 1, 1 ],
   [ 0, 0 ] ]
 
-  5. variabel "fix.tes" berisi tentang data json yang menampung hitungan pertanyaan dari pengguna yang cocok pada pertanyaan database
+5. variabel "fix.tes" berisi tentang data json yang menampung hitungan pertanyaan dari pengguna yang cocok pada pertanyaan database
 
-  #### arti
-  -> tempArrayd[i].filter(i => i === 1).length
-  menghitung array pada output Nomor 4, yang bernilai "1"
+#### arti
+-> tempArrayd[i].filter(i => i === 1).length
+menghitung array pada output Nomor 4, yang bernilai "1"
 
-  #### output
-  [ 0, 2, 1, 2, 2, 2, 0 ]
+#### output
+[ 0, 2, 1, 2, 2, 2, 0 ]
 
-  6. Mengumpulkan seluruh nomor maksimal pada variabel "totalMatch", dengan parameter maksimal variabel "max_match_kata" dan kemudian hasil akan ditampung oleh variabel "filtered".
+6. Mengumpulkan seluruh nomor maksimal pada variabel "totalMatch", dengan parameter maksimal variabel "max_match_kata" dan kemudian hasil akan ditampung oleh variabel "filtered".
 
-  #### output
-  [ 2, 2, 2, 2 ]
+#### output
+[ 2, 2, 2, 2 ]
 
-  7. Menyeleksi kalimat pertanyaan pada database yang cocok dengan pertanyaan pada pengguna dengan kondisi. Jika total_match pada variabel "tes" cocok dengan nomor yang ada pada variabel "filetered", maka akan dipush kedalam variabel "aa".
+7. Menyeleksi kalimat pertanyaan pada database yang cocok dengan pertanyaan pada pengguna dengan kondisi. Jika total_match pada variabel "tes" cocok dengan nomor yang ada pada variabel "filetered", maka akan dipush kedalam variabel "aa".

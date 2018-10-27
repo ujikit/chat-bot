@@ -3,9 +3,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <link href="/third-party/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <!-- <link href="/third-party/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
+  <link href="/third-party/bootstrap/css/bootstrap-custom.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/third-party/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
+  <!-- <link rel="stylesheet" href="node_modules/sweetalert/dist/sweetalert2.min.css"> -->
   <style media="screen">
   /* fallback */
     @font-face {
@@ -45,12 +46,14 @@
     .lupa-password{ margin-top:20px; }
     .tabs .tab a { color: #4caf50!important; }
     .tabs .indicator { background-color: #4caf50 !important; }
+    .tab-remake:hover { text-decoration: none;}
+    .tab-remake:focus { text-decoration: none;}
   </style>
 </head>
 <body>
   <div class="container rectangle-all-login">
       <div class="row">
-        <div class="col l6 green darken-3 hide-on-small-only" style="height:540px;">
+        <div class="col l6 green darken-3 hide-on-small-only" style="height:539px;">
           <div class="rectangle-asset-left-login left">
             <h4 class="col l12">Mandaya BOT</h4>
             <p class="col l12 rectangle-desc-left-login">Sistem Informasi Terpusat Sekolah Melalui Aplikasi Chat.</p>
@@ -68,8 +71,8 @@
         </div>
         <div class="col l6 white">
           <ul class="tabs tabs-fixed-width tab-demo">
-            <li class="tab"><a class="active" href="#pegawai">Pegawai</a></li>
-            <li class="tab"><a href="#siswa">Siswa</a></li>
+            <li class="tab"><a class="tab-remake" href="#pegawai">Pegawai</a></li>
+            <li class="tab"><a class="tab-remake" href="#siswa">Siswa</a></li>
           </ul>
           <div style="margin-top:40px;">
             <div class="col l12">
@@ -96,14 +99,6 @@
                             Masuk
                             <i class="material-icons right">send</i>
                           </button>
-                          <% if ( messages.error_login_pegawai ) { %>
-                            <div style="margin-top:10px;">
-                              <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                  <p><%= messages.error_login_pegawai %> </p>
-                              </div>
-                            </div>
-                          <% } %>
                           </div>
                           </center>
                           <div class="col l12 s12 lupa-password">
@@ -133,14 +128,6 @@
                             Masuk
                             <i class="material-icons right">send</i>
                           </button>
-                          <% if ( messages.error_login_siswa ) { %>
-                            <div style="margin-top:10px;">
-                              <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                  <p><%= messages.error_login_siswa %> </p>
-                              </div>
-                            </div>
-                          <% } %>
                           </div>
                         </center>
                           <div class="col l12 s12 lupa-password">
@@ -164,7 +151,7 @@
       <div class="modal-content">
         <div class="container">
           <center>
-            <p style="font-size:30px;">Lupa Password ?</p>
+            <p style="font-size:30px;">Lupa Password ?</p><br>
             <p style="margin-top:-20px;">Masukan Nomor Induk Pegawai untuk meminta password baru.</p>
             <div class="row" style="margin-top:25px;">
               <input type="hidden" name="category" value="pegawai">
@@ -192,7 +179,7 @@
       <div class="modal-content">
         <div class="container">
           <center>
-            <p style="font-size:30px;">Lupa Password ?</p>
+            <p style="font-size:30px;">Lupa Password ?</p><br>
             <p style="margin-top:-20px;">Masukan Nomor Induk Siswa untuk meminta password baru.</p>
             <div class="row" style="margin-top:25px;">
               <input type="hidden" name="category" value="siswa">
@@ -217,10 +204,15 @@
 
 <script src="/third-party/jquery-3.3.1.min.js"></script>
 <script src="/third-party/materialize/js/materialize.min.js"></script>
-<script src="/third-party/bootstrap/js/bootstrap.js"></script>
-<script type="text/javascript" src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<!-- <script src="/third-party/bootstrap/js/bootstrap.js"></script> -->
+<script type="text/javascript" src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+    <% if (messages.error_login_pegawai) { %>
+      swal("Uups!", "<%= messages.error_login_pegawai %>" , "error");
+    <% } else if (messages.error_login_siswa) { %>
+      swal("Uups!", "<%= messages.error_login_siswa %>" , "error");
+    <% } %>
     $('.tabs').tabs();
     $('.modal').modal();
     $('#button-submit-forgot-password-pegawai').on('click', function(){

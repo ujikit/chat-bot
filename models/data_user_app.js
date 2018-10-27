@@ -19,28 +19,23 @@ let connection = mysql.createConnection({
 // VIEWS
 exports.dashboard_user = function(req, res){
 	let userId = req.session.userId;
-	// if(userId == null){ res.redirect("/"); return 0; }
-	// if (req.session.jabatan == "siswa") {
-	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-	// 	connection.query(sql, function  (err_final,rows){
-	// 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
-	// 	})
-	// }
-	// else if (req.session.jabatan == "guru") {
-	// 	var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
-	// 	connection.query(sql, function  (err_final,rows){
-	// 		res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
-	// 	})
-	// }
-  // development
-	res.render('dashboard.ejs',{session:'10888', jabatan:'siswa', nama_pengguna:'addisty'});
+	if(userId == null){ res.redirect("/"); return 0; }
+	if (req.session.jabatan == "siswa") {
+		var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
+		})
+	}
+	else if (req.session.jabatan == "guru") {
+		var sql = "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+			res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
+		})
+	}
 };
 exports.dashboard_tutorial_video = function(req, res){
-  // development
-	// let userId = req.session.userId;
-	let userId = 10888;
+	let userId = req.session.userId;
 	if(userId == null){ res.redirect("/"); return 0; }
-
 	if (req.session.jabatan == "siswa") {
 		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
@@ -63,8 +58,10 @@ exports.dashboard_tutorial_video = function(req, res){
 
 exports.dashboard_tutorial_video_cari = function(req, res){
 	var cari_judul_tutorial_video = req.params.id;
-
-	var sql 		= "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'"; //userID
+	var cari_judul_tutorial_video	= cari_judul_tutorial_video.replace(/_/gi, " ")
+	var kode = cari_judul_tutorial_video.match(/[0-9]/gi)
+	if (kode !== null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE kd_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
+	else if (kode == null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
 	connection.query(sql, function  (err_cari_video,rows_cari_video){
 		if (err_cari_video) throw err_cari_video;
 		if (rows_cari_video.length !== 0) {
@@ -73,7 +70,7 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 				var no = i + 1;
 				arr_hasil_judul.push('\
 				<div class="col s12 l4">\
-					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video+'</b></p>\
+					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video.substring(0, 27)+'</b></p>\
 					<video class="responsive-video" controls>\
 						<source src="http://localhost/_Project/chat_bot/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
 					</video>\
@@ -84,12 +81,15 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 			var arr_hasil_judul	=	arr_hasil_judul.replace(/(\\t|\\|\["|"]|",")/g, '')
 			res.send(arr_hasil_judul)
 		}
-		else {
+		else if (rows_cari_video.length == 0){
 			res.send('\
 			<div class="col s12 l12">\
 				<p class="center">Video Tutorial yang Kamu Cari Tidak Ditemukan.</p>\
 			</div>\
 			')
+		}
+		else {
+			console.log("sek");
 		}
 		return 0;
 	})
@@ -115,9 +115,7 @@ exports.data_user_suggest = function(req,res,next){
 
 // Response Chat
 exports.chat_user = function(req,res,next){
-  // development
-	// let userId = req.session.userId;
-	let userId = '10888';
+	let userId = req.session.userId;
 	if(userId == null){ res.redirect("/"); return 0; }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
@@ -350,9 +348,7 @@ exports.chat_user = function(req,res,next){
 			} // ./ duplikat kelas
 		}
 		else {
-			// development
-			var parameter =	['siswa'];
-			// var parameter =	[req.session.jabatan];
+			var parameter =	[req.session.jabatan];
 			var sqls = "SELECT * FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ?";
 			connection.query(sqls, parameter, function  (err,rows){
 				if (err) throw err;
@@ -415,7 +411,7 @@ exports.chat_user = function(req,res,next){
 					var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
 					if (max_match_kata == 0) {
-						res.send("Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+						res.send("<a class='code label label-warning'>Kode : <b style='color:black'>ntf01</b></a><br><br>Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 										+"|"
 										+"error|"
 										+"1_parameter");
@@ -434,7 +430,7 @@ exports.chat_user = function(req,res,next){
 					      aa.push(fix.tes[i].kalimat)
 					    }
 					  }
-					} // output | [7] 
+					} // output | [7]
 					// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 					var f = aa.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 
@@ -449,7 +445,7 @@ exports.chat_user = function(req,res,next){
 					var j = i.split(",");
 					var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
 					res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-									+"Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
+									+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
 									+"error|"
 									+"2_parameters");
 					return 0
@@ -636,7 +632,7 @@ exports.chat_user = function(req,res,next){
 																var no = i + 1;
 																daftar_duplikasi_nama_kelas.push('<br>'+no+'. '+rows_cari_kd_kelas[i].nama_kelas_daftar);
 															}
-															daftar_duplikasi_nama_kelas.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b>")
+															daftar_duplikasi_nama_kelas.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 															var daftar_duplikasi_nama_kelas = JSON.stringify(daftar_duplikasi_nama_kelas)
 															var daftar_duplikasi_nama_kelas = daftar_duplikasi_nama_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 															res.send('Terdapat <b>daftar nama kelas</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_kelas+"|"
@@ -759,11 +755,11 @@ exports.chat_user = function(req,res,next){
 											          var j = i+1;
 											          nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
 											        }
-											        nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
+											        nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 											        var nama_nip_baru = JSON.stringify(nama_nip_baru)
 											        var nama_nip_baru = nama_nip_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 															var grup_duplikat =	jabatan_cari;
-											        res.send("Terdapat <b>daftar nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nip_baru+"|"
+											        res.send("Terdapat <b>daftar nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>"+nama_nip_baru+"|"
 											                +"Coba pilih nomor yang telah disediakan : |"
 											                +"success|"
 											                +"duplicate_name|"
@@ -886,11 +882,11 @@ exports.chat_user = function(req,res,next){
 																var j = i+1;
 																nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 															}
-															nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b>")
+															nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 															var nama_nis_baru = JSON.stringify(nama_nis_baru)
 															var nama_nis_baru = nama_nis_baru.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 															var grup_duplikat =	jabatan_cari;
-															res.send("Terdapat <b>daftar nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br><br>"+nama_nis_baru+"|"
+															res.send("Terdapat <b>daftar nama</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>"+nama_nis_baru+"|"
 																			+"Coba pilih nomor yang telah disediakan : |"
 																			+"success|"
 																			+"duplicate_name|"
@@ -1065,7 +1061,7 @@ exports.chat_user = function(req,res,next){
 																var no = i + 1;
 																daftar_duplikasi_nama_kelas.push('<br>'+no+'. '+rows_cari_kd_kelas[i].nama_kelas_daftar);
 															}
-															daftar_duplikasi_nama_kelas.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b>")
+															daftar_duplikasi_nama_kelas.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 															var daftar_duplikasi_nama_kelas = JSON.stringify(daftar_duplikasi_nama_kelas)
 															var daftar_duplikasi_nama_kelas = daftar_duplikasi_nama_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 															res.send('Terdapat <b>daftar nama kelas</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_kelas+"|"
@@ -1181,7 +1177,7 @@ exports.chat_user = function(req,res,next){
 															var no = i + 1;
 															daftar_duplikasi_nama_mapel.push('<br>'+no+'. '+rows_cari_kd_mapel[i].nama_mata_pelajaran);
 														}
-														daftar_duplikasi_nama_mapel.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b>")
+														daftar_duplikasi_nama_mapel.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 														var daftar_duplikasi_nama_mapel = JSON.stringify(daftar_duplikasi_nama_mapel)
 														var daftar_duplikasi_nama_mapel = daftar_duplikasi_nama_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 														res.send('Terdapat <b>daftar nama mata pelajaran</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_mapel+"|"

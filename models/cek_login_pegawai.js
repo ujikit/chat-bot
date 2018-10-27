@@ -28,7 +28,7 @@ exports.login_pegawai = function(req, res){
       var sql_pegawai  = "SELECT nip_pegawai,password_pegawai,jabatan_pegawai FROM data_pegawai WHERE username_pegawai='"+username+"'";
       connection.query(sql_pegawai, function (err, result) {
 				if (result.length == 0) {
-					req.flash('error_login_pegawai', 'Username Tidak Ditemukan !')
+					req.flash('error_login_pegawai', 'Username Pegawai '+username+', Tidak Ditemukan !')
 					res.redirect('/')
 				}
 				else {
@@ -45,12 +45,10 @@ exports.login_pegawai = function(req, res){
 								res.redirect('/dashboard_user');
 							}
 							else if (result_bcrypt == false) {
-								req.flash('error_login_pegawai', 'Password Salah')
+								req.flash('error_login_pegawai', 'Password Atas Username '+username+', Salah !')
 								res.redirect('/');
 							}
-							return false;
 					});
-					return false;
 				}
 			});
    }

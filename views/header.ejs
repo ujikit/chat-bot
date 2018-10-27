@@ -34,6 +34,7 @@
       -webkit-font-smoothing: antialiased;
     }
   </style>
+  <link href="/third-party/label.css"  type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/third-party/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/node_modules/sweetalert2/dist/sweetalert2.min.css"  type="text/css" rel="stylesheet" media="screen,projection"/>
   <!-- <link href="/third-party/materialize/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
@@ -161,7 +162,7 @@
     </a>
     <ul class="right hide-on-med-and-down">
       <li><a href="/dashboard_user">Home</a></li>
-      <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
+      <li><a target="_blank" href="/dashboard_tutorial_video">Tutorial</a></li>
       <% if (jabatan == 'guru') { %>
         <li><a href="/logout_pegawai">Keluar</a></li>
       <% } else if (jabatan == 'siswa'){ %>
@@ -181,7 +182,7 @@
       </div>
       <ul>
         <li><a href="/dashboard_user">Home</a></li>
-        <li><a href="/dashboard_tutorial_video">Tutorial</a></li>
+        <li><a target="_blank" href="/dashboard_tutorial_video">Tutorial</a></li>
         <% if (jabatan == 'guru') { %>
           <li><a href="/logout_pegawai">Keluar</a></li>
         <% } else if (jabatan == 'siswa'){ %>

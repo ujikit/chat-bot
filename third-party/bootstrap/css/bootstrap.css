@@ -42,13 +42,13 @@ audio:not([controls]) {
 template {
   display: none;
 }
-a {
+/* a {
   background-color: transparent;
 }
 a:active,
 a:hover {
   outline: 0;
-}
+} */
 abbr[title] {
   border-bottom: 1px dotted;
 }
@@ -108,7 +108,7 @@ samp {
   font-family: monospace, monospace;
   font-size: 1em;
 }
-button,
+/* button,
 input,
 optgroup,
 select,
@@ -178,7 +178,7 @@ textarea {
 }
 optgroup {
   font-weight: bold;
-}
+} */
 table {
   border-spacing: 0;
   border-collapse: collapse;
@@ -1076,7 +1076,7 @@ th {
      -moz-box-sizing: border-box;
           box-sizing: border-box;
 }
-html {
+/* html {
   font-size: 10px;
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -1095,8 +1095,8 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-}
-a {
+} */
+/* a {
   color: #337ab7;
   text-decoration: none;
 }
@@ -1108,7 +1108,7 @@ a:focus {
 a:focus {
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
-}
+} */
 figure {
   margin: 0;
 }

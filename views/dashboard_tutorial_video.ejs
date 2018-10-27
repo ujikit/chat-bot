@@ -17,12 +17,12 @@
       </form>
     </div>
     <div class="row" style="background:#d7e5cd">
-      <div id="hasil-cari-tutorial-video">
+      <div id="hasil-cari-tutorial-video" style="padding:20px;">
         <% for(var i = 0; i < rows_chatbot_video.length; i++){
           no = i + 1;
         %>
           <div class="col s12 l4">
-    				<p style="font-size:20px;color:#262626;"><b><%= no %>. <%= rows_chatbot_video[i].nama_tutorial_chatbot_video %></b></p>
+    				<p style="font-size:20px;color:#262626;"><b><%= no %>. <%= rows_chatbot_video[i].nama_tutorial_chatbot_video.substring(0, 27) %></b></p>
     				<video class="responsive-video" controls>
     					<source src="http://localhost/_Project/chat_bot/media/video_tutorial/<%= rows_chatbot_video[i].kd_tutorial_chatbot_video %>.mp4" type="video/mp4">
     				</video>
@@ -72,6 +72,7 @@
 
       function cari(){
         var input_value_cari = $('.input_cari').val();
+        var input_value_cari = input_value_cari.replace(/ /gi, "_")
         $('#hasil-cari-tutorial-video').load('/dashboard_tutorial_video_cari/'+input_value_cari);
       }
     })
