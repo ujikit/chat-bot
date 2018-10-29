@@ -1,6 +1,6 @@
 -- MySQL dump 10.16  Distrib 10.1.32-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: man2_chatbot
+-- Host: 192.168.1.129    Database: man2_chatbot
 -- ------------------------------------------------------
 -- Server version	10.1.32-MariaDB
 

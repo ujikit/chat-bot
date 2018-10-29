@@ -23,6 +23,7 @@ exports.dashboard_user = function(req, res){
 	if (req.session.jabatan == "siswa") {
 		var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
 		connection.query(sql, function  (err_final,rows){
+			if (err_final) throw err_final
 			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
 		})
 	}
@@ -34,34 +35,41 @@ exports.dashboard_user = function(req, res){
 	}
 };
 exports.dashboard_tutorial_video = function(req, res){
-	let userId = req.session.userId;
-	if(userId == null){ res.redirect("/"); return 0; }
-	if (req.session.jabatan == "siswa") {
-		var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
-			var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
-			connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
-			res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa, rows_chatbot_video:rows_chatbot_video});
-		})
-		})
-	}
-	else if (req.session.jabatan == "guru") {
-		var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
+	// let userId = req.session.userId;
+	// if(userId == null){ res.redirect("/"); return 0; }
+	// if (req.session.jabatan == "siswa") {
+	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 		var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
+	// 		connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
+	// 		res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa, rows_chatbot_video:rows_chatbot_video});
+	// 	})
+	// 	})
+	// }
+	// else if (req.session.jabatan == "guru") {
+	// 	var sql 		= "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 	var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
+	// 	connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
+	// 		res.render('dashboard_tutorial_video.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai, rows_chatbot_video:rows_chatbot_video});
+	// 	})
+	// 	})
+	// }
+	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='10888'"; //userID
+	connection.query(sql, function  (err_final,rows){
 		var sql 		= "SELECT * FROM tutorial_chatbot_video"; //userID
 		connection.query(sql, function  (err_chatbot_video,rows_chatbot_video){
-			res.render('dashboard_tutorial_video.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai, rows_chatbot_video:rows_chatbot_video});
-		})
-		})
-	}
+		res.render('dashboard_tutorial_video.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa, rows_chatbot_video:rows_chatbot_video});
+	})
+	})
 };
 
 exports.dashboard_tutorial_video_cari = function(req, res){
 	var cari_judul_tutorial_video = req.params.id;
 	var cari_judul_tutorial_video	= cari_judul_tutorial_video.replace(/_/gi, " ")
-	var kode = cari_judul_tutorial_video.match(/[0-9]/gi)
-	if (kode !== null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE kd_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
-	else if (kode == null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
+	var kode_regex = cari_judul_tutorial_video.match(/[0-9]/gi)
+	if (kode_regex !== null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE kd_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
+	else if (kode_regex == null) { var sql = "SELECT * FROM tutorial_chatbot_video WHERE nama_tutorial_chatbot_video REGEXP '"+cari_judul_tutorial_video+"'" }
 	connection.query(sql, function  (err_cari_video,rows_cari_video){
 		if (err_cari_video) throw err_cari_video;
 		if (rows_cari_video.length !== 0) {
@@ -70,9 +78,9 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 				var no = i + 1;
 				arr_hasil_judul.push('\
 				<div class="col s12 l4">\
-					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video.substring(0, 27)+'</b></p>\
+					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video.substring(0, 21)+'</b></p>\
 					<video class="responsive-video" controls>\
-						<source src="http://localhost/_Project/chat_bot/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
+						<source src="http://192.168.1.129:8888/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
 					</video>\
 				</div>\
 				');
@@ -165,7 +173,7 @@ exports.chat_user = function(req,res,next){
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
 
-				    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				    res.send("<img src='http://192.168.1.129/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
 				            +"2_parameters");
@@ -203,7 +211,7 @@ exports.chat_user = function(req,res,next){
 							return false
 						}
 						else {
-							res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://192.168.1.129/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
 							+"2_parameters");
@@ -737,7 +745,7 @@ exports.chat_user = function(req,res,next){
 											          return false
 											        }
 											        else {
-											          res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+											          res.send("<img src='http://192.168.1.129/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 											          +final+"|"
 											          +"success|"
 											          +"2_parameters");
@@ -753,7 +761,7 @@ exports.chat_user = function(req,res,next){
 											        var nama_nip_baru = []
 											        for (var i = 0; i < rows.length; i++) {
 											          var j = i+1;
-											          nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
+											          nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://192.168.1.129/_Project/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
 											        }
 											        nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 											        var nama_nip_baru = JSON.stringify(nama_nip_baru)
@@ -857,14 +865,14 @@ exports.chat_user = function(req,res,next){
 															} // ./READONLY
 															// DATA KOSONG SISWA
 															if (final == "null" || final == "") {
-																res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+																res.send("<img src='http://192.168.1.129/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																				+"Mohon maaf, data yang kamu minta masih kosong.|"
 																				+"error|"
 																				+"2_parameters");
 																return false
 															}
 															else {
-																res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+																res.send("<img src='http://192.168.1.129/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																+final+"|"
 																+"success|"
 																+"2_parameters");
@@ -880,7 +888,7 @@ exports.chat_user = function(req,res,next){
 															var nama_nis_baru = []
 															for (var i = 0; i < rows.length; i++) {
 																var j = i+1;
-																nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+																nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://192.168.1.129/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 															}
 															nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 															var nama_nis_baru = JSON.stringify(nama_nis_baru)

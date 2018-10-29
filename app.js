@@ -33,11 +33,10 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(flash());
 app.use('/third-party', express.static(__dirname + '/third-party'));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/media/video_tutorial', express.static(__dirname + '/media/video_tutorial'));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -75,5 +74,5 @@ app.get('/dashboard_tutorial_video', data_user_app.dashboard_tutorial_video);
 //Middleware
 var listener = app.listen(8888, function(){
     console.log('Listening on port ' + listener.address().port); //Listening on port 8888
-    console.log('Listening on address ' + listener.address().address); //Listening on port 8888
+    // console.log('Listening on address ' + listener.address().address); //Listening on port 8888
 });
