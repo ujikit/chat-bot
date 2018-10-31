@@ -18,21 +18,26 @@ let connection = mysql.createConnection({
 
 // VIEWS
 exports.dashboard_user = function(req, res){
-	let userId = req.session.userId;
-	if(userId == null){ res.redirect("/"); return 0; }
-	if (req.session.jabatan == "siswa") {
-		var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
-			if (err_final) throw err_final
-			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
-		})
-	}
-	else if (req.session.jabatan == "guru") {
-		var sql = "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
-		connection.query(sql, function  (err_final,rows){
-			res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
-		})
-	}
+	// let userId = req.session.userId;
+	// if(userId == null){ res.redirect("/"); return 0; }
+	// if (req.session.jabatan == "siswa") {
+	// 	var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 		if (err_final) throw err_final
+	// 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
+	// 	})
+	// }
+	// else if (req.session.jabatan == "guru") {
+	// 	var sql = "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+	// 	connection.query(sql, function  (err_final,rows){
+	// 		res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
+	// 	})
+	// }
+  // development
+	var nis_siswa = "10888"
+	var jabatan_siswa = "siswa"
+	var nama_siswa = "fauzi"
+	res.render('dashboard.ejs',{session:nis_siswa, jabatan:jabatan_siswa, nama_pengguna:nama_siswa});
 };
 exports.dashboard_tutorial_video = function(req, res){
 	// let userId = req.session.userId;
@@ -123,7 +128,11 @@ exports.data_user_suggest = function(req,res,next){
 
 // Response Chat
 exports.chat_user = function(req,res,next){
-	let userId = req.session.userId;
+  // development
+	// let userId = req.session.userId;
+	// var jabatan =	[req.session.jabatan];
+	var userId = "10888"
+	var jabatan = "siswa"
 	if(userId == null){ res.redirect("/"); return 0; }
   let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
@@ -142,6 +151,13 @@ exports.chat_user = function(req,res,next){
 		var parse  	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
+			if (data.isi_pesan_chat_pengguna.match(/^([a-zA-Z\D]|\d\w|\d.+\w|\d\D|\d.+\D)/g)) {
+				res.send("Pilihan Tidak Tersedia.</b>|"
+							 +"|"
+							 +"error|"
+							 +"1_parameter")
+				return 0
+			}
 			var data 		= data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
 			var data 		= data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
 			var offset 	= data[4]-1;
@@ -158,7 +174,6 @@ exports.chat_user = function(req,res,next){
 									 +"|"
 									 +"error|"
 									 +"1_parameter")
-						return 0;
 					}
 				  else if (data[3] < data[4] || data[4] == 0) {
 				    res.send("Keluar dari pilihan.</b>|"
@@ -356,9 +371,8 @@ exports.chat_user = function(req,res,next){
 			} // ./ duplikat kelas
 		}
 		else {
-			var parameter =	[req.session.jabatan];
 			var sqls = "SELECT * FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ?";
-			connection.query(sqls, parameter, function  (err,rows){
+			connection.query(sqls, jabatan, function  (err,rows){
 				if (err) throw err;
 				var data = []
 				var parse2 = parse.split(" ")
@@ -445,15 +459,17 @@ exports.chat_user = function(req,res,next){
 					var penomoranDuplikatPertanyaan = []
 					for (var i = 0; i < f.length; i++) {
 						var no = i+1
-						penomoranDuplikatPertanyaan.push(no+'. '+f[i])
+						penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
 					}
 					var g = JSON.stringify(penomoranDuplikatPertanyaan);
-					var h	= g.replace(/[^0-9a-z,.\s]/gi, "")
+					var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
 					var i	= h.replace(/,/gi, "<br>")
-					var j = i.split(",");
-					var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
+					// console.log(i);
+					// return 0
+					// var j = i.split(",");
+					// var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
 					res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-									+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b>"+k+"</b>|"
+									+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
 									+"error|"
 									+"2_parameters");
 					return 0

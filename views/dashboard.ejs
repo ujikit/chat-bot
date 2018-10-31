@@ -23,7 +23,7 @@
               <!-- <input class="chat-typing" type="text" name="" value="" placeholder="Masukan Pertanyaan.."> -->
               <i class="material-icons prefix">textsms</i>
               <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
-              <input id="icon_prefix" type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
+              <input type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
               <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
               <!-- <input type="text" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose"> -->
             </div>
@@ -38,6 +38,7 @@
   </div>
 
   <!-- Modal Structure -->
+  <!-- Saran pertanyaan ke sistem -->
   <div id="modal1" class="modal">
     <form id="suggest-kosa-kata-form" method="post">
       <div class="modal-content">
@@ -187,6 +188,14 @@
           }
         })
       })
-
+      // $(document).on('click', '#salin-pertanyaan', function(){
+      //   var a = $('.data-saran').html()
+      //   var a = a.split('<br>')
+      //   $('#data-saran-copy').text(a)
+      // })
+      $(document).on('click', '#salin-pertanyaan', function(){
+        var a = $(this).html()
+        $('.chat-typing').val(a)
+      })
     }); /*DOCUMENT READY*/
   </script>
