@@ -1,5 +1,6 @@
 let bcrypt = require('bcrypt-nodejs');
 let _ = require('lodash');
+let akarata = require('akarata');
 // node-datetime
 let dateTime = require('node-datetime');
 let dt = dateTime.create(); dt.format('m/d/Y H:M:S');
@@ -145,10 +146,9 @@ exports.chat_user = function(req,res,next){
       waktu_pesan_chat_pengguna     			: new Date(dt.now())
     };
 		// RESPONSE
-		var pesan  	= input.isi_pesan_chat_pengguna;
-		var json 	 	= JSON.stringify(pesan);
-		var parse0 	=	json.replace(/[!?]/gi, "");
-		var parse  	= JSON.parse(parse0);
+		var pesan  	= JSON.stringify(input.isi_pesan_chat_pengguna);
+		var parse0 	=	pesan.replace(/[!?]/gi, "");
+		var parsing	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
 			if (data.isi_pesan_chat_pengguna.match(/^([a-zA-Z\D]|\d\w|\d.+\w|\d\D|\d.+\D)/g)) {
@@ -375,7 +375,17 @@ exports.chat_user = function(req,res,next){
 			connection.query(sqls, jabatan, function  (err,rows){
 				if (err) throw err;
 				var data = []
-				var parse2 = parse.split(" ")
+				var parse	= parsing
+				var parse2 = parsing.split(" ")
+
+        // Stemming
+				var stemming = []
+				for (var i = 0; i < parse2.length; i++) {
+					stemming.push(akarata.stem(parse2[i]))
+				}
+				var parse = stemming.join(" ")
+        // ./Stemming
+
 				for (var i = 0; i < rows.length; i++){
 					var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
 					var regex = new RegExp(kosa_kata, 'gi');

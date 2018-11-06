@@ -2,7 +2,7 @@ Chatter Bot merupakan program komputer yang berinteraksi dengan pengguna menggun
 
 ## Donate
 
-Jika aplikasi ini membantumu dalam proses belajar, kamu boleh donasikan dalam bentuk apapun untuk membantu pengembang memaintain aplikasi yang lebih baik lagi, bisa dalam bentuk pulsa dll.
+Jika aplikasi ini membantumu dalam proses belajar, kamu boleh donasikan dalam bentuk apapun untuk membantu pengembang memaintain aplikasi yang lebih baik lagi, bisa dalam bentuk pulsa dll. Instagram : ujikofficial, Facebook : Fauzi Zaki.
 
 ## License
 
@@ -36,7 +36,7 @@ Showdown has been tested successfully with:
 
 
 ## Credits
-Full credit list at https://github.com/ujikit
+Credit by https://github.com/ujikit
 
 
 <!-- the project is being maintenance (90%) footnote : im sorry for badly markdown, i have no idea to write the documentation until the project is finish 100%. god bless u all. -->
