@@ -1,11 +1,10 @@
 let bcrypt = require('bcrypt-nodejs');
 let _ = require('lodash');
-let akarata = require('akarata');
+let sanitizer = require('sanitizer');// Handling Input Xss
 // node-datetime
 let dateTime = require('node-datetime');
 let dt = dateTime.create(); dt.format('m/d/Y H:M:S');
 // ./node-datetime
-let sanitizer = require('sanitizer');// Handling Input Xss
 
 // Connection
 let mysql      = require('mysql');
@@ -378,13 +377,13 @@ exports.chat_user = function(req,res,next){
 				var parse	= parsing
 				var parse2 = parsing.split(" ")
 
-        // Stemming
-				var stemming = []
+        // Stemming process
+				var stem = []
 				for (var i = 0; i < parse2.length; i++) {
-					stemming.push(akarata.stem(parse2[i]))
+					stem.push(stemming(parse2[i]))
 				}
-				var parse = stemming.join(" ")
-        // ./Stemming
+				var parse = stem.join(" ")
+        // ./Stemming process
 
 				for (var i = 0; i < rows.length; i++){
 					var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
@@ -394,95 +393,100 @@ exports.chat_user = function(req,res,next){
 				}
 
 			  if (res1 === undefined) {
-					var data = []
-					for (var i = 0; i < rows.length; i++) {
-						data.push(rows[i].kosa_kata_pesan_chat_bot_kosa_kata)
-					}
 
-					var json = []
-					var jsonA = []
-					for (var i = 0; i < parse2.length; i++) {
-					  var regex = new RegExp(parse2[i],"gi")
-					  for (var j = 0; j < data.length; j++) {
-					    var asd = data[j].match(regex)
-					    if (asd !== null) { var d = 1 }
-					    else { var d = 0 }
-					    json.push(d)
-					  }
-					} // output | [1]
+					var sqls = "SELECT kalimat_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
+					connection.query(sqls, jabatan, function  (err,rows){
+						var data = []
+						for (var i = 0; i < rows.length; i++) {
+							data.push(rows[i].kalimat_pesan_chat_bot_kosa_kata)
+						}
+						var json = []
+						var jsonA = []
+						for (var i = 0; i < parse2.length; i++) {
+						  var regex = new RegExp(parse2[i],"gi")
+						  for (var j = 0; j < data.length; j++) {
+						    var asd = data[j].match(regex)
+						    if (asd !== null) { var d = 1 }
+						    else { var d = 0 }
+						    json.push(d)
+						  }
+						} // output | [1]
 
-					var tempArray = _.chunk(json,data.length)
-					// output | [2]
+						var tempArray = _.chunk(json,data.length)
+						// output | [2]
 
-					var tempMatchPerKata = []
-					for (var i = 0; i < data.length; i++) {
-					  for (var j = 0; j < tempArray.length; j++) {
-					    var s = tempArray[j][i]
-					    tempMatchPerKata.push(s)
-					  }
-					} // output | [3]
+						var tempMatchPerKata = []
+						for (var i = 0; i < data.length; i++) {
+						  for (var j = 0; j < tempArray.length; j++) {
+						    var s = tempArray[j][i]
+						    tempMatchPerKata.push(s)
+						  }
+						} // output | [3]
 
-					var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
-					// output | [4]
+						var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
+						// output | [4]
 
-					var fix = {tes:[]}
-					for (var i = 0; i < tempArrayd.length; i++) {
-					  fix.tes.push
-					  ({
-	            "id" : i,
-	            "total_match" : tempArrayd[i].filter(i => i === 1).length, //menghitung jumlah dari array yang berisi "1"
-	            "kalimat" : data[i]
-					  })
-					}// output | [5]
+						var fix = {tes:[]}
+						for (var i = 0; i < tempArrayd.length; i++) {
+						  fix.tes.push
+						  ({
+		            "id" : i,
+		            "total_match" : tempArrayd[i].filter(i => i === 1).length, //menghitung jumlah dari array yang berisi "1"
+		            "kalimat" : data[i]
+						  })
+						}// output | [5]
 
-					var totalMatch = []
-					for (var i = 0; i < fix.tes.length; i++) {
-					  totalMatch.push(fix.tes[i].total_match)
-					} // array | daftar total match kata pertanyaan degan seluruh kalimat
+						var totalMatch = []
+						for (var i = 0; i < fix.tes.length; i++) {
+						  totalMatch.push(fix.tes[i].total_match)
+						} // array | daftar total match kata pertanyaan degan seluruh kalimat
 
-					var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
+						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
-					if (max_match_kata == 0) {
-						res.send("<a class='code label label-warning'>Kode : <b style='color:black'>ntf01</b></a><br><br>Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-										+"|"
+						if (max_match_kata == 0) {
+							res.send("<a class='code label label-warning'>Kode : <b style='color:black'>ntf01</b></a><br><br>Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+											+"|"
+											+"error|"
+											+"1_parameter");
+							return 0
+						}
+
+						var filtered = totalMatch.filter((value) => {
+						  return value >= max_match_kata;
+						}); // output | [6]
+						// array | mencari max nomor pada array variabel max_match_kata yang siap dikumpulkan didalam variabel filter
+
+						var aa = []
+						for (var i = 0; i < fix.tes.length; i++) {
+						  for (var j = 0; j < filtered.length; j++) {
+						    if (fix.tes[i].total_match == filtered[j]) {
+						      aa.push(fix.tes[i].kalimat)
+						    }
+						  }
+						} // output | [7]
+						// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
+						var f = aa.filter(function(elem, index, self) { return index === self.indexOf(elem); })
+
+						var penomoranDuplikatPertanyaan = []
+						for (var i = 0; i < f.length; i++) {
+							var no = i+1
+							penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
+						}
+						var g = JSON.stringify(penomoranDuplikatPertanyaan);
+						var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
+						var i	= h.replace(/,/gi, "<br>")
+						// console.log(i);
+						// return 0
+						// var j = i.split(",");
+						// var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
+						res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+										+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
 										+"error|"
-										+"1_parameter");
+										+"2_parameters");
 						return 0
-					}
+					})
 
-					var filtered = totalMatch.filter((value) => {
-					  return value >= max_match_kata;
-					}); // output | [6]
-					// array | mencari max nomor pada array variabel max_match_kata yang siap dikumpulkan didalam variabel filter
 
-					var aa = []
-					for (var i = 0; i < fix.tes.length; i++) {
-					  for (var j = 0; j < filtered.length; j++) {
-					    if (fix.tes[i].total_match == filtered[j]) {
-					      aa.push(fix.tes[i].kalimat)
-					    }
-					  }
-					} // output | [7]
-					// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
-					var f = aa.filter(function(elem, index, self) { return index === self.indexOf(elem); })
-
-					var penomoranDuplikatPertanyaan = []
-					for (var i = 0; i < f.length; i++) {
-						var no = i+1
-						penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
-					}
-					var g = JSON.stringify(penomoranDuplikatPertanyaan);
-					var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
-					var i	= h.replace(/,/gi, "<br>")
-					// console.log(i);
-					// return 0
-					// var j = i.split(",");
-					// var k = j.filter(function(elem, index, self) { return index === self.indexOf(elem); }) //hapus data array yang duplikat
-					res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-									+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
-									+"error|"
-									+"2_parameters");
-					return 0
 			  } // ./NOT FOUND kosa kata dan SUGGEST ksoa kata siswa
 				else {
 			    ketemuKosaKata(res1, pesan, parse)
@@ -511,7 +515,7 @@ exports.chat_user = function(req,res,next){
 						if (jabatan_yg_dicari[2] == "siswa") {
 							var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
 							connection.query(sql, function  (err_rows,rows){
-							var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP by kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
+							var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
 							connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
 							var sql = "SELECT COUNT(nis_siswa) as jumlah_seluruh_siswa FROM data_siswa";
 							connection.query(sql, function  (err_rows,rows_jumlah_siswa){
@@ -1232,6 +1236,30 @@ exports.chat_user = function(req,res,next){
 				}
 			}
 			}); // ./grup_kosa_kata_final
+	}
+  // stemming imbuhan menjadi kata dasar
+	function stemming (stem) {
+		for (var i = 0; i < stem.length; i++) {
+			if (stem.startsWith("peng")) {
+				var l = stem.replace(/peng/gi, "")
+				return l
+			}
+			else if (stem.startsWith("pel") && stem.endsWith("an")) {
+				var l = stem.replace(/(pel|an)/gi, "")
+				return l
+			}
+			else if (stem.startsWith("pem") && stem.endsWith("an")) {
+				var l = stem.replace(/(pem|an)/gi, "")
+				return l
+			}
+			else if (stem.startsWith("pe") && stem.endsWith("an")) {
+				var l = stem.replace(/(pe|an)/gi, "")
+				return l
+			}
+			else {
+				return stem
+			}
+		}
 	}
 
 };
