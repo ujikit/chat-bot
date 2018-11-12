@@ -1,4 +1,4 @@
-OUTPUT
+fOUTPUT
 
 1. variabel "json" berisi, pertanyaan pengguna contoh : "nomor telepon" yang akan dijadikan array "parse2" yang dicocokan ke seluruh pertanyaan yang ada pada database, semisal ada output :
 
@@ -7,23 +7,25 @@ OUTPUT
 Maka akan menampilkan :
 
 #### output 1
-null == daftar pengampu mata pelajaran
-nomor == nomor telepon pegawai
-nomor == nomor induk pegawai
-nomor == nomor telepon siswa
-nomor == nomor telepon orang tua siswa
-nomor == nomor telepon wali siswa
-null == nama lengkap siswa
-null == daftar pengampu mata pelajaran
-telepon == nomor telepon pegawai
-null == nomor induk pegawai
-telepon == nomor telepon siswa
-telepon == nomor telepon orang tua siswa
-telepon == nomor telepon wali siswa
-null == nama lengkap siswa
+0 . null == daftar pengampu mata pelajaran
+1 . nomor == nomor telepon pegawai
+2 . nomor == nomor induk pegawai
+3 . nomor == nomor telepon siswa
+4 . nomor == nomor telepon orang tua siswa
+5 . nomor == nomor telepon wali siswa
+6 . null == nama lengkap siswa
+==================>> <<==================
+7 . null == daftar pengampu mata pelajaran
+8 . telepon == nomor telepon pegawai
+9 . null == nomor induk pegawai
+10. telepon == nomor telepon siswa
+11. telepon == nomor telepon orang tua siswa
+12. telepon == nomor telepon wali siswa
+13. null == nama lengkap siswa
 
 #### output 2
-0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0
+0 |1 |2 |3 |4 |5 |6 |7 |8 |9 |10|11|12|13
+0,|1,|1,|1,|1,|1,|0,|0,|1,|0,|1,|1,|1,|0
 
 2. variabel "tempArray" memecah data pada variabel "json" sesuai dengan total seluruh pertanyaan yang ada pada database
 
@@ -59,11 +61,22 @@ hasil akhir tersebut dichunk lagi untuk proses perhitungan final pertanyaan dr p
 
 5. variabel "fix.tes" berisi tentang data json yang menampung hitungan pertanyaan dari pengguna yang cocok pada pertanyaan database
 
+### output 1
+[
+{ id: 0, total_match: 0, kalimat: 'daftar pengampu mata pelajaran' },
+{ id: 1, total_match: 2, kalimat: 'nomor telepon pegawai' },
+{ id: 2, total_match: 1, kalimat: 'nomor induk pegawai' },
+{ id: 3, total_match: 2, kalimat: 'nomor telepon siswa' },
+{ id: 4, total_match: 2, kalimat: 'nomor telepon wali siswa' },
+{ id: 5, total_match: 2, kalimat: 'nomor telepon orang tua siswa' },
+{ id: 6, total_match: 0, kalimat: 'nama lengkap siswa' }  
+]
+
 #### arti
 -> tempArrayd[i].filter(i => i === 1).length
 menghitung array pada output Nomor 4, yang bernilai "1"
 
-#### output
+#### output 2
 [ 0, 2, 1, 2, 2, 2, 0 ]
 
 6. Mengumpulkan seluruh nomor maksimal pada variabel "totalMatch", dengan parameter maksimal variabel "max_match_kata" dan kemudian hasil akan ditampung oleh variabel "filtered".

@@ -1,9 +1,9 @@
 ** Yang COCOK didatabase **
 
-- tanya detail pembayaran (1 parameter)
+- tanya detail pembayaran (0 parameter)
 1). detail pembayaran
 
-- tanya nama pegawai / siswa / mapel (2 parameter)
+- tanya nama pegawai / siswa / mapel (1 parameter)
 1). nama pegawai
 2). rukmi
 
