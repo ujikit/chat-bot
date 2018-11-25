@@ -33,7 +33,7 @@ exports.login_pegawai = function(req, res){
 				}
 				else {
 					var password_pegawai = result[0].password_pegawai;
-					let hash = password_pegawai;
+					var hash = password_pegawai;
 					hash = hash.replace(/^\$2y(.+)$/i, '$2a$1');
 					bcrypt.compare(password, hash, function(error_bcrypt, result_bcrypt) {
 						if (error_bcrypt) throw error_bcrypt;

@@ -1,14 +1,14 @@
-var bcrypt = require('bcrypt-nodejs');
-var _ = require('lodash');
-var sanitizer = require('sanitizer');// Handling Input Xss
+let bcrypt = require('bcrypt-nodejs');
+let _ = require('lodash');
+let sanitizer = require('sanitizer');// Handling Input Xss
 // node-datetime
-var dateTime = require('node-datetime');
-var dt = dateTime.create(); dt.format('m/d/Y H:M:S');
+let dateTime = require('node-datetime');
+let dt = dateTime.create(); dt.format('m/d/Y H:M:S');
 // ./node-datetime
 
 // Connection
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
+let mysql      = require('mysql');
+let connection = mysql.createConnection({
 	host : "localhost",
 	user : "root",
 	password : "",
@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
 // VIEWS
 exports.dashboard_user = function(req, res){
-	// var userId = req.session.userId;
+	// let userId = req.session.userId;
 	// if(userId == null){ res.redirect("/"); return 0; }
 	// if (req.session.jabatan == "siswa") {
 	// 	var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
@@ -40,7 +40,7 @@ exports.dashboard_user = function(req, res){
 	res.render('dashboard.ejs',{session:nis_siswa, jabatan:jabatan_siswa, nama_pengguna:nama_siswa});
 };
 exports.dashboard_tutorial_video = function(req, res){
-	// var userId = req.session.userId;
+	// let userId = req.session.userId;
 	// if(userId == null){ res.redirect("/"); return 0; }
 	// if (req.session.jabatan == "siswa") {
 	// 	var sql 		= "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
@@ -129,12 +129,12 @@ exports.data_user_suggest = function(req,res,next){
 // Response Chat
 exports.chat_user = function(req,res,next){
   // development
-	// var userId = req.session.userId;
+	// let userId = req.session.userId;
 	// var jabatan =	[req.session.jabatan];
 	var userId = "10888"
 	var jabatan = "siswa"
 	if(userId == null){ res.redirect("/"); return 0; }
-  var input = JSON.parse(JSON.stringify(req.body));
+  let input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
     var data = {
       pengirim_pesan_chat_pengguna  			: input.pengirim_pesan_chat_pengguna,
@@ -378,26 +378,28 @@ exports.chat_user = function(req,res,next){
 				var parse2 = parsing.split(" ")
 
         // Stemming process
-				var split = []
+				var stem = []
 				for (var i = 0; i < parse2.length; i++) {
-				  if (parse2[i].endsWith("ku")) {
-				    var l = parse2[i].replace(/(ku)/gi, "")
-				  }
-				  else {
-				    var l = parse2[i]
-				  }
-				  split.push(l)
+					if (parse2[i].endsWith("ku") || parse2[i].endsWith("mu")) { var l = parse2[i].replace(/(ku|mu)/gi, "") }
+					else { var l = parse2[i] }
+					stem.push(stemming(l))
 				}
-				var stem = stemming(split)
-				// return 0
 				var parse = stem.join(" ")
         // ./Stemming process
 
-					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
+				for (var i = 0; i < rows.length; i++){
+					var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
+					var regex = new RegExp(kosa_kata, 'gi');
+					var ress = parse.match(regex);
+					if (ress !== null) { var res1 = ress; }
+				}
+
+			  if (res1 === undefined) {
+					var sqls = "SELECT kalimat_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
 					connection.query(sqls, jabatan, function  (err,rows){
 						var data = []
 						for (var i = 0; i < rows.length; i++) {
-							data.push(rows[i].kosa_kata_pesan_chat_bot_kosa_kata)
+							data.push(rows[i].kalimat_pesan_chat_bot_kosa_kata)
 						}
 						var json = []
 						var jsonA = []
@@ -425,77 +427,68 @@ exports.chat_user = function(req,res,next){
 						var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
 						// output | [4]
 
-						var fix = []
+						var fix = {tes:[]}
 						for (var i = 0; i < tempArrayd.length; i++) {
-						  fix.push
+						  fix.tes.push
 						  ({
 		            "id" : i,
 		            "total_match" : tempArrayd[i].filter(i => i === 1).length, //menghitung jumlah per array dari variabel tempArrayd
-		            "kalimat" : data[i],
-		            "split_total_kalimat" : data[i].split(" ").length
+		            "kalimat" : data[i]
 						  })
 						}// output | [5]
 
 						var totalMatch = []
-						for (var i = 0; i < fix.length; i++) {
-						  totalMatch.push(fix[i].total_match)
+						for (var i = 0; i < fix.tes.length; i++) {
+						  totalMatch.push(fix.tes[i].total_match)
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
+
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
 						if (max_match_kata == 0) {
 							res.send("<a class='code label label-warning'>Kode : <b style='color:black'>ntf01</b></a><br><br>Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-							+"|"
-							+"error|"
-							+"1_parameter");
+											+"|"
+											+"error|"
+											+"1_parameter");
 							return 0
 						}
 
-						var fix2 = []
-						var lowestSplit = []
-						for (var i = 0; i < fix.length; i++) {
-						  if (fix[i].total_match == max_match_kata) {
-								fix2.push
-							  ({
-			            "id" : fix[i].id,
-			            "total_match" : fix[i].total_match, //menghitung jumlah per array dari variabel tempArrayd
-			            "kalimat" : fix[i].kalimat,
-			            "split_total_kalimat" : fix[i].split_total_kalimat
-							  })
-								lowestSplit.push(fix[i].split_total_kalimat)
-						  }
-						}
-						var lowest = Math.min(...lowestSplit)
+						var filtered = totalMatch.filter((value) => {
+						  return value >= max_match_kata;
+						}); // output | [6]
+						// array | mencari max nomor pada array variabel max_match_kata yang siap dikumpulkan didalam variabel filter
 
-						var qwe = []
-						for (var i = 0; i < fix2.length; i++) {
-							if (fix2[i].split_total_kalimat == lowest) {
-								qwe.push(fix2[i].kalimat)
-							}
-						}// output | [6]
+						var aa = []
+						for (var i = 0; i < fix.tes.length; i++) {
+						  for (var j = 0; j < filtered.length; j++) {
+						    if (fix.tes[i].total_match == filtered[j]) {
+						      aa.push(fix.tes[i].kalimat)
+						    }
+						  }
+						} // output | [7]
 						// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 
-						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 
-						if (f.length == 1) {
-							var res1 = f[0]
-							ketemuKosaKata(res1, pesan, parse)
+						var f = aa.filter(function(elem, index, self) { return index === self.indexOf(elem); })
+
+						var penomoranDuplikatPertanyaan = []
+						for (var i = 0; i < f.length; i++) {
+							var no = i+1
+							penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
 						}
-						else {
-							var penomoranDuplikatPertanyaan = []
-							for (var i = 0; i < f.length; i++) {
-								var no = i+1
-								penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
-							}
-							var g = JSON.stringify(penomoranDuplikatPertanyaan);
-							var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
-							var i	= h.replace(/,/gi, "<br>")
-							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
-											+"error|"
-											+"2_parameters");
-							return 0
-						}
+						var g = JSON.stringify(penomoranDuplikatPertanyaan);
+						var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
+						var i	= h.replace(/,/gi, "<br>")
+						res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+										+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
+										+"error|"
+										+"2_parameters");
+						return 0
 					})
+			  }
+				else {
+			    ketemuKosaKata(res1, pesan, parse)
+			  }
+				return 0;
 			})
 		}
   }); // ./req.getConnection(function (err, connection)
@@ -503,7 +496,7 @@ exports.chat_user = function(req,res,next){
   // Function
 	function ketemuKosaKata (res1, pesan, parse) {
 	  // Mencari grup kosa kata
-		var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata = '"+res1+"'";
+		var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata = '"+res1[0]+"'";
 		connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
 			if (err_grup_kosa_kata) throw err_grup_kosa_kata;
 			var grup_kosa_kata_final 	= rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
@@ -779,6 +772,7 @@ exports.chat_user = function(req,res,next){
 									var no = j+1;
 									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
 								}
+								// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 							}
 						}
 						arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
@@ -809,6 +803,7 @@ exports.chat_user = function(req,res,next){
 									var no = j+1;
 									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Pegawai : <b>"+hitung_jml_pegawai_per_kelas[j].cnt+"</b><br>");
 								}
+								// console.log(hitung_jml_pegawai_per_kelas[j].kd_kelas_daftar_nilai_pegawai_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_pegawai_per_kelas[j].cnt);
 							}
 						}
 						arr.push("<br>Jumlah Seluruh Pegawai : <b><br>"+rows_jumlah_pegawai[0].jumlah_seluruh_pegawai+"</b>")
@@ -837,6 +832,7 @@ exports.chat_user = function(req,res,next){
 								var no = i+1;
 								arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : <b>"+rows[i].nama_pegawai+"</b><br>b). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
 							}
+							// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 						}
 					}
 					var arr = JSON.stringify(arr)
@@ -1033,6 +1029,7 @@ exports.chat_user = function(req,res,next){
 																	}
 																	var daftar_kelas_pengampu_mapel = JSON.stringify(daftar_kelas_pengampu_mapel)
 																	var daftar_kelas_pengampu_mapel = daftar_kelas_pengampu_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_kelas_pengampu_mapel);
 																	res.send('Pengampu mata pelajaran <b>'+regex6[0]+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
 																	+"|"
 																	+"success|"
@@ -1149,6 +1146,7 @@ exports.chat_user = function(req,res,next){
 																	}
 																	var daftar_mapel_dan_pengampu_mapel_per_kelas = JSON.stringify(daftar_mapel_dan_pengampu_mapel_per_kelas)
 																	var daftar_mapel_dan_pengampu_mapel_per_kelas = daftar_mapel_dan_pengampu_mapel_per_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_mapel_dan_pengampu_mapel_per_kelas);
 																	res.send('Pengampu mata pelajaran kelas <b>'+regex6[0]+'</b> adalah : '+daftar_mapel_dan_pengampu_mapel_per_kelas+"|"
 																	+"|"
 																	+"success|"
@@ -1220,97 +1218,38 @@ exports.chat_user = function(req,res,next){
 			}); // ./grup_kosa_kata_final
 	}
   // stemming imbuhan menjadi kata dasar
-	function stemming (split) {
-		var json =  {
-		              "mata" : [ "mata pencaharian", "mata pelajaran", "mata uang", "mata kail" ]
-		            }
-	  // double words
-	  var temp1 = []
-	  var temp2 = []
-	  for (var i = 0; i < split.length; i++) {
-	    for (var j = 0; j < Object.keys(json).length; j++) {
-	      if (split[i] == Object.keys(json)[j]) {
-	        var lihatBelakang = i
-	        var lihatDepan = i+1
-	        var keys = Object.keys(json)[j]
-	        var values = Object.values(json)[j]
-	        var regex = new RegExp (split[lihatDepan], "g")
-	        for (var k = 0; k < values.length; k++) {
-	          if (values[k].match(regex) || values[k].match(regex) !== null){
-	            temp1.push({
-	              "index" : i,
-	              "word" : split[lihatBelakang],
-	              "visible" : "1"
-	            })
-	            i++
-	            temp1.push({
-	              "index" : i,
-	              "word" : split[lihatDepan],
-	              "visible" : "1"
-	            })
-	          }
-	        }
-	      }
-	      else {
-	        temp2.push({
-	          "index" : i,
-	          "word" : split[i],
-	          "visible" : "0"
-	        })
-	      }
-	    }
-	  }
-	  var all = temp1.concat(temp2)
-	  var all = _.uniqBy(all, function (e) {
-	              return e.index;
-	            });
-	  var stem = _.orderBy(all, ['index'],['asc']);
-	  // ./double words
-
-	  var s = []
-	  for (var i = 0; i < stem.length; i++) {
-	    if (stem[i].visible == "0") {
-	      // prefiks
-	      if (stem[i].word.startsWith("peng")) {
-	        var l = stem[i].word.replace(/peng/gi, "")
-	        s.push(l)
-	      }
-	      // ./prefiks
-	      // konfiks
-	      else if (stem[i].word.startsWith("pel") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pel|an)/gi, "")
-	        s.push(l)
-	      }
-	      else if (stem[i].word.startsWith("pem") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pem|an)/gi, "")
-	        s.push(l)
-	      }
-	      else if (stem[i].word.startsWith("pe") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pe|an)/gi, "")
-	        s.push(l)
-	      }
-	      // ./konfiks
-	      // suffiks
-	      else if (stem[i].word.endsWith("nya") || stem[i].word.endsWith("kan")) {
-	        var l = stem[i].word.replace(/(nya|kan)/gi, "")
-	        s.push(l)
-	      }
-	      // ./suffiks
-	      else {
-	        s.push(stem[i].word)
-	      }
-	    }
-	    else if (stem[i].visible == "1") {
-	      if (stem[i].word.endsWith("nya") || stem[i].word.endsWith("kan")) {
-	        var l = stem[i].word.replace(/(nya|kan)/gi, "")
-	        s.push(l)
-	      }
-	      else {
-	        s.push(stem[i].word)
-	      }
-	    }
-	  }
-	return s
+	function stemming (stem) {
+		for (var i = 0; i < stem.length; i++) {
+      // prefiks
+			if (stem.startsWith("peng")) {
+				var l = stem.replace(/peng/gi, "")
+				return l
+			}
+      // ./prefiks
+      // konfiks
+			else if (stem.startsWith("pel") && stem.endsWith("an")) {
+				var l = stem.replace(/(pel|an)/gi, "")
+				return l
+			}
+			else if (stem.startsWith("pem") && stem.endsWith("an")) {
+				var l = stem.replace(/(pem|an)/gi, "")
+				return l
+			}
+			else if (stem.startsWith("pe") && stem.endsWith("an")) {
+				var l = stem.replace(/(pe|an)/gi, "")
+				return l
+			}
+			// ./konfiks
+      // suffiks
+			else if (stem.endsWith("nya") || stem.endsWith("kan")) {
+				var l = stem.replace(/(nya|kan)/gi, "")
+				return l
+			}
+      // ./suffiks
+			else {
+				return stem
+			}
+		}
 	}
 
 };

@@ -389,10 +389,21 @@ exports.chat_user = function(req,res,next){
 				  split.push(l)
 				}
 				var stem = stemming(split)
+				// console.log(stem);
 				// return 0
 				var parse = stem.join(" ")
         // ./Stemming process
 
+				for (var i = 0; i < rows.length; i++){
+					var kosa_kata = rows[i].kosa_kata_pesan_chat_bot_kosa_kata;
+					var regex = new RegExp(kosa_kata, 'gi');
+					// console.log(parse+" === "+regex);
+					// return 0
+					var ress = parse.match(regex);
+					if (ress !== null) { var res1 = ress; }
+				}
+
+			  if (res1 === undefined) {
 					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
 					connection.query(sqls, jabatan, function  (err,rows){
 						var data = []
@@ -425,77 +436,70 @@ exports.chat_user = function(req,res,next){
 						var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
 						// output | [4]
 
-						var fix = []
+						var fix = {tes:[]}
 						for (var i = 0; i < tempArrayd.length; i++) {
-						  fix.push
+						  fix.tes.push
 						  ({
 		            "id" : i,
 		            "total_match" : tempArrayd[i].filter(i => i === 1).length, //menghitung jumlah per array dari variabel tempArrayd
-		            "kalimat" : data[i],
-		            "split_total_kalimat" : data[i].split(" ").length
+		            "kalimat" : data[i]
 						  })
 						}// output | [5]
+						console.log(fix.tes);
+						return 0
 
 						var totalMatch = []
-						for (var i = 0; i < fix.length; i++) {
-						  totalMatch.push(fix[i].total_match)
+						for (var i = 0; i < fix.tes.length; i++) {
+						  totalMatch.push(fix.tes[i].total_match)
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
+
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
 						if (max_match_kata == 0) {
 							res.send("<a class='code label label-warning'>Kode : <b style='color:black'>ntf01</b></a><br><br>Mohon maaf, maksud dari pertanyaan '<b>"+pesan+"</b>' apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-							+"|"
-							+"error|"
-							+"1_parameter");
+											+"|"
+											+"error|"
+											+"1_parameter");
 							return 0
 						}
 
-						var fix2 = []
-						var lowestSplit = []
-						for (var i = 0; i < fix.length; i++) {
-						  if (fix[i].total_match == max_match_kata) {
-								fix2.push
-							  ({
-			            "id" : fix[i].id,
-			            "total_match" : fix[i].total_match, //menghitung jumlah per array dari variabel tempArrayd
-			            "kalimat" : fix[i].kalimat,
-			            "split_total_kalimat" : fix[i].split_total_kalimat
-							  })
-								lowestSplit.push(fix[i].split_total_kalimat)
-						  }
-						}
-						var lowest = Math.min(...lowestSplit)
+						var filtered = totalMatch.filter((value) => {
+						  return value >= max_match_kata;
+						}); // output | [6]
+						// array | mencari max nomor pada array variabel max_match_kata yang siap dikumpulkan didalam variabel filter
 
-						var qwe = []
-						for (var i = 0; i < fix2.length; i++) {
-							if (fix2[i].split_total_kalimat == lowest) {
-								qwe.push(fix2[i].kalimat)
-							}
-						}// output | [6]
+						var aa = []
+						for (var i = 0; i < fix.tes.length; i++) {
+						  for (var j = 0; j < filtered.length; j++) {
+						    if (fix.tes[i].total_match == filtered[j]) {
+						      aa.push(fix.tes[i].kalimat)
+						    }
+						  }
+						} // output | [7]
 						// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 
-						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 
-						if (f.length == 1) {
-							var res1 = f[0]
-							ketemuKosaKata(res1, pesan, parse)
+						var f = aa.filter(function(elem, index, self) { return index === self.indexOf(elem); })
+
+						var penomoranDuplikatPertanyaan = []
+						for (var i = 0; i < f.length; i++) {
+							var no = i+1
+							penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
 						}
-						else {
-							var penomoranDuplikatPertanyaan = []
-							for (var i = 0; i < f.length; i++) {
-								var no = i+1
-								penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
-							}
-							var g = JSON.stringify(penomoranDuplikatPertanyaan);
-							var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
-							var i	= h.replace(/,/gi, "<br>")
-							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
-											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
-											+"error|"
-											+"2_parameters");
-							return 0
-						}
+						var g = JSON.stringify(penomoranDuplikatPertanyaan);
+						var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
+						var i	= h.replace(/,/gi, "<br>")
+						res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+										+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
+										+"error|"
+										+"2_parameters");
+						return 0
 					})
+			  }
+				else {
+			    ketemuKosaKata(res1, pesan, parse)
+			  }
+				return 0;
 			})
 		}
   }); // ./req.getConnection(function (err, connection)
@@ -503,7 +507,7 @@ exports.chat_user = function(req,res,next){
   // Function
 	function ketemuKosaKata (res1, pesan, parse) {
 	  // Mencari grup kosa kata
-		var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata = '"+res1+"'";
+		var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata = '"+res1[0]+"'";
 		connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
 			if (err_grup_kosa_kata) throw err_grup_kosa_kata;
 			var grup_kosa_kata_final 	= rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
@@ -779,6 +783,7 @@ exports.chat_user = function(req,res,next){
 									var no = j+1;
 									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
 								}
+								// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 							}
 						}
 						arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
@@ -809,6 +814,7 @@ exports.chat_user = function(req,res,next){
 									var no = j+1;
 									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Pegawai : <b>"+hitung_jml_pegawai_per_kelas[j].cnt+"</b><br>");
 								}
+								// console.log(hitung_jml_pegawai_per_kelas[j].kd_kelas_daftar_nilai_pegawai_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_pegawai_per_kelas[j].cnt);
 							}
 						}
 						arr.push("<br>Jumlah Seluruh Pegawai : <b><br>"+rows_jumlah_pegawai[0].jumlah_seluruh_pegawai+"</b>")
@@ -837,6 +843,7 @@ exports.chat_user = function(req,res,next){
 								var no = i+1;
 								arr.push("<br><b>"+no+". Nama Kelas : "+rows[i].kd_kelas_daftar_kelas_transaksi+"</b><br>Data : <br>a). Wali Kelas : <b>"+rows[i].nama_pegawai+"</b><br>b). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
 							}
+							// console.log(hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan+' - '+rows[i].kd_kelas_daftar_kelas_transaksi+' - '+hitung_jml_siswa_per_kelas[j].cnt);
 						}
 					}
 					var arr = JSON.stringify(arr)
@@ -1033,6 +1040,7 @@ exports.chat_user = function(req,res,next){
 																	}
 																	var daftar_kelas_pengampu_mapel = JSON.stringify(daftar_kelas_pengampu_mapel)
 																	var daftar_kelas_pengampu_mapel = daftar_kelas_pengampu_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_kelas_pengampu_mapel);
 																	res.send('Pengampu mata pelajaran <b>'+regex6[0]+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
 																	+"|"
 																	+"success|"
@@ -1149,6 +1157,7 @@ exports.chat_user = function(req,res,next){
 																	}
 																	var daftar_mapel_dan_pengampu_mapel_per_kelas = JSON.stringify(daftar_mapel_dan_pengampu_mapel_per_kelas)
 																	var daftar_mapel_dan_pengampu_mapel_per_kelas = daftar_mapel_dan_pengampu_mapel_per_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_mapel_dan_pengampu_mapel_per_kelas);
 																	res.send('Pengampu mata pelajaran kelas <b>'+regex6[0]+'</b> adalah : '+daftar_mapel_dan_pengampu_mapel_per_kelas+"|"
 																	+"|"
 																	+"success|"
@@ -1222,7 +1231,8 @@ exports.chat_user = function(req,res,next){
   // stemming imbuhan menjadi kata dasar
 	function stemming (split) {
 		var json =  {
-		              "mata" : [ "mata pencaharian", "mata pelajaran", "mata uang", "mata kail" ]
+		              "mata" : [ "mata pencaharian", "mata pelajaran", "mata uang", "mata kail" ],
+		              "mdatas" : [ "mata sadasdsa", "mata ssss", "mata uang", "mata kail", "mata ZZZ", "mata XXX" ]
 		            }
 	  // double words
 	  var temp1 = []
@@ -1249,6 +1259,7 @@ exports.chat_user = function(req,res,next){
 	              "visible" : "1"
 	            })
 	          }
+	          // console.log(values[k].match(regex) +" || "+ values[k].match(regex));
 	        }
 	      }
 	      else {

@@ -86,15 +86,16 @@
                           <center>
                           <input type="hidden" name="privilage" value="pegawai">
                           <div class="input-field col l12 s12">
-                            <input name="username" type="text" class="validate" autocomplete="on">
+                            <input id="usernamePegawai" name="username" type="text" class="validate" autocomplete="on">
                             <label for="icon_prefix">Masukan Username</label>
+                            <div id="grupUsernamePegawai"></div>
                           </div>
                           <div class="input-field col l12 s12">
-                            <input name="password" type="password" class="validate">
+                            <input id="passwordPegawai" name="password" type="password" class="validate">
                             <label for="icon_telephone">Masukan Password</label>
                           </div>
                           <div class="col l12 s12">
-                          <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">
+                          <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="button" style="width:100%;height:10%;margin-top:20px;">
                             Masuk
                             <i class="material-icons right">send</i>
                           </button>
@@ -115,11 +116,11 @@
                           <center>
                           <input type="hidden" name="privilage" value="siswa">
                           <div class="input-field col l12 s12">
-                            <input name="username" type="text" class="validate" autocomplete="on">
+                            <input id="usernameSiswa" name="username" type="text" class="validate" autocomplete="on">
                             <label for="icon_prefix">Masukan Username</label>
                           </div>
                           <div class="input-field col l12 s12">
-                            <input name="password" type="password" class="validate">
+                            <input id="passwordSiswa" name="password" type="password" class="validate">
                             <label for="icon_telephone">Masukan Password</label>
                           </div>
                           <div class="col l12 s12">
@@ -207,6 +208,15 @@
 <script type="text/javascript" src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+    // $("#button-login-chatbot-pegawai").on("click", function () {
+    //   var usernamePegawai = $("#usernamePegawai").val()
+    //   var passwordPegawai = $("#passwordPegawai").val()
+    //   if (usernamePegawai == "") {
+    //     $("#grupUsernamePegawai").append("asdasd")
+    //     return 0
+    //   }
+    // })
+
     <% if (messages.error_login_pegawai) { %>
       swal("Uups!", "<%= messages.error_login_pegawai %>" , "error");
     <% } else if (messages.error_login_siswa) { %>

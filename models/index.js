@@ -1,7 +1,7 @@
-let dateTime = require('node-datetime');
-let dt = dateTime.create();
-let date = dt.format('Y-m-d');
-let time = dt.format('H:M:S');
+var dateTime = require('node-datetime');
+var dt = dateTime.create();
+var date = dt.format('Y-m-d');
+var time = dt.format('H:M:S');
 
 exports.index = function(req, res){
   res.render('index');
