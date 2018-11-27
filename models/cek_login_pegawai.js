@@ -9,7 +9,7 @@ var hour = dt.format('H:M:S');
 // Connection
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-	host : "192.168.1.129",
+	host : "localhost",
 	user : "root",
 	password : "",
 	database : "man2"
@@ -37,6 +37,7 @@ exports.login_pegawai = function(req, res){
 					hash = hash.replace(/^\$2y(.+)$/i, '$2a$1');
 					bcrypt.compare(password, hash, function(error_bcrypt, result_bcrypt) {
 						if (error_bcrypt) throw error_bcrypt;
+						console.log(result_bcrypt);
 							if (result_bcrypt === true) {
 								req.session.userId = result[0].nip_pegawai;
 								req.session.jabatan = result[0].jabatan_pegawai;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 22, 2018 at 02:40 AM
+-- Generation Time: Nov 27, 2018 at 12:13 PM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.0.30
 
@@ -48,40 +48,40 @@ CREATE TABLE `data_pegawai` (
 
 INSERT INTO `data_pegawai` (`nip_pegawai`, `nama_pegawai`, `jabatan_pegawai`, `kd_mata_pelajaran_pegawai`, `jenis_kelamin_pegawai`, `username_pegawai`, `password_pegawai`, `alamat_pegawai`, `tempat_lahir_pegawai`, `tanggal_lahir_pegawai`, `no_handphone_pegawai`) VALUES
 ('1111', 'admin', 'admin', 'admin', 'L', 'admin', '$2y$10$MgSFgKlI3s1KdLcbp6TLAuIMYmjXfIIQ190VRKNi9yUPVkrdqeAMq', NULL, NULL, NULL, NULL),
-('195811111179031002', 'Ahmad Wahyudi', 'guru', 'sasindo', 'L', '195811111179031002', '$2y$10$e5adeCf/NCxS3GSVoXDimeFKUusVIav9oVA0k5WwITc7h2RFrf8q.', 'YOGYAKARTA', 'YOGYAKARTA', '1982-06-30', '08121668218'),
-('195811112679031002', 'Anwar Hermanto', 'guru', 'sasing', 'L', '195811112679031002', '$2y$10$Pzyi3QOi44Xem5b3At2eYOq6PkD.9aRPt9/ql.eHsRnJkLi4AYmyG', 'YOGYAKARTA', 'YOGYAKARTA', '1976-11-13', '08121668218'),
-('195811171612031002', 'Cecep Supriyatna', 'guru', 'bindo', 'L', '195811171612031002', '$2y$10$vtQuTUiuBDp6erXTfbWH1OAYQ11H0uQEauMy0LLQGq.fQGQgFN6su', 'YOGYAKARTA', 'YOGYAKARTA', '1963-01-23', '08121668218'),
-('195811171676723202', 'Marlina', 'guru', 'fis', 'P', '195811171676723202', '$2y$10$nZFDfxT5CWjeLJ67/ObkEO0OotibS7chl1qnNtUci2wVoM9xUnpkm', 'YOGYAKARTA', 'YOGYAKARTA', '1961-01-29', '081983838044'),
-('195811171676731001', 'Sitti Wanti', 'guru', 'fkh', 'P', '195811171676731001', '$2y$10$epE2xanPaf4ybK.8BtHjweX.fzzsYalyBi8udHIIEEnNSrdNvphD2', 'YOGYAKARTA', 'YOGYAKARTA', '1965-06-29', '085333716634'),
-('195811171676731002', 'Fauziah Hanum', 'guru', 'bjawa', 'P', '195811171676731002', '$2y$10$9GkP6TlSOw8N8pT1UIYpu.qwseXkyI2xTw6fJDWriKCIYKI3EwRve', 'BANYUMAS', 'BANYUMAS', '1976-08-20', '08121668218'),
-('195811171676731009', 'Ratnawati', 'guru', 'eko', 'P', '195811171676731009', '$2y$10$YRnYmnkmxGNVSMbK6TuQh.7orB3T4BmJJFT5kSChL/f082X1PwdAq', 'YOGYAKARTA', 'YOGYAKARTA', '1962-11-09', '085638158543'),
-('195811171676731202', 'Hartati', 'guru', 'geo', 'P', '195811171676731202', '$2y$10$TERgT/ztn5I0x8EqSs7dauuVL1L3qmnWH/.Bler4ZOZmGxWRxp5U.', 'YOGYAKARTA', 'YOGYAKARTA', '1963-08-11', '081866998406'),
-('195811171676734235', 'Hamsina', 'guru', 'iltaf', 'P', '195811171676734235', '$2y$10$7950bsifCIPJB6jpv2Oq8u9aLrHp3q6j.OSNFZsh7p8rmjSjZp7iG', 'YOGYAKARTA', 'YOGYAKARTA', '1960-02-02', '085685103439'),
-('195811171676734306', 'Rosdiati', 'guru', 'ilhad', 'P', '195811171676734306', '$2y$10$b6pNf57ZAQLdVsb/gtf6Tu0PIslzs5YleezrDwzmXL0rUFxxrYdMa', 'YOGYAKARTA', 'YOGYAKARTA', '1963-08-14', '081839992210'),
-('195811171676738888', 'Mutmainah Sri Ayu', 'guru', 'kim', 'P', '195811171676738888', '$2y$10$jZYiPd7ZamIBxxakNts1WuXG6lwl0y8sGGcAPbUXLAv1CqXyCIMs.', 'YOGYAKARTA', 'YOGYAKARTA', '1961-08-29', '081734161893'),
-('195811171676765366', 'Mursalimah', 'guru', 'ilkal', 'P', '195811171676765366', '$2y$10$GkiQslCW7ro1qA68glvaoOX4CjDlEvmuSNLDbgF1WK3pMkpliP9O.', 'YOGYAKARTA', 'YOGYAKARTA', '1960-07-09', '085220546329'),
-('195811171679031002', 'Ahmad Zamroni', 'guru', 'barabAGAMA', 'L', '195811171679031002', '$2y$10$MU77UgAwupRR0WSXvxdbdeqs2QvZCnhrbFCNZtpVEX7U1B09Y2LgW', 'KUNINGAN', 'KUNINGAN', '1966-07-15', '08121668218'),
-('195811171679031992', 'Harry Mortir', 'guru', 'bjep', 'L', '195811171679031992', '$2y$10$r0CF58pN7MaRzTs5Usc.ZequsPQi3rL3mFPUtDjq6Zy.7eUhv37Be', 'BOGOR', 'BOGOR', '1973-06-26', '08121668218'),
-('195811171679045002', 'Daryono', 'guru', 'bing', 'L', '195811171679045002', '$2y$10$iH4OoLxKxvV2TJsrSaqeqO8PUVYh57eCWV4dAxZcr98MMLkPI9mle', 'BOGOR', 'BOGOR', '1977-05-06', '08121668218'),
-('195811171679100004', 'Indaryanti Tri Mulyani', 'guru', 'bjer', 'P', '195811171679100004', '$2y$10$fDcdrpXbwQo95HCcLvOUgOw77FdWzmySfeCa.PyZK3CT/eCD4FB4G', 'Tegal', 'Tegal', '1960-08-29', '08121668218'),
-('195811171979031002', 'Abdullah', 'guru', 'barab', 'L', '195811171979031002', '$2y$10$SD9IaI79vpMU8XiJlODc4u6awX3LgX8rnilyJq7Yr54VgtFvkEwLW', 'YOGYAKARTA', 'YOGYAKARTA', '1958-11-17', '08521148218'),
-('195811173256331005', 'Kinarti Ningsih', 'guru', 'bio', 'P', '195811173256331005', '$2y$10$FTH4JwFLIWvXwV3jOypXJ.2rbe4QqxINnTz.z5gEaFdweCh.gtGCS', 'YOGYAKARTA', 'YOGYAKARTA', '1960-10-29', '085528144130'),
-('196001242012122001', 'Hartato', 'guru', 'sej', 'L', '196001242012122001', '$2y$10$ZJyJwgL7vf.4J/.7Kh6NkepV86WjUqSCM7bIXE5HVbCVDcM5Kxn6C', 'YOGYAKARTA', 'YOGYAKARTA', '1960-10-29', '081616162056'),
-('196102011985031004', 'Nurhanan', 'guru', 'ski', 'L', '196102011985031004', '$2y$10$m7d59mbQvwJSe4J06.8AU.SMpzjAaqNGHsYOT6eP3mj3kWiA1aztC', 'BOGOR', 'BOGOR', '1962-11-09', '081908276125'),
-('196504061991032005', 'Asiafri Indah Setiawati', 'guru', 'aa', 'P', '196504061991032005', '$2y$10$FMLG0QGOX9XwqCelsCfuW.OQOx1ka/SCYcAE1c5ROw7hc88sQ/HE.', 'BANYUWANGI', 'BANYUWANGI', '1968-10-24', '08172638218'),
-('196504061991092005', 'Riza Fauzi', 'guru', 'antro', 'L', '196504061991092005', '$2y$10$z1U1mNQOsrksvG0X2/T0DOC1aF7mH4Fyf8cNnjnzuw5KIYoWzlWB.', 'MEDAN', 'MEDAN', '1965-04-06', '08171148218'),
-('196504066691032005', 'Aslamiah', 'guru', 'akhAGAMA', 'P', '196504066691032005', '$2y$10$gBtzIJ7/y16fOtPJ52wD9eESqGt/8hhKmbFQbQH2tpB.niAWW32fS', 'JAKARTA', 'JAKARTA', '1977-04-16', '08175928218'),
-('196507032012121004', 'Sukandi', 'guru', 'tik', 'L', '196507032012121004', '$2y$10$DK/S2tUZe7dgXjGvNH8IDekyjf3RLQb/0KorB6owgpNIMq2PXtJFG', 'Tegal', 'Tegal', '1960-07-09', '085658757773'),
-('196604241992032005', 'Nanti Triwardani Utami', 'guru', 'aqh', 'P', '196604241992032005', '$2y$10$YDCuDcoDY9wmeLh4iXfr8OFH5gsC/oy18KZbldJK.d/34JyiNAGgW', 'Karangmojo', 'Surakarta', '1979-10-23', '085747237232'),
-('196809302012121002', 'Joko Padmono', 'guru', 'senbud', 'L', '196809302012121002', '$2y$10$jBrOSXy3P3SbDg57bWvYsugOCEiE6bDOfNJT208PYB4UymW8memGK', 'BANYUMAS', 'BANYUMAS', '1963-08-11', '081902799322'),
-('197008122007121002', 'Indrawan Agus Permadi', 'guru', 'pkn', 'L', '197008122007121002', '$2y$10$UWEuqwrrGNzogqIln8/1S..kEnN/e71UtQOuDqFe3Ls..hSceVfkW', 'KUNINGAN', 'KUNINGAN', '1976-08-20', '081791910113'),
-('197010082012121004', 'Kirman', 'guru', 'sos', 'L', '197010082012121004', '$2y$10$gJRo98/wP4q.A6/Y0/qF9O8VWV1bIObQrcwZ8Fcx8OsNE6jD8BxH.', 'BOGOR', 'BOGOR', '1963-08-14', '085886154594'),
-('197209112012121003', 'Suprapto', 'guru', 'mtkIPA', 'L', '197209112012121003', '$2y$10$Qe2Hg9pGJl14iexk1dtc7e7furNkHzcumP/OUq9ai/XOlJfehbcL2', 'MEDAN', 'MEDAN', '1963-01-23', '085612442584'),
-('197307121994012001', 'Eko Yulianto', 'guru', 'penjas', 'L', '197307121994012001', '$2y$10$L7RITP0ueSvG41sTkI93Ae1eTjNMGy6H4oJuBKDDuFibHq0q1EXnK', 'YOGYAKARTA', 'YOGYAKARTA', '1977-05-06', '081793732272'),
-('197609172010121001', 'Asep Herawan', 'guru', 'mtk', 'L', '197609172010121001', '$2y$10$W/0SsvSt4jRAIiqIkOr/JerrQa71eoarxMxpNj5V/KCp4Z3.9FKBC', 'JAKARTA', 'JAKARTA', '1979-10-23', '081745396164'),
-('197710052009102001', 'Bambang Ratmojo', 'guru', 'ppmb', 'L', '197710052009102001', '$2y$10$1IwUbiHpXY.CkIdwe42RXukZS/vH/9qxVAaT8guMXHqp7Cemlmn02', 'YOGYAKARTA', 'YOGYAKARTA', '1973-06-26', '081634841202'),
-('198007312008111001', 'Irawan Saptono', 'guru', 'pkk', 'L', '198007312008111001', '$2y$10$.OOnchlfOp7cnQUtDMB.7erDA/ARZqi/BeBWxDknGlmwHaYlp/b1i', 'YOGYAKARTA', 'YOGYAKARTA', '1960-08-29', '081681018893'),
-('198407102014061001', 'Sukiman', 'guru', 'usfik', 'L', '198407102014061001', '$2y$10$MJMmsSl.RO5d23VBqwN4JuPmDL.6cIvxOuXrMzvQOI80JeMdjI8/y', 'YOGYAKARTA', 'YOGYAKARTA', '1960-02-02', '081741547046');
+('195811111179031002', 'Ahmad Wahyudi', 'pegawai', 'sasindo', 'L', '195811111179031002', '$2y$10$e5adeCf/NCxS3GSVoXDimeFKUusVIav9oVA0k5WwITc7h2RFrf8q.', 'YOGYAKARTA', 'YOGYAKARTA', '1982-06-30', '08121668218'),
+('195811112679031002', 'Anwar Hermanto', 'pegawai', 'sasing', 'L', '195811112679031002', '$2y$10$Pzyi3QOi44Xem5b3At2eYOq6PkD.9aRPt9/ql.eHsRnJkLi4AYmyG', 'YOGYAKARTA', 'YOGYAKARTA', '1976-11-13', '08121668218'),
+('195811171612031002', 'Cecep Supriyatna', 'pegawai', 'bindo', 'L', '195811171612031002', '$2y$10$vtQuTUiuBDp6erXTfbWH1OAYQ11H0uQEauMy0LLQGq.fQGQgFN6su', 'YOGYAKARTA', 'YOGYAKARTA', '1963-01-23', '08121668218'),
+('195811171676723202', 'Marlina', 'pegawai', 'fis', 'P', '195811171676723202', '$2y$10$nZFDfxT5CWjeLJ67/ObkEO0OotibS7chl1qnNtUci2wVoM9xUnpkm', 'YOGYAKARTA', 'YOGYAKARTA', '1961-01-29', '081983838044'),
+('195811171676731001', 'Sitti Wanti', 'pegawai', 'fkh', 'P', '195811171676731001', '$2y$10$epE2xanPaf4ybK.8BtHjweX.fzzsYalyBi8udHIIEEnNSrdNvphD2', 'YOGYAKARTA', 'YOGYAKARTA', '1965-06-29', '085333716634'),
+('195811171676731002', 'Fauziah Hanum', 'pegawai', 'bjawa', 'P', '195811171676731002', '$2y$10$9GkP6TlSOw8N8pT1UIYpu.qwseXkyI2xTw6fJDWriKCIYKI3EwRve', 'BANYUMAS', 'BANYUMAS', '1976-08-20', '08121668218'),
+('195811171676731009', 'Ratnawati', 'pegawai', 'eko', 'P', '195811171676731009', '$2y$10$YRnYmnkmxGNVSMbK6TuQh.7orB3T4BmJJFT5kSChL/f082X1PwdAq', 'YOGYAKARTA', 'YOGYAKARTA', '1962-11-09', '085638158543'),
+('195811171676731202', 'Hartati', 'pegawai', 'geo', 'P', '195811171676731202', '$2y$10$TERgT/ztn5I0x8EqSs7dauuVL1L3qmnWH/.Bler4ZOZmGxWRxp5U.', 'YOGYAKARTA', 'YOGYAKARTA', '1963-08-11', '081866998406'),
+('195811171676734235', 'Hamsina', 'pegawai', 'iltaf', 'P', '195811171676734235', '$2y$10$7950bsifCIPJB6jpv2Oq8u9aLrHp3q6j.OSNFZsh7p8rmjSjZp7iG', 'YOGYAKARTA', 'YOGYAKARTA', '1960-02-02', '085685103439'),
+('195811171676734306', 'Rosdiati', 'pegawai', 'ilhad', 'P', '195811171676734306', '$2y$10$b6pNf57ZAQLdVsb/gtf6Tu0PIslzs5YleezrDwzmXL0rUFxxrYdMa', 'YOGYAKARTA', 'YOGYAKARTA', '1963-08-14', '081839992210'),
+('195811171676738888', 'Mutmainah Sri Ayu', 'pegawai', 'kim', 'P', '195811171676738888', '$2y$10$jZYiPd7ZamIBxxakNts1WuXG6lwl0y8sGGcAPbUXLAv1CqXyCIMs.', 'YOGYAKARTA', 'YOGYAKARTA', '1961-08-29', '081734161893'),
+('195811171676765366', 'Mursalimah', 'pegawai', 'ilkal', 'P', '195811171676765366', '$2y$10$GkiQslCW7ro1qA68glvaoOX4CjDlEvmuSNLDbgF1WK3pMkpliP9O.', 'YOGYAKARTA', 'YOGYAKARTA', '1960-07-09', '085220546329'),
+('195811171679031002', 'Ahmad Zamroni', 'pegawai', 'barabAGAMA', 'L', '195811171679031002', '$2y$10$MU77UgAwupRR0WSXvxdbdeqs2QvZCnhrbFCNZtpVEX7U1B09Y2LgW', 'KUNINGAN', 'KUNINGAN', '1966-07-15', '08121668218'),
+('195811171679031992', 'Surya Hartanto', 'pegawai', 'bjep', 'L', '195811171679031992', '$2y$10$r0CF58pN7MaRzTs5Usc.ZequsPQi3rL3mFPUtDjq6Zy.7eUhv37Be', 'BOGOR', 'BOGOR', '1973-06-26', '08121668218'),
+('195811171679045002', 'Daryono', 'pegawai', 'bing', 'L', '195811171679045002', '$2y$10$iH4OoLxKxvV2TJsrSaqeqO8PUVYh57eCWV4dAxZcr98MMLkPI9mle', 'BOGOR', 'BOGOR', '1977-05-06', '08121668218'),
+('195811171679100004', 'Indaryanti Tri Mulyani', 'pegawai', 'bjer', 'P', '195811171679100004', '$2y$10$fDcdrpXbwQo95HCcLvOUgOw77FdWzmySfeCa.PyZK3CT/eCD4FB4G', 'Tegal', 'Tegal', '1960-08-29', '08121668218'),
+('195811171979031002', 'Abdullah', 'pegawai', 'barab', 'L', '195811171979031002', '$2y$10$SD9IaI79vpMU8XiJlODc4u6awX3LgX8rnilyJq7Yr54VgtFvkEwLW', 'YOGYAKARTA', 'YOGYAKARTA', '1958-11-17', '08521148218'),
+('195811173256331005', 'Kinarti Ningsih', 'pegawai', 'bio', 'P', '195811173256331005', '$2y$10$FTH4JwFLIWvXwV3jOypXJ.2rbe4QqxINnTz.z5gEaFdweCh.gtGCS', 'YOGYAKARTA', 'YOGYAKARTA', '1960-10-29', '085528144130'),
+('196001242012122001', 'Hartato', 'pegawai', 'sej', 'L', '196001242012122001', '$2y$10$ZJyJwgL7vf.4J/.7Kh6NkepV86WjUqSCM7bIXE5HVbCVDcM5Kxn6C', 'YOGYAKARTA', 'YOGYAKARTA', '1960-10-29', '081616162056'),
+('196102011985031004', 'Nurhanan', 'pegawai', 'ski', 'L', '196102011985031004', '$2y$10$m7d59mbQvwJSe4J06.8AU.SMpzjAaqNGHsYOT6eP3mj3kWiA1aztC', 'BOGOR', 'BOGOR', '1962-11-09', '081908276125'),
+('196504061991032005', 'Asiafri Indah Setiawati', 'pegawai', 'aa', 'P', '196504061991032005', '$2y$10$FMLG0QGOX9XwqCelsCfuW.OQOx1ka/SCYcAE1c5ROw7hc88sQ/HE.', 'BANYUWANGI', 'BANYUWANGI', '1968-10-24', '08172638218'),
+('196504061991092005', 'Riza Fauzi', 'pegawai', 'antro', 'L', '196504061991092005', '$2y$10$z1U1mNQOsrksvG0X2/T0DOC1aF7mH4Fyf8cNnjnzuw5KIYoWzlWB.', 'MEDAN', 'MEDAN', '1965-04-06', '08171148218'),
+('196504066691032005', 'Aslamiah', 'pegawai', 'akhAGAMA', 'P', '196504066691032005', '$2y$10$gBtzIJ7/y16fOtPJ52wD9eESqGt/8hhKmbFQbQH2tpB.niAWW32fS', 'JAKARTA', 'JAKARTA', '1977-04-16', '08175928218'),
+('196507032012121004', 'Sukandi', 'pegawai', 'tik', 'L', '196507032012121004', '$2y$10$DK/S2tUZe7dgXjGvNH8IDekyjf3RLQb/0KorB6owgpNIMq2PXtJFG', 'Tegal', 'Tegal', '1960-07-09', '085658757773'),
+('196604241992032005', 'Nanti Triwardani Utami', 'pegawai', 'aqh', 'P', '196604241992032005', '$2y$10$YDCuDcoDY9wmeLh4iXfr8OFH5gsC/oy18KZbldJK.d/34JyiNAGgW', 'Karangmojo', 'Surakarta', '1979-10-23', '085747237232'),
+('196809302012121002', 'Joko Padmono', 'pegawai', 'senbud', 'L', '196809302012121002', '$2y$10$jBrOSXy3P3SbDg57bWvYsugOCEiE6bDOfNJT208PYB4UymW8memGK', 'BANYUMAS', 'BANYUMAS', '1963-08-11', '081902799322'),
+('197008122007121002', 'Indrawan Agus Permadi', 'pegawai', 'pkn', 'L', '197008122007121002', '$2y$10$UWEuqwrrGNzogqIln8/1S..kEnN/e71UtQOuDqFe3Ls..hSceVfkW', 'KUNINGAN', 'KUNINGAN', '1976-08-20', '081791910113'),
+('197010082012121004', 'Kirman', 'pegawai', 'sos', 'L', '197010082012121004', '$2y$10$gJRo98/wP4q.A6/Y0/qF9O8VWV1bIObQrcwZ8Fcx8OsNE6jD8BxH.', 'BOGOR', 'BOGOR', '1963-08-14', '085886154594'),
+('197209112012121003', 'Suprapto', 'pegawai', 'mtkIPA', 'L', '197209112012121003', '$2y$10$Qe2Hg9pGJl14iexk1dtc7e7furNkHzcumP/OUq9ai/XOlJfehbcL2', 'MEDAN', 'MEDAN', '1963-01-23', '085612442584'),
+('197307121994012001', 'Eko Yulianto', 'pegawai', 'penjas', 'L', '197307121994012001', '$2y$10$L7RITP0ueSvG41sTkI93Ae1eTjNMGy6H4oJuBKDDuFibHq0q1EXnK', 'YOGYAKARTA', 'YOGYAKARTA', '1977-05-06', '081793732272'),
+('197609172010121001', 'Asep Herawan', 'pegawai', 'mtk', 'L', '197609172010121001', '$2y$10$W/0SsvSt4jRAIiqIkOr/JerrQa71eoarxMxpNj5V/KCp4Z3.9FKBC', 'JAKARTA', 'JAKARTA', '1979-10-23', '081745396164'),
+('197710052009102001', 'Bambang Ratmojo', 'pegawai', 'ppmb', 'L', '197710052009102001', '$2y$10$1IwUbiHpXY.CkIdwe42RXukZS/vH/9qxVAaT8guMXHqp7Cemlmn02', 'YOGYAKARTA', 'YOGYAKARTA', '1973-06-26', '081634841202'),
+('198007312008111001', 'Irawan Saptono', 'pegawai', 'pkk', 'L', '198007312008111001', '$2y$10$.OOnchlfOp7cnQUtDMB.7erDA/ARZqi/BeBWxDknGlmwHaYlp/b1i', 'YOGYAKARTA', 'YOGYAKARTA', '1960-08-29', '081681018893'),
+('198407102014061001', 'Sukiman', 'pegawai', 'usfik', 'L', '198407102014061001', '$2y$10$MJMmsSl.RO5d23VBqwN4JuPmDL.6cIvxOuXrMzvQOI80JeMdjI8/y', 'YOGYAKARTA', 'YOGYAKARTA', '1960-02-02', '081741547046');
 
 -- --------------------------------------------------------
 
@@ -94,7 +94,7 @@ CREATE TABLE `data_siswa` (
   `nisn_siswa` char(10) DEFAULT NULL,
   `nama_siswa` varchar(100) DEFAULT NULL,
   `username_siswa` char(5) NOT NULL,
-  `password_siswa` char(255) NOT NULL,
+  `password_siswa` char(60) NOT NULL,
   `jenis_kelamin_siswa` enum('L','P') DEFAULT NULL,
   `kd_kelas_daftar_siswa` varchar(15) DEFAULT NULL,
   `jabatan_siswa` varchar(25) NOT NULL,
@@ -561,7 +561,7 @@ INSERT INTO `jabatan` (`kd_jabatan`, `nama_jabatan`) VALUES
 ('admin', 'Administrator'),
 ('bk', 'BK'),
 ('bot', 'BOT'),
-('guru', 'Guru'),
+('pegawai', 'Pegawai'),
 ('siswa', 'Siswa');
 
 -- --------------------------------------------------------
@@ -2110,7 +2110,6 @@ INSERT INTO `pembayaran_daftar` (`id_pembayaran_daftar`, `kd_pembayaran_daftar`,
 CREATE TABLE `pesan_chat_bot_kosa_kata` (
   `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL,
   `kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
-  `kalimat_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
   `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
   `chat_privilege_kosa_kata` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -2119,37 +2118,33 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
 -- Dumping data for table `pesan_chat_bot_kosa_kata`
 --
 
-INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kata_pesan_chat_bot_kosa_kata`, `kalimat_pesan_chat_bot_kosa_kata`, `grup_kosa_kata_pesan_chat_bot_kosa_kata`, `chat_privilege_kosa_kata`) VALUES
-(324, 'daftar ampu mata ajar', 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', 'pegawai,siswa'),
-(326, 'nama lengkap pegawai', 'nama lengkap pegawai', 'nama_pegawai', 'pegawai,siswa'),
-(327, 'jenis kelamin pegawai', 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', 'pegawai,siswa'),
-(328, 'alamat rumah pegawai', 'alamat rumah pegawai', 'alamat_pegawai', 'pegawai,siswa'),
-(329, 'nomor telepon pegawai', 'nomor telepon pegawai', 'no_handphone_pegawai', 'pegawai,siswa'),
-(330, 'nomor induk pegawai', 'nomor induk pegawai', 'nip_pegawai', 'pegawai,siswa'),
-(331, 'nomor telepon siswa', 'nomor telepon siswa', 'no_handphone_siswa', 'pegawai,siswa'),
-(332, 'nomor induk siswa', 'nomor induk siswa', 'nis_siswa', 'pegawai,siswa'),
-(333, 'nomor induk nasional siswa', 'nomor induk nasional siswa', 'nisn_siswa', 'pegawai,siswa'),
-(334, 'alamat rumah siswa', 'alamat rumah siswa', 'alamat_siswa', 'pegawai,siswa'),
-(335, 'tempat lahir siswa', 'tempat lahir siswa', 'tempat_lahir_siswa', 'pegawai,siswa'),
-(336, 'tanggal lahir siswa', 'tanggal lahir siswa', 'tanggal_lahir_siswa', 'pegawai,siswa'),
-(337, 'nama ayah siswa', 'nama ayah siswa', 'orangtua_nama_ayah_siswa', 'pegawai,siswa'),
-(338, 'nama ibu siswa', 'nama ibu siswa', 'orangtua_nama_ibu_siswa', 'pegawai,siswa'),
-(339, 'alamat orangtua siswa', 'alamat orangtua siswa', 'orangtua_alamat_siswa', 'pegawai,siswa'),
-(340, 'nomor telepon orang tua siswa', 'nomor telepon orang tua siswa', 'orangtua_telepon_siswa', 'pegawai,siswa'),
-(341, 'kerja ayah siswa', 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', 'pegawai,siswa'),
-(342, 'kerja ibu siswa', 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', 'pegawai,siswa'),
-(343, 'nama wali siswa', 'nama wali siswa', 'nama_wali_siswa', 'pegawai,siswa'),
-(344, 'kerja wali siswa', 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', 'pegawai,siswa'),
-(345, 'alamat wali siswa', 'alamat wali siswa', 'alamat_wali_siswa', 'pegawai,siswa'),
-(346, 'nomor telepon wali siswa', 'nomor telepon wali siswa', 'no_handphone_wali_siswa', 'pegawai,siswa'),
-(347, 'detail bayar', 'detail pembayaran', '0_detail_pembayaran', 'siswa'),
-(349, 'jumlah siswa', 'jumlah siswa', '0_jumlah_siswa', 'pegawai,siswa'),
-(350, 'jumlah pegawai', 'jumlah pegawai', '0_jumlah_pegawai', 'pegawai,siswa'),
-(351, 'daftar ampu mata ajar kelas', 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
-(352, 'daftar ampu kelas', 'daftar pengampu kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
-(353, 'daftar nama siswa kelas', 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', 'pegawai,siswa'),
-(354, 'nama lengkap siswa', 'nama lengkap siswa', 'nama_siswa', 'pegawai,siswa'),
-(355, 'daftar kelas dan wali kelas', 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa');
+INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kata_pesan_chat_bot_kosa_kata`, `grup_kosa_kata_pesan_chat_bot_kosa_kata`, `chat_privilege_kosa_kata`) VALUES
+(326, 'nama lengkap pegawai', 'nama_pegawai', 'pegawai,siswa'),
+(327, 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', 'pegawai,siswa'),
+(328, 'alamat rumah pegawai', 'alamat_pegawai', 'pegawai,siswa'),
+(329, 'nomor telepon pegawai', 'no_handphone_pegawai', 'pegawai,siswa'),
+(330, 'nomor induk pegawai', 'nip_pegawai', 'pegawai,siswa'),
+(331, 'nomor telepon siswa', 'no_handphone_siswa', 'pegawai,siswa'),
+(332, 'nomor induk siswa', 'nis_siswa', 'pegawai,siswa'),
+(334, 'alamat rumah siswa', 'alamat_siswa', 'pegawai,siswa'),
+(335, 'tempat lahir siswa', 'tempat_lahir_siswa', 'pegawai,siswa'),
+(336, 'tanggal lahir siswa', 'tanggal_lahir_siswa', 'pegawai,siswa'),
+(337, 'nama ayah siswa', 'orangtua_nama_ayah_siswa', 'pegawai,siswa'),
+(338, 'nama ibu siswa', 'orangtua_nama_ibu_siswa', 'pegawai,siswa'),
+(339, 'alamat orangtua siswa', 'orangtua_alamat_siswa', 'pegawai,siswa'),
+(341, 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', 'pegawai,siswa'),
+(342, 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', 'pegawai,siswa'),
+(343, 'nama wali siswa', 'nama_wali_siswa', 'pegawai,siswa'),
+(344, 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', 'pegawai,siswa'),
+(345, 'alamat wali siswa', 'alamat_wali_siswa', 'pegawai,siswa'),
+(347, 'detail pembayaran', '0_detail_pembayaran', 'siswa'),
+(349, 'jumlah siswa', '0_jumlah_siswa', 'pegawai,siswa'),
+(350, 'jumlah pegawai', '0_jumlah_pegawai', 'pegawai,siswa'),
+(351, 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
+(352, 'daftar pengampu kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
+(353, 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', 'pegawai,siswa'),
+(354, 'nama lengkap siswa', 'nama_siswa', 'pegawai,siswa'),
+(355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa');
 
 -- --------------------------------------------------------
 

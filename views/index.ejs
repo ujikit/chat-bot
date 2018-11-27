@@ -33,13 +33,13 @@
     body{
       /* overflow-x: hidden;
       overflow-y: hidden; */
-      background-image: url("http://192.168.1.129:80/_Project/man2/frontend/img/background-login-chatbot.png");
+      background-image: url("http://localhost/_Project/man2/frontend/img/background-login-chatbot.png");
       height: 100%;
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
     }
-    .rectangle-all-login{ margin-top: 70px; }
+    .rectangle-all-login{ margin-top: 130px; }
     .rectangle-asset-left-login{ color:white; margin-top:40px; }
     .rectangle-desc-left-login{ margin-top:0px; }
     .lupa-password{ margin-top:20px; }
@@ -80,7 +80,7 @@
                   <div id="pegawai">
                       <form method="post" action="/login_pegawai" id="form-login-chatbot-pegawai">
                         <center>
-                          <img src="http://192.168.1.129/_Project/man2/frontend/img/guru.png" alt="logo man2" style="width:34%">
+                          <img src="http://localhost/_Project/man2/frontend/img/pegawai.png" alt="logo man2" style="width:34%">
                         </center>
                         <div class="row" style="margin-top:20px;">
                           <center>
@@ -88,19 +88,18 @@
                           <div class="input-field col l12 s12">
                             <input id="usernamePegawai" name="username" type="text" class="validate" autocomplete="on">
                             <label for="icon_prefix">Masukan Username</label>
-                            <div id="grupUsernamePegawai"></div>
                           </div>
                           <div class="input-field col l12 s12">
                             <input id="passwordPegawai" name="password" type="password" class="validate">
                             <label for="icon_telephone">Masukan Password</label>
                           </div>
                           <div class="col l12 s12">
-                          <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="button" style="width:100%;height:10%;margin-top:20px;">
+                          <button id="button-login-chatbot-pegawai" class="btn waves-effect green darken-3 waves-light" type="submit" style="width:100%;height:10%;margin-top:20px;">
                             Masuk
                             <i class="material-icons right">send</i>
                           </button>
                           </div>
-                          </center>
+                        </center>
                           <div class="col l12 s12 lupa-password">
                             <a href="#modal-lupa-password-pegawai" class="modal-trigger" style="color:#999ea0">Lupa Password ?</a>
                           </div>
@@ -110,7 +109,7 @@
                   <div id="siswa">
                       <form method="post" action="/login_siswa" id="form-login-chatbot-siswa">
                         <center>
-                          <img src="http://192.168.1.129:80/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
+                          <img src="http://localhost/_Project/man2/frontend/img/siswa.png" alt="logo man2" style="width:28%">
                         </center>
                         <div class="row" style="margin-top:20px;">
                           <center>
@@ -208,14 +207,6 @@
 <script type="text/javascript" src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    // $("#button-login-chatbot-pegawai").on("click", function () {
-    //   var usernamePegawai = $("#usernamePegawai").val()
-    //   var passwordPegawai = $("#passwordPegawai").val()
-    //   if (usernamePegawai == "") {
-    //     $("#grupUsernamePegawai").append("asdasd")
-    //     return 0
-    //   }
-    // })
 
     <% if (messages.error_login_pegawai) { %>
       swal("Uups!", "<%= messages.error_login_pegawai %>" , "error");
