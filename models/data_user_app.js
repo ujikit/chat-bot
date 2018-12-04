@@ -86,7 +86,7 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 				<div class="col s12 l4">\
 					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video.substring(0, 21)+'</b></p>\
 					<video class="responsive-video" controls>\
-						<source src="http://localhost:8888/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
+						<source src="http://192.168.1.129:8888/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
 					</video>\
 				</div>\
 				');
@@ -188,7 +188,7 @@ exports.chat_user = function(req,res,next){
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
 
-				    res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				    res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
 				            +"2_parameters");
@@ -226,7 +226,7 @@ exports.chat_user = function(req,res,next){
 							return false
 						}
 						else {
-							res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
 							+"2_parameters");
@@ -383,7 +383,6 @@ exports.chat_user = function(req,res,next){
 					  split.push(l)
 					}
 					var stem = stemming(split)
-					// return 0
 					var parse = stem.join(" ")
 	        // ./Stemming process
 					var data = []
@@ -466,7 +465,6 @@ exports.chat_user = function(req,res,next){
 						// // pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 
 						var f = lowestSplit.filter(function(elem, index, self) { return index === self.indexOf(elem); })
-
 						if (f.length == 1) {
 							var res1 = f[0]
 							ketemuKosaKata(res1, pesan, parse)
@@ -923,7 +921,7 @@ exports.chat_user = function(req,res,next){
 														return false
 													}
 													else {
-														res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters");
@@ -939,7 +937,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nip_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
+														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
 													}
 													nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nip_baru = JSON.stringify(nama_nip_baru)
@@ -1045,14 +1043,14 @@ exports.chat_user = function(req,res,next){
 													} // ./READONLY
 													// DATA KOSONG SISWA
 													if (final == "null" || final == "") {
-														res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																		+"Mohon maaf, data yang kamu minta masih kosong.|"
 																		+"error|"
 																		+"2_parameters");
 														return false
 													}
 													else {
-														res.send("<img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters");
@@ -1068,7 +1066,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nis_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost/_Project/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 													}
 													nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nis_baru = JSON.stringify(nama_nis_baru)
@@ -1111,7 +1109,8 @@ exports.chat_user = function(req,res,next){
 	      if (split[i] == Object.keys(json)[j]) {
 	        var lihatBelakang = i
 	        var lihatDepan = i+1
-	        var keys = Object.keys(json)[j]
+					if (split[lihatDepan] === undefined) { return [split[lihatBelakang]] }
+					var keys = Object.keys(json)[j]
 	        var values = Object.values(json)[j]
 	        var regex = new RegExp (split[lihatDepan], "g")
 	        for (var k = 0; k < values.length; k++) {

@@ -9,7 +9,7 @@ var hour = dt.format('H:M:S');
 // Connection
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-	host : "localhost",
+	host : "192.168.1.129",
 	user : "root",
 	password : "",
 	database : "man2"
