@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 27, 2018 at 12:13 PM
+-- Generation Time: Dec 07, 2018 at 07:24 AM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.0.30
 
@@ -2006,7 +2006,7 @@ INSERT INTO `pembayaran` (`id_pembayaran`, `kd_pembayaran`, `cicil_total_pembaya
 (83, 'uang_operasional', NULL, '1.800.000', '10903', NULL, NULL, 'N'),
 (84, 'spp', NULL, '1.500.000', '10903', NULL, NULL, 'N'),
 (85, 'd_ulang', NULL, '565.000', '10907', NULL, NULL, 'N'),
-(86, 'seragam', NULL, '1.500.000', '10907', NULL, NULL, 'N'),
+(86, 'seragam', '1.200.000', '300.000', '10907', '0000-00-00 00:00:00', '2018-11-28 01:28:19', 'N'),
 (87, 'uang_operasional', NULL, '1.800.000', '10907', NULL, NULL, 'N'),
 (88, 'spp', NULL, '1.500.000', '10907', NULL, NULL, 'N'),
 (89, 'd_ulang', NULL, '565.000', '10908', NULL, NULL, 'N'),
@@ -2021,7 +2021,7 @@ INSERT INTO `pembayaran` (`id_pembayaran`, `kd_pembayaran`, `cicil_total_pembaya
 (98, 'seragam', NULL, '1.500.000', '10912', NULL, NULL, 'N'),
 (99, 'uang_operasional', NULL, '1.800.000', '10912', NULL, NULL, 'N'),
 (100, 'spp', NULL, '1.500.000', '10912', NULL, NULL, 'N'),
-(101, 'd_ulang', NULL, '565.000', '10888', NULL, NULL, 'N'),
+(101, 'd_ulang', '65.000', '500.000', '10888', '0000-00-00 00:00:00', '2018-11-28 01:29:33', 'N'),
 (102, 'seragam', '1.500.000', '', '10888', '2018-10-18 09:38:02', '2018-10-18 09:38:02', 'Y'),
 (103, 'uang_operasional', NULL, '1.800.000', '10888', NULL, NULL, 'N'),
 (104, 'spp', NULL, '1.500.000', '10888', NULL, NULL, 'N'),
@@ -2141,10 +2141,11 @@ INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kat
 (349, 'jumlah siswa', '0_jumlah_siswa', 'pegawai,siswa'),
 (350, 'jumlah pegawai', '0_jumlah_pegawai', 'pegawai,siswa'),
 (351, 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
-(352, 'daftar pengampu kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
 (353, 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', 'pegawai,siswa'),
 (354, 'nama lengkap siswa', 'nama_siswa', 'pegawai,siswa'),
-(355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa');
+(355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa'),
+(356, 'nomor induk nasional siswa', 'nisn_siswa', 'pegawai,siswa'),
+(358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', 'pegawai,siswa');
 
 -- --------------------------------------------------------
 
@@ -2387,7 +2388,7 @@ ALTER TABLE `pembayaran_daftar`
 -- AUTO_INCREMENT for table `pesan_chat_bot_kosa_kata`
 --
 ALTER TABLE `pesan_chat_bot_kosa_kata`
-  MODIFY `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=356;
+  MODIFY `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=359;
 
 --
 -- AUTO_INCREMENT for table `pesan_chat_bot_kosa_kata_suggest`

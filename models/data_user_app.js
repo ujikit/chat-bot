@@ -443,28 +443,65 @@ exports.chat_user = function(req,res,next){
 							return 0
 						}
 
+            // Seleksi kecocokan per kata pertanyaan pengguna dengan kata didatabase
 						var fix2 = []
 						var lowestSplit = []
+						var allKalimat = []
+						var min_split_kata = []
 						for (var i = 0; i < fix.length; i++) {
 						  if (fix[i].total_match == max_match_kata) {
 								fix2.push
 							  ({
 			            "id" : fix[i].id,
-			            "total_match" : fix[i].total_match, //menghitung jumlah per array dari variabel tempArrayd
+			            "total_match" : fix[i].total_match,
 			            "kalimat" : fix[i].kalimat,
 			            "split_total_kalimat" : fix[i].split_total_kalimat
 							  })
-								lowestSplit.push(fix[i].kalimat)
+								lowestSplit.push(fix[i].split_total_kalimat)
+								allKalimat.push(fix[i].kalimat)
+								min_split_kata.push(fix[i].split_total_kalimat)
 						  }
 						}
-						// var lowest = Math.min(...lowestSplit)
-						// var qwe = []
-						// for (var i = 0; i < fix2.length; i++) {
-						// 	if (fix2[i].split_total_kalimat == lowest) { qwe.push(fix2[i].kalimat) }
-						// }// output | [6]
-						// // pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 
-						var f = lowestSplit.filter(function(elem, index, self) { return index === self.indexOf(elem); })
+            // ketika pertanyaan yang diajukan length hanya : 1 / 2, maka dicegat disini
+						if (pesan.split(" ").length == 1 || pesan.split(" ").length == 2) {
+							var penomoranDuplikatPertanyaan = []
+							for (var i = 0; i < allKalimat.length; i++) {
+								var no = i+1
+								penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+allKalimat[i]+"</a>")
+							}
+							var g = JSON.stringify(penomoranDuplikatPertanyaan);
+							var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
+							var i	= h.replace(/,/gi, "<br>")
+							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
+											+"error|"
+											+"2_parameters");
+							return 0
+						}
+
+						var min_split_kata = Math.min(...min_split_kata) // array | mencari max pada array total match
+
+						var fix3 = []
+						for (var i = 0; i < fix2.length; i++) {
+						  if (fix2[i].split_total_kalimat == min_split_kata) {
+								fix3.push
+							  ({
+			            "id" : fix2[i].id,
+			            "total_match" : fix2[i].total_match,
+			            "kalimat" : fix2[i].kalimat,
+			            "split_total_kalimat" : fix2[i].split_total_kalimat
+							  })
+						  }
+						}
+
+						var qwe = []
+						for (var i = 0; i < fix3.length; i++) {
+							qwe.push(fix3[i].kalimat)
+						}// output | [6]
+						// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
+
+						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 						if (f.length == 1) {
 							var res1 = f[0]
 							ketemuKosaKata(res1, pesan, parse)
@@ -833,6 +870,121 @@ exports.chat_user = function(req,res,next){
 									+"2_parameters");
 					return 0;
 				})
+				}
+				else if (grup_kosa_kata_final == "0_daftar_pengampu_mapel") { // Jika yang dicari daftar seluruh pengampu Contoh : Bahasa Indonesia
+					var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran ORDER BY nama_mata_pelajaran ASC";
+						connection.query(sql,function (err_cari_nama_mapel,rows_cari_nama_mapel){
+						if (err_cari_nama_mapel) throw err_cari_nama_mapel;
+						for (var i = 0; i < rows_cari_nama_mapel.length; i++) {
+							var nama1 = rows_cari_nama_mapel[i].nama_mata_pelajaran;
+							var nama4 = nama1.split(" ");
+							var nama2 = new RegExp(nama4[0], 'gi');
+							var match	= parse.match(nama2);
+							if (match !== null) {
+								var parse2 = parse.split(" ");
+								var index = parse2.indexOf(match[0]); //nomor letak array heryani
+								var splice = parse2.splice(index);
+								var hps_arr_kosong = splice.filter(function(str) {
+									return /\S/.test(str);
+								}); //fungsi menghapus array yg kosong : BENTUK OBJECT
+								var splice2= hps_arr_kosong.join().replace(/,/g, ' ');
+								hps_arr_kosong.push("null");
+							}
+						}
+						// NOT FOUND 3 nama mata pelajaran
+						if (index === undefined || index == -1) {
+							res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br>|"
+											+"|"
+											+"error|"
+											+"1_parameter_no_clear|"
+											+"|");
+							return 0;
+						}
+						var arr = [];
+						for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
+							var nama3 = rows_cari_nama_mapel[j].nama_mata_pelajaran;
+							for (var k = 0; k < hps_arr_kosong.length; k++) {
+								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
+								var regexx  = new RegExp(tt, 'gi');
+								var regexxx = nama3.match(regexx);
+								if (regexxx === null) {
+										hps_arr_kosong.pop();
+										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
+										arr.push(nama_fix);
+								} } }
+						for (var i = 0; i < arr.length; i++) {
+							var nama_fix2 = arr[i];
+							for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
+								var regex5 = new RegExp(nama_fix2, 'gi');
+								var regex6 = rows_cari_nama_mapel[j].nama_mata_pelajaran.match(regex5);
+								if (regex6 !== null) {
+									if (nama_fix2 === "") { return false }
+									else {
+										var selects 								= [regex6[0]];
+										var sql 										= "SELECT COUNT(*) FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ?";
+										connection.query(sql, selects, function  (err_count_nama_mapel,rows_count_nama_mapel){
+											if (err_count_nama_mapel) throw err_count_nama_mapel;
+											var count_nama_mapel = JSON.stringify(rows_count_nama_mapel)
+											var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
+											var count_nama_mapel = count_nama_mapel.replace(/[^0-9]+/, "")
+											if (count_nama_mapel == 1) {
+												var sql = "SELECT kd_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP '"+regex6[0]+"' ORDER BY nama_mata_pelajaran ASC";
+													connection.query(sql, function (err_cari_kd_mapel,rows_cari_kd_mapel){
+														var kd_mata_pelajaran = rows_cari_kd_mapel[0].kd_mata_pelajaran;
+														var sql = "SELECT * FROM mata_pelajaran_transaksi INNER JOIN data_pegawai ON mata_pelajaran_transaksi.nip_pegawai_mata_pelajaran_transaksi = data_pegawai.nip_pegawai WHERE kd_mata_pelajaran_transaksi REGEXP '"+kd_mata_pelajaran+"' ORDER BY kd_kelas_daftar_mata_pelajaran_transaksi ASC";
+															connection.query(sql, function (err_cari_mapel_transaksi,rows_cari_mapel_transaksi){
+																if (rows_cari_mapel_transaksi.length !== 0) {
+																	var daftar_kelas_pengampu_mapel	=	[]
+																	for (var i = 0; i < rows_cari_mapel_transaksi.length; i++) {
+																		var no = i + 1;
+																		daftar_kelas_pengampu_mapel.push('<br><br>'+no+'. Data ke -'+no+'<br> <b>Nama Kelas</b> : '+rows_cari_mapel_transaksi[i].kd_kelas_daftar_mata_pelajaran_transaksi+' <br><b>Nama Pengampu</b> : '+rows_cari_mapel_transaksi[i].nama_pegawai);
+																	}
+																	var daftar_kelas_pengampu_mapel = JSON.stringify(daftar_kelas_pengampu_mapel)
+																	var daftar_kelas_pengampu_mapel = daftar_kelas_pengampu_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_kelas_pengampu_mapel);
+																	res.send('Pengampu mata pelajaran <b>'+regex6[0]+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
+																	+"|"
+																	+"success|"
+																	+"1_parameter");
+																	return 0;
+																}
+																else {
+																	res.send("Pengampu mata pelajaran dengan nama mata pelajaran <b>"+regex6[0]+"</b> tidak ada pengampunya|"
+																	+"|"
+																	+"error|"
+																	+"1_parameter");
+																}
+														})
+												})
+												return 0;
+											}
+											else if (count_nama_mapel > 1) {
+												var parameter = [regex6[0]]
+												var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran WHERE nama_mata_pelajaran REGEXP ? ORDER BY nama_mata_pelajaran ASC";
+													connection.query(sql, parameter, function (err_cari_kd_mapel,rows_cari_kd_mapel){
+														var daftar_duplikasi_nama_mapel	=	[]
+														for (var i = 0; i < rows_cari_kd_mapel.length; i++) {
+															var no = i + 1;
+															daftar_duplikasi_nama_mapel.push('<br>'+no+'. '+rows_cari_kd_mapel[i].nama_mata_pelajaran);
+														}
+														daftar_duplikasi_nama_mapel.push("<br><b>"+(no+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
+														var daftar_duplikasi_nama_mapel = JSON.stringify(daftar_duplikasi_nama_mapel)
+														var daftar_duplikasi_nama_mapel = daftar_duplikasi_nama_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+														res.send('Terdapat <b>daftar nama mata pelajaran</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_mapel+"|"
+														+"Coba pilih nomor yang telah disediakan : |"
+														+"success|"
+														+"duplicate_name|"
+														+grup_kosa_kata_final+'>'+grup+'>'+regex6[0]+'>'+count_nama_mapel);
+													})
+													return 0;
+											}
+										});
+										return 0;
+									} }
+								else {
+								} } }
+						});
+					return 0;
 				}
 			}
 			else if (grup_kosa_kata_final.endsWith("pegawai")) {
