@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0.1
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 07, 2018 at 07:24 AM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.0.30
+-- Host: 127.0.0.1
+-- Generation Time: Dec 10, 2018 at 01:37 AM
+-- Server version: 10.1.29-MariaDB
+-- PHP Version: 7.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -2145,7 +2145,8 @@ INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kat
 (354, 'nama lengkap siswa', 'nama_siswa', 'pegawai,siswa'),
 (355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa'),
 (356, 'nomor induk nasional siswa', 'nisn_siswa', 'pegawai,siswa'),
-(358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', 'pegawai,siswa');
+(358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', 'pegawai,siswa'),
+(359, 'nomor telepon orangtua siswa', 'orangtua_telepon_siswa', 'pegawai,siswa');
 
 -- --------------------------------------------------------
 
@@ -2388,7 +2389,7 @@ ALTER TABLE `pembayaran_daftar`
 -- AUTO_INCREMENT for table `pesan_chat_bot_kosa_kata`
 --
 ALTER TABLE `pesan_chat_bot_kosa_kata`
-  MODIFY `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=359;
+  MODIFY `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=360;
 
 --
 -- AUTO_INCREMENT for table `pesan_chat_bot_kosa_kata_suggest`

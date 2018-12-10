@@ -147,7 +147,7 @@ exports.chat_user = function(req,res,next){
     };
 		// RESPONSE
 		var pesan  	= JSON.stringify(input.isi_pesan_chat_pengguna);
-		var parse0 	=	pesan.replace(/[!?]/gi, "");
+		var parse0 	=	pesan.replace(/(\?|\!| ya )/gi, "");
 		var parsing	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
@@ -394,8 +394,8 @@ exports.chat_user = function(req,res,next){
 						}
 						var json = []
 						var jsonA = []
-						for (var i = 0; i < parse2.length; i++) {
-						  var regex = new RegExp(parse2[i],"gi")
+						for (var i = 0; i < stem.length; i++) {
+						  var regex = new RegExp(stem[i],"gi")
 						  for (var j = 0; j < data.length; j++) {
 						    var asd = data[j].match(regex)
 						    if (asd !== null) { var d = 1 }
@@ -447,7 +447,6 @@ exports.chat_user = function(req,res,next){
 						var fix2 = []
 						var lowestSplit = []
 						var allKalimat = []
-						var min_split_kata = []
 						for (var i = 0; i < fix.length; i++) {
 						  if (fix[i].total_match == max_match_kata) {
 								fix2.push
@@ -457,13 +456,13 @@ exports.chat_user = function(req,res,next){
 			            "kalimat" : fix[i].kalimat,
 			            "split_total_kalimat" : fix[i].split_total_kalimat
 							  })
-								lowestSplit.push(fix[i].split_total_kalimat)
 								allKalimat.push(fix[i].kalimat)
-								min_split_kata.push(fix[i].split_total_kalimat)
+								lowestSplit.push(fix[i].split_total_kalimat)
 						  }
 						}
+						var lowestSplit = Math.min(...lowestSplit) // array | mencari max pada array total match
 
-            // ketika pertanyaan yang diajukan length hanya : 1 / 2, maka dicegat disini
+						// ketika pertanyaan yang diajukan length hanya : 1 / 2, maka dicegat disini
 						if (pesan.split(" ").length == 1 || pesan.split(" ").length == 2) {
 							var penomoranDuplikatPertanyaan = []
 							for (var i = 0; i < allKalimat.length; i++) {
@@ -480,11 +479,9 @@ exports.chat_user = function(req,res,next){
 							return 0
 						}
 
-						var min_split_kata = Math.min(...min_split_kata) // array | mencari max pada array total match
-
 						var fix3 = []
 						for (var i = 0; i < fix2.length; i++) {
-						  if (fix2[i].split_total_kalimat == min_split_kata) {
+						  if (fix2[i].split_total_kalimat == lowestSplit) {
 								fix3.push
 							  ({
 			            "id" : fix2[i].id,
@@ -499,7 +496,6 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < fix3.length; i++) {
 							qwe.push(fix3[i].kalimat)
 						}// output | [6]
-						// pushArray | mencari total yang diketahui max nya dan siap di push untuk disajikan ke pengguna
 
 						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 						if (f.length == 1) {
@@ -1129,19 +1125,19 @@ exports.chat_user = function(req,res,next){
 					for (var i = 0; i < rows_cari_nama.length; i++) {
 						var nama1 = rows_cari_nama[i].nama_siswa;
 						var nama4 = nama1.split(" ");
-						var nama2 = new RegExp(nama4[0], 'gi');
+						var nama2 = new RegExp(nama4[0], 'gi'); //diambil nama depannya (contoh : addisty)
 						var match	= parse.match(nama2);
 						if (match !== null) {
 							var parse2 = parse.split(" ");
 							var index = parse2.indexOf(match[0]); //nomor letak array heryani
-							var splice = parse2.splice(index);
+							var splice = parse2.splice(index); //splice atau pemotongan
 							var hps_arr_kosong = splice.filter(function(str) {
 								return /\S/.test(str);
 							}); //fungsi menghapus array yg kosong : BENTUK OBJECT
 							var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
 							hps_arr_kosong.push("null");
 						}
-					}
+					} // output | [1]
 
 					// NOT FOUND 3 SISWA
 					if (index === undefined || index == -1) {
@@ -1164,7 +1160,8 @@ exports.chat_user = function(req,res,next){
 										hps_arr_kosong.pop();
 										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
 										arr.push(nama_fix);
-								} } }
+								} } } // output | [2]
+
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -1301,8 +1298,8 @@ exports.chat_user = function(req,res,next){
 	  for (var i = 0; i < stem.length; i++) {
 	    if (stem[i].visible == "0") {
 	      // prefiks
-	      if (stem[i].word.startsWith("peng")) {
-	        var l = stem[i].word.replace(/peng/gi, "")
+	      if (stem[i].word.startsWith("peng") || stem[i].word.startsWith("meng")) {
+	        var l = stem[i].word.replace(/peng|meng/gi, "")
 	        s.push(l)
 	      }
 	      // ./prefiks

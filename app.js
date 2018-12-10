@@ -61,7 +61,6 @@ app.post('/dashboard/data_user_app/submit_suggest_kosa_kata', data_user_app.data
 app.post('/forgot_password', index.forgot_password);
 // ./POST Request
 // GET
-app.get('/', index.index);
 app.get('/dashboard_tutorial_video_cari/:id', data_user_app.dashboard_tutorial_video_cari);
 app.get('/logout_siswa', cek_login_siswa.logout_siswa);
 app.get('/logout_pegawai', cek_login_pegawai.logout_pegawai);
@@ -71,6 +70,7 @@ app.get('/logout_pegawai', cek_login_pegawai.logout_pegawai);
 // ./DATA
 
 // GET VIEWS
+app.get('/', index.index);
 app.get('/dashboard_user', data_user_app.dashboard_user);
 app.get('/dashboard_tutorial_video', data_user_app.dashboard_tutorial_video);
 // ./GET VIEWS
