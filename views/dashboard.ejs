@@ -7,31 +7,43 @@
    <li><a href="#!">Usulkan</a></li>
   </ul>
   <div class="container">
-    <div class="col s12 chat-page">
-      <div class="col s12">
-        <ul class="chat-page-history">
-       <!-- <p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p><p>asd</p> -->
-       <!-- <div class="receiver"><p class="chat-receiver"><a class="dropdown-trigger btn" href="#" data-target="dropdown1">Drop Me!</a></p></div> -->
-       <!-- <div class="sender"><p class="chat-sender">TesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTesTes</p></div> -->
-        </ul>
+    <div class="row">
+      <div class="col s5 m5 l5 xl5">
+        <div style="margin-top:30px"> <h5 class="center-align">Aplikasi Chat</h5> </div>
+        <div class="row chat-page">
+          <div class="col s12">
+            <ul id="chat-page-history" class="chat-page-history"> </ul>
+          </div>
+          <div class="col s12 chat-page-typing-and-sending" style="margin-bottom:-20px">
+            <form id="chat-form" method="post">
+              <div class="row">
+                <div class="col s1 m1 l1 xl1"></div>
+                <div class="col s9 m9 l9 xl9 input-field">
+                  <i class="material-icons prefix">textsms</i>
+                  <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
+                  <input type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
+                  <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
+                </div>
+                <div class="col s2 m2 l2 xl2">
+                  <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="col s12 chat-page-typing-and-sending">
-        <div class="row">
-          <div class="col s1 m1 l1 xl1"></div>
-          <form id="chat-form" method="post">
-            <div class="col s8 m8 l8 xl9 input-field">
-              <!-- <input class="chat-typing" type="text" name="" value="" placeholder="Masukan Pertanyaan.."> -->
-              <i class="material-icons prefix">textsms</i>
-              <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
-              <input type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
-              <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
-              <!-- <input type="text" name="isi_pesan_chat_pengguna_blank_name" class="chat-typing-choose"> -->
+      <div class="col s1 m1 l1 xs1"></div>
+      <div class="col s5 m5 l5 xl5">
+        <div style="margin-top:30px"> <h5 class="center-align">Proses Kalimat</h5> </div>
+        <div class="row chat-page">
+          <div class="col s12">
+            <ul id="process-chat-page-history" class="chat-page-history"></ul>
+          </div>
+          <div class="col s12 chat-page-typing-and-sending" style="margin-bottom:-20px">
+            <div class="center-align">
+              <a class="btn-floating btn-medium waves-effect waves-light chat-sending" disabled><i class="small material-icons right">refresh</i></a>
             </div>
-            <div class="col s2 m2 l2 xl1">
-              <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
-            </div>
-          </form>
-          <div class="col s1 m1 l1 xl1"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -60,22 +72,22 @@
 
   <% include footer %>
   <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
       // Chat
-      $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
-      setTimeout(function(){
+      $('#chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+      setTimeout(function () {
         $('.load-chat').hide()
-        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Hallo, aku adalah <b>MANDAYA BOT</b>. Ada yang bisa aku bantu mengenai informasi seputar sekolah?</p></li>');
+        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">Hallo, aku adalah <b>MANDAYA BOT</b>. Ada yang bisa aku bantu mengenai informasi seputar sekolah?</p></li>');
       },1000);
 
       // chat-sending clicked //
-      $(document).keypress(function(e) {
+      $(document).keypress( function (e) {
         if(e.which == 13) {
           e.preventDefault();
           submit();
         }
       });
-      $('.chat-sending').click(function(event) {
+      $('.chat-sending').click( function (event) {
         event.preventDefault();
         submit();
       }); // ./chat-sending clicked
@@ -85,8 +97,8 @@
         if(message.trim() == ''){ return false; }
         // XSS Attack
         else if ( message.match(/<[(\w+)(\s+(\w+)\s*\=\s*(\'|")(.*?)\\4\s*)*\s*(\/>|>)]+/gi) ) {
-          $('.chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
-          $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+          $('#chat-page-history').append('<li class="sender"><p class="chat-sender">Maaf, pertanyaan anda tidak bisa kami layani.</p></li>');
+          $("#chat-page-history").animate({scrollTop: $('#chat-page-history').get(0).scrollHeight}, 1000);
           $('.chat-typing').val(null);
           return false;
         }
@@ -96,8 +108,8 @@
              type: "POST",
              url: "/dashboard/chat_user_app",
              data: $("#chat-form").serialize(), // serializes the form's elements.
-             success: function(response){
-               let personalChatMessage = $('.chat-page-history');
+             success: function (response) {
+               let personalChatMessage = $('#chat-page-history');
                var r = response.split("|");
 
                let session = "<%=session%>";
@@ -108,63 +120,55 @@
                   </li>');
                }
                else{
+                 processChat (message, r)
                   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
                   var itemCount = ($("[id^='message-']").length + 1);
-                  $('.chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><i id="'+message+'" class="large material-icons modal-trigger" href="#modal1" style="color:#b7d0a5;font-size:17px;float:right">announcement</i><br><a style="color:#262626">' + message + '</a></p></li>');
-                  // $('.chat-typing').val(null);
-                  $('.chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
-                  $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
-                  setTimeout(function(){
+                  $('#chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><i id="'+message+'" class="large material-icons modal-trigger" href="#modal1" style="color:#b7d0a5;font-size:17px;float:right">announcement</i><br><a style="color:#262626">' + message + '</a></p></li>');
+                  $('#chat-page-history').append('<img class="load-chat" src="/third-party/_images/chat-load1.gif">');
+                  $("#chat-page-history").animate({scrollTop: $('#chat-page-history').get(0).scrollHeight}, 1000);
+                  setTimeout(function () {
                     $('.chat-sending').removeClass('disabled');
                     $('.load-chat').hide();
                     if (r[2] == "success") {
                       if (r[3] == "1_parameter") {
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
 
                       }
                       else if (r[3] == "2_parameters") { //suggest
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[0]+'</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">'+r[1]+'</p></li>');
                         $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
 
                       }
                       else if (r[3] == "duplicate_name") {
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
-                        var sek = r[4]+'>';
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                        var sek = r[5]+'>';
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val(sek);
                         $('.chat-typing').val('');
                       }
                     }
                     else if (r[2] == "error") {
                       if (r[3] == "1_parameter") {
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         $('.chat-typing').val('');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
 
                       }
                       else if (r[3] == "2_parameters") { // suggest
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
                         $('.chat-typing').val('');
                       }
                       else if (r[3] == "1_parameter_no_clear") {
-                        $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
+                        $('#chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
                         $('input[name*="isi_pesan_chat_pengguna_choose"]').val('');
-
                       }
-                      // else if (r[3] == "blank_name") {
-                      //   $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[0] + '</p></li>');
-                      //   $('.chat-page-history').append('<li class="sender"><p class="chat-sender">' + r[1] + '</p></li>');
-                      //   var sek = r[4]+'>';
-                      //   $('input[name*="isi_pesan_chat_pengguna_blank_name"]').val(sek);
-                      //   $('.chat-typing').val('');
-                      // }
                     }
-                    $(".chat-page-history").animate({scrollTop: $('.chat-page-history').get(0).scrollHeight}, 1000);
+                    $("#chat-page-history").animate({scrollTop: $('#chat-page-history').get(0).scrollHeight}, 1000);
                   },1000);
                }
              }
@@ -172,28 +176,59 @@
         }
       }
 
+      function processChat (message, r) {
+        $("#process-chat-page-history").empty()
+        $("#process-chat-page-history").animate({
+          scrollTop: $("#process-chat-page-history").position().top
+        });
+        let process_chat = []
+        // let {stem, json, tempArray, tempMatchPerKata, tempArrayd, fix, totalMatch, max_match_kata, fix2, allKalimat, lowestSplit, qwe} = JSON.parse(r[4])
+        $("#process-chat-page-history").append(`<li class="sender"><p class="chat-sender">Pertanyaan : <b>${message}</b></p></li>`);
+        process_chat.push(`stem : <b>${JSON.stringify(JSON.parse(r[4])[0])}</b>`)
+        process_chat.push(`json : <b>${JSON.stringify(JSON.parse(r[4])[1])}</b>`)
+        process_chat.push(`tempArray : <b>${JSON.stringify(JSON.parse(r[4])[2])}</b>`)
+        process_chat.push(`tempMatchPerKata : <b>${JSON.stringify(JSON.parse(r[4])[3])}</b>`)
+        process_chat.push(`tempArrayd : <b>${JSON.stringify(JSON.parse(r[4])[4])}</b>`)
+        process_chat.push(`fix : <b>${JSON.stringify(JSON.parse(r[4])[5])}</b>`)
+        process_chat.push(`totalMatch : <b>${JSON.stringify(JSON.parse(r[4])[6])}</b>`)
+        process_chat.push(`max_match_kata : <b>${JSON.stringify(JSON.parse(r[4])[7])}</b>`)
+        process_chat.push(`fix2 : <b>${JSON.stringify(JSON.parse(r[4])[8])}</b>`)
+        process_chat.push(`allKalimat : <b>${JSON.stringify(JSON.parse(r[4])[9])}</b>`)
+
+        if (JSON.stringify(JSON.parse(r[4])[11]) === undefined) {
+          process_chat.push(`lowestSplit : <b>Terdapat Ambigu Pertanyaan</b>`)
+          process_chat.push(`fix3 : <b>Terdapat Ambigu Pertanyaan</b>`)
+        }
+        else {
+          process_chat.push(`lowestSplit : <b>${JSON.stringify(JSON.parse(r[4])[10])}</b>`)
+          process_chat.push(`fix3 : <b>${JSON.stringify(JSON.parse(r[4])[11])}</b>`)
+        }
+        if (JSON.stringify(JSON.parse(r[4])[12]) === undefined) { process_chat.push(`qwe : <b>Terdapat Ambigu Pertanyaan</b>`) }
+        else { process_chat.push(`qwe : <b>${JSON.stringify(JSON.parse(r[4])[12])}</b>`) }
+
+        for (var i = 0; i < process_chat.length; i++) {
+          var no = i+1
+          $('#process-chat-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-warning'><b style='color:black'>${no}.</b></a>  ${process_chat[i]}</p></li>`);
+        }
+      }
+
       // // Function // //
       // Submit suggest kosa kata
-      $(document).on('click', '.modal-trigger', function(){
+      $(document).on('click', '.modal-trigger', function (){
         suggest = $(this).attr('id')
         $('#suggest-kosa-kata').val(suggest)
       })
-      $('#button-submit-suggest').on('click', function() {
+      $('#button-submit-suggest').on('click', function () {
         $.ajax({
           type : 'POST',
           url : '/dashboard/data_user_app/submit_suggest_kosa_kata',
           data : $('#suggest-kosa-kata-form').serialize(),
-          success : function(response){
+          success : function (response) {
             // alert(response)
           }
         })
       })
-      // $(document).on('click', '#salin-pertanyaan', function(){
-      //   var a = $('.data-saran').html()
-      //   var a = a.split('<br>')
-      //   $('#data-saran-copy').text(a)
-      // })
-      $(document).on('click', '#salin-pertanyaan', function(){
+      $(document).on('click', '#salin-pertanyaan', function () {
         var a = $(this).html()
         $('.chat-typing').val(a)
         $(".chat-typing").focus();

@@ -152,13 +152,11 @@ exports.chat_user = function(req,res,next){
 		var parsing	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
-			var process_chat = "Duplikasi Nama"
 			if (data.isi_pesan_chat_pengguna.match(/^([a-zA-Z\D]|\d\w|\d.+\w|\d\D|\d.+\D)/g)) {
 				res.send("Pilihan Tidak Tersedia.</b>|"
 							 +"|"
 							 +"error|"
-							 +"1_parameter|"
-							 +JSON.stringify(process_chat));
+							 +"1_parameter")
 				return 0
 			}
 			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
@@ -176,15 +174,13 @@ exports.chat_user = function(req,res,next){
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
 									 +"error|"
-									 +"1_parameter|"
-									 +JSON.stringify(process_chat));
+									 +"1_parameter")
 					}
 				  else if (data[3] < data[4] || data[4] == 0) {
 				    res.send("Keluar dari pilihan.</b>|"
 				           +"|"
 				           +"success|"
-				           +"1_parameter|"
-									 +JSON.stringify(process_chat));
+				           +"1_parameter")
 				   	return 0;
 				  }
 				  else {
@@ -196,8 +192,7 @@ exports.chat_user = function(req,res,next){
 				    res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
-				            +"2_parameters|"
-										+JSON.stringify(process_chat));
+				            +"2_parameters");
 				  }
 				})
 			} // ./ duplikat pegawai
@@ -208,16 +203,14 @@ exports.chat_user = function(req,res,next){
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
 									 +"error|"
-									 +"1_parameter|"
-									 +JSON.stringify(process_chat));
+									 +"1_parameter")
 						return 0;
 					}
 					else if (data[3] < data[4] || data[4] == 0) {
 						res.send("Keluar dari pilihan.</b>|"
 									 +"|"
 									 +"success|"
-									 +"1_parameter|"
-									 +JSON.stringify(process_chat));
+									 +"1_parameter")
 					 return 0;
 					}
 					else {
@@ -230,16 +223,14 @@ exports.chat_user = function(req,res,next){
 							res.send("Mohon maaf, data yang kamu minta masih kosong.|"
 											+"|"
 											+"error|"
-											+"1_parameter|"
-											+JSON.stringify(process_chat));
+											+"1_parameter");
 							return false
 						}
 						else {
 							res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
-							+"2_parameters|"
-							+JSON.stringify(process_chat));
+							+"2_parameters");
 							return 0;
 						}
 						//jika terdeteksi data.isi_pesan_chat_pengguna_choose ada datanya, maka tidak akan mengeksekusi perintah dibawahnya
@@ -255,16 +246,14 @@ exports.chat_user = function(req,res,next){
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
 									 +"error|"
-									 +"1_parameter|"
-									 +JSON.stringify(process_chat));
+									 +"1_parameter")
 						return 0;
 					}
 					else if (data[3] < data[4] || data[4] == 0 || rows.length == 0) {
 						res.send("Keluar dari pilihan.</b>|"
 									 +"|"
 									 +"success|"
-									 +"1_parameter|"
-									 +JSON.stringify(process_chat));
+									 +"1_parameter")
 					  return 0;
 					}
 					else {
@@ -285,15 +274,13 @@ exports.chat_user = function(req,res,next){
 										res.send('Pengampu mata pelajaran <b>'+nama_mata_pelajaran+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
 										+"|"
 										+"success|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
+										+"1_parameter");
 									}
 									else {
 										res.send("Pengampu mata pelajaran dengan nama mata pelajaran <b>"+nama_mata_pelajaran+"</b> tidak ada pengampunya|"
 										+"|"
 										+"error|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
+										+"1_parameter");
 									}
 							})
 							return 0;
@@ -311,16 +298,14 @@ exports.chat_user = function(req,res,next){
 							res.send("Pilihan Tidak Tersedia.</b>|"
 										 +"|"
 										 +"error|"
-										 +"1_parameter|"
-										 +JSON.stringify(process_chat));
+										 +"1_parameter")
 							return 0;
 						}
 						else if (data[3] < data[4] || data[4] == 0 || rows.length == 0) {
 							res.send("Keluar dari pilihan.</b>|"
 										 +"|"
 										 +"success|"
-										 +"1_parameter|"
-										 +JSON.stringify(process_chat));
+										 +"1_parameter")
 						  return 0;
 						}
 						else {
@@ -342,16 +327,14 @@ exports.chat_user = function(req,res,next){
 											res.send('Daftar seluruh nama siswa kelas <b>'+nama_kelas_daftar+'</b> adalah : <br>'+daftar_nama_seluruh_siswa_kelas+"|"
 											+"|"
 											+"success|"
-											+"1_parameter|"
-											+JSON.stringify(process_chat));
+											+"1_parameter");
 											return 0;
 										}
 										else {
 											res.send("Kelas <b>"+nama_kelas_daftar+"</b> tidak ada siswanya.|"
 											+"|"
 											+"error|"
-											+"1_parameter|"
-											+JSON.stringify(process_chat));
+											+"1_parameter");
 										}
 								})
 							}
@@ -370,15 +353,13 @@ exports.chat_user = function(req,res,next){
 											res.send('Pengampu mata pelajaran kelas <b>'+nama_kelas_daftar+'</b> adalah : '+daftar_mapel_dan_pengampu_mapel_per_kelas+"|"
 											+"|"
 											+"success|"
-											+"1_parameter|"
-											+JSON.stringify(process_chat));
+											+"1_parameter");
 										}
 										else {
 											res.send("Pengampu mata pelajaran kelas <b>"+nama_kelas_daftar+"</b> tidak ada pengampunya|"
 											+"|"
 											+"error|"
-											+"1_parameter|"
-											+JSON.stringify(process_chat));
+											+"1_parameter");
 										}
 								})
 								return 0;
@@ -391,51 +372,41 @@ exports.chat_user = function(req,res,next){
 			} // ./ duplikat kelas
 		}
 		else {
+					var parse	= parsing
 					var parse2 = parsing.split(" ")
 					var parse2 = parse2.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-					var process_chat = []
-
-					// Stopwords process
-					var stopwords = stopWords (parsing)
-					// ./Stopwords process
 
 	        // Stemming process
 					var split = []
-					for (var i = 0; i < stopwords.length; i++) {
-					  if (stopwords[i].endsWith("ku")) { var l = stopwords[i].replace(/(ku)/gi, "") }
-					  else { var l = stopwords[i] }
+					for (var i = 0; i < parse2.length; i++) {
+					  if (parse2[i].endsWith("ku")) { var l = parse2[i].replace(/(ku)/gi, "") }
+					  else { var l = parse2[i] }
 					  split.push(l)
 					}
-					var stem = stemming (split)
+					var stem = stemming(split)
 					var parse = stem.join(" ")
 	        // ./Stemming process
-					process_chat.push(stem)
-
 					var data = []
-					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ? && active_kosa_kata_pesan_chat_bot_kosa_kata='1' GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
+					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ? GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
 					connection.query(sqls, jabatan, function  (err,rows){
 						var data = []
 						for (var i = 0; i < rows.length; i++) {
 							data.push(rows[i].kosa_kata_pesan_chat_bot_kosa_kata)
 						}
 						var json = []
+						var jsonA = []
 						for (var i = 0; i < stem.length; i++) {
 						  var regex = new RegExp(stem[i],"gi")
 						  for (var j = 0; j < data.length; j++) {
 						    var asd = data[j].match(regex)
-								// console.log(j+". "+asd+" == "+data[j]);
 						    if (asd !== null) { var d = 1 }
 						    else { var d = 0 }
 						    json.push(d)
 						  }
 						} // output | [1]
 
-						process_chat.push(json)
-
 						var tempArray = _.chunk(json,data.length)
 						// output | [2]
-
-						process_chat.push(tempArray)
 
 						var tempMatchPerKata = []
 						for (var i = 0; i < data.length; i++) {
@@ -445,12 +416,8 @@ exports.chat_user = function(req,res,next){
 						  }
 						} // output | [3]
 
-						process_chat.push(tempMatchPerKata)
-
-						var tempArrayd = _.chunk(tempMatchPerKata,stopwords.length)
+						var tempArrayd = _.chunk(tempMatchPerKata,parse2.length)
 						// output | [4]
-
-						process_chat.push(tempArrayd)
 
 						var fix = []
 						for (var i = 0; i < tempArrayd.length; i++) {
@@ -463,23 +430,17 @@ exports.chat_user = function(req,res,next){
 						  })
 						}// output | [5]
 
-						process_chat.push(fix)
-
 						var totalMatch = []
 						for (var i = 0; i < fix.length; i++) {
 						  totalMatch.push(fix[i].total_match)
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
-						process_chat.push(totalMatch)
-						process_chat.push(max_match_kata)
-
-						if (max_match_kata == 0 || parsing.length == 1) {
+						if (max_match_kata == 0) {
 							res.send("Mohon maaf, maksud dari pertanyaan <b>"+pesan+"</b> apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 							+"|"
 							+"error|"
-							+"1_parameter|"
-							+JSON.stringify(process_chat));
+							+"1_parameter");
 							return 0
 						}
 
@@ -502,10 +463,6 @@ exports.chat_user = function(req,res,next){
 						}
 						var lowestSplit = Math.min(...lowestSplit) // array | mencari max pada array total match
 
-						process_chat.push(fix2)
-						process_chat.push(allKalimat)
-						process_chat.push(lowestSplit)
-
 						// ketika pertanyaan yang diajukan length hanya : 1 / 2, maka dicegat disini
 						if (pesan.split(" ").length == 1 || pesan.split(" ").length == 2) {
 							var penomoranDuplikatPertanyaan = []
@@ -519,8 +476,7 @@ exports.chat_user = function(req,res,next){
 							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
 											+"error|"
-											+"2_parameters|"
-											+JSON.stringify(process_chat));
+											+"2_parameters");
 							return 0
 						}
 
@@ -536,18 +492,16 @@ exports.chat_user = function(req,res,next){
 							  })
 						  }
 						}
-						process_chat.push(fix3)
 
 						var qwe = []
 						for (var i = 0; i < fix3.length; i++) {
 							qwe.push(fix3[i].kalimat)
 						}// output | [6]
-						process_chat.push(qwe)
 
 						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 						if (f.length == 1) {
 							var res1 = f[0]
-							ketemuKosaKata(res1, pesan, parse, process_chat)
+							ketemuKosaKata(res1, pesan, parse)
 						}
 						else {
 							var penomoranDuplikatPertanyaan = []
@@ -561,8 +515,7 @@ exports.chat_user = function(req,res,next){
 							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
 											+"error|"
-											+"2_parameters|"
-											+JSON.stringify(process_chat));
+											+"2_parameters");
 							return 0
 						}
 					})
@@ -570,7 +523,7 @@ exports.chat_user = function(req,res,next){
   }); // ./req.getConnection(function (err, connection)
 
   // Function
-	function ketemuKosaKata (res1, pesan, parse, process_chat) {
+	function ketemuKosaKata (res1, pesan, parse) {
 	  // Mencari grup kosa kata
 		var sql = "SELECT grup_kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE kosa_kata_pesan_chat_bot_kosa_kata = '"+res1+"'";
 		connection.query(sql, function  (err_grup_kosa_kata,rows_grup_kosa_kata){
@@ -602,8 +555,7 @@ exports.chat_user = function(req,res,next){
 						res.send("Jumlah Seluruh Siswa : <br>"+arr+"|"
 										+"|"
 										+"success|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
+										+"1_parameter");
 						return 0;
 					})
 				})
@@ -633,8 +585,7 @@ exports.chat_user = function(req,res,next){
 						res.send("Jumlah Seluruh pegawai : <br>"+arr+"|"
 										+"|"
 										+"success|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
+										+"1_parameter");
 						return 0;
 				})
 				})
@@ -661,8 +612,7 @@ exports.chat_user = function(req,res,next){
 					res.send("Daftar Kelas dan Wali Kelas : <br>"+arr+"|"
 									+"|"
 									+"success|"
-									+"1_parameter|"
-									+JSON.stringify(process_chat));
+									+"1_parameter");
 					return 0;
 					})
 					})
@@ -683,14 +633,14 @@ exports.chat_user = function(req,res,next){
 								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
 								hps_arr_kosong.push("null");
 							}
-						} // output | [1]
+						}
 						// NOT FOUND 3 nama kelas
 						if (index === undefined || index == -1) {
 							res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
 											+"|"
 											+"error|"
 											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
+											+"|");
 							return 0;
 						}
 						var arr = [];
@@ -738,16 +688,14 @@ exports.chat_user = function(req,res,next){
 																	res.send('Daftar seluruh nama siswa kelas <b>'+regex6[0]+'</b> adalah : <br>'+daftar_nama_seluruh_siswa_kelas+"|"
 																	+"|"
 																	+"success|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																	return 0;
 																}
 																else {
 																	res.send("Kelas <b>"+nama_kelas_daftar+"</b> tidak ada siswanya.|"
 																	+"|"
 																	+"error|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																}
 														})
 												})
@@ -765,11 +713,10 @@ exports.chat_user = function(req,res,next){
 														var daftar_duplikasi_nama_kelas = JSON.stringify(daftar_duplikasi_nama_kelas)
 														var daftar_duplikasi_nama_kelas = daftar_duplikasi_nama_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 														res.send('Terdapat <b>daftar nama kelas</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_kelas+"|"
-																		+"Coba pilih nomor yang telah disediakan : |"
-																		+"success|"
-																		+"duplicate_name|"
-																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
+														+"Coba pilih nomor yang telah disediakan : |"
+														+"success|"
+														+"duplicate_name|"
+														+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
 													})
 													return 0;
 											}
@@ -794,17 +741,19 @@ exports.chat_user = function(req,res,next){
 								var parse2 = parse.split(" ");
 								var index = parse2.indexOf(match[0]); //nomor letak array heryani
 								var splice = parse2.splice(index);
-								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
+								var hps_arr_kosong = splice.filter(function(str) {
+									return /\S/.test(str);
+								}); //fungsi menghapus array yg kosong : BENTUK OBJECT
 								hps_arr_kosong.push("null");
 							}
-						} // output | [1]
+						}
 						// NOT FOUND 3 nama kelas
 						if (index === undefined || index == -1) {
 							res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
 											+"|"
 											+"error|"
 											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
+											+"|");
 							return 0;
 						}
 						var arr = [];
@@ -853,16 +802,14 @@ exports.chat_user = function(req,res,next){
 																	res.send('Pengampu mata pelajaran kelas <b>'+regex6[0]+'</b> adalah : '+daftar_mapel_dan_pengampu_mapel_per_kelas+"|"
 																	+"|"
 																	+"success|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																	return 0;
 																}
 																else {
 																	res.send("Pengampu mata pelajaran kelas <b>"+regex6[0]+"</b> tidak ada pengampunya|"
 																	+"|"
 																	+"error|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																}
 														})
 												})
@@ -881,11 +828,10 @@ exports.chat_user = function(req,res,next){
 														var daftar_duplikasi_nama_kelas = JSON.stringify(daftar_duplikasi_nama_kelas)
 														var daftar_duplikasi_nama_kelas = daftar_duplikasi_nama_kelas.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 														res.send('Terdapat <b>daftar nama kelas</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_kelas+"|"
-																		+"Coba pilih nomor yang telah disediakan : |"
-																		+"success|"
-																		+"duplicate_name|"
-																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
+														+"Coba pilih nomor yang telah disediakan : |"
+														+"success|"
+														+"duplicate_name|"
+														+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
 													})
 													return 0;
 											}
@@ -916,8 +862,7 @@ exports.chat_user = function(req,res,next){
 					res.send("Jika kamu merasa sudah melunasi, namun belum tercatat dibagian <b>Tata Usaha</b>, mohon segera <b>lapor</b> dan membawa <b>bukti pembayaran</b> ke bagian <b>Tata Usaha</b>.|"
 									+"Daftar Tagihan Pembayaran Kamu : <br>"+dataArray+"|"
 									+"success|"
-									+"2_parameters|"
-									+JSON.stringify(process_chat));
+									+"2_parameters");
 					return 0;
 				})
 				}
@@ -934,17 +879,19 @@ exports.chat_user = function(req,res,next){
 								var parse2 = parse.split(" ");
 								var index = parse2.indexOf(match[0]); //nomor letak array heryani
 								var splice = parse2.splice(index);
-								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
+								var hps_arr_kosong = splice.filter(function(str) {
+									return /\S/.test(str);
+								}); //fungsi menghapus array yg kosong : BENTUK OBJECT
 								hps_arr_kosong.push("null");
 							}
-						} // output | [1]
+						}
 						// NOT FOUND 3 nama mata pelajaran
 						if (index === undefined || index == -1) {
 							res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br>|"
 											+"|"
 											+"error|"
 											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
+											+"|");
 							return 0;
 						}
 						var arr = [];
@@ -988,19 +935,18 @@ exports.chat_user = function(req,res,next){
 																	}
 																	var daftar_kelas_pengampu_mapel = JSON.stringify(daftar_kelas_pengampu_mapel)
 																	var daftar_kelas_pengampu_mapel = daftar_kelas_pengampu_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
+																	// console.log(daftar_kelas_pengampu_mapel);
 																	res.send('Pengampu mata pelajaran <b>'+regex6[0]+'</b> seluruh kelas adalah : '+daftar_kelas_pengampu_mapel+"|"
 																	+"|"
 																	+"success|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																	return 0;
 																}
 																else {
 																	res.send("Pengampu mata pelajaran dengan nama mata pelajaran <b>"+regex6[0]+"</b> tidak ada pengampunya|"
 																	+"|"
 																	+"error|"
-																	+"1_parameter|"
-																	+JSON.stringify(process_chat));
+																	+"1_parameter");
 																}
 														})
 												})
@@ -1019,11 +965,10 @@ exports.chat_user = function(req,res,next){
 														var daftar_duplikasi_nama_mapel = JSON.stringify(daftar_duplikasi_nama_mapel)
 														var daftar_duplikasi_nama_mapel = daftar_duplikasi_nama_mapel.replace(/[^a-zA-Z0-9.\s+<>:='_/&#-]/g, "")
 														res.send('Terdapat <b>daftar nama mata pelajaran</b> yang kamu cari, pilihlah salah satu dari daftar tersebut : <br>'+daftar_duplikasi_nama_mapel+"|"
-																		+"Coba pilih nomor yang telah disediakan : |"
-																		+"success|"
-																		+"duplicate_name|"
-																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>mapel>'+regex6[0]+'>'+count_nama_mapel);
+														+"Coba pilih nomor yang telah disediakan : |"
+														+"success|"
+														+"duplicate_name|"
+														+grup_kosa_kata_final+'>mapel>'+regex6[0]+'>'+count_nama_mapel);
 													})
 													return 0;
 											}
@@ -1037,6 +982,8 @@ exports.chat_user = function(req,res,next){
 				}
 			}
 			else if (grup_kosa_kata_final.endsWith("pegawai")) {
+				var jabatan_cari = grup_kosa_kata_final.split("_")
+				var jabatan_cari = jabatan_cari[jabatan_cari.length - 1]
 				var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai ORDER BY nama_pegawai ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
 					if (err_cari_nama) throw err_cari_nama;
@@ -1052,7 +999,6 @@ exports.chat_user = function(req,res,next){
 							var hps_arr_kosong = splice.filter(function(str) {
 								return /\S/.test(str);
 							}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-							var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
 							hps_arr_kosong.push("null");
 						}
 					}
@@ -1062,7 +1008,7 @@ exports.chat_user = function(req,res,next){
 										+"|"
 										+"error|"
 										+"1_parameter_no_clear|"
-		 							 	+JSON.stringify(process_chat));
+										+"|");
 						return 0;
 					}
 					else {
@@ -1116,16 +1062,14 @@ exports.chat_user = function(req,res,next){
 														res.send("Mohon maaf, data yang kamu minta masih kosong.|"
 																		+"|"
 																		+"error|"
-																		+"1_parameter|"
-																		+JSON.stringify(process_chat));
+																		+"1_parameter");
 														return false
 													}
 													else {
 														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
-														+"2_parameters|"
-														+JSON.stringify(process_chat));
+														+"2_parameters");
 														return 0;
 													}
 												});// ./rows
@@ -1147,10 +1091,16 @@ exports.chat_user = function(req,res,next){
 																	+"Coba pilih nomor yang telah disediakan : |"
 																	+"success|"
 																	+"duplicate_name|"
-																	+JSON.stringify(process_chat)+"|"
-																	+grup_kosa_kata_final+'>pegawai>'+regex6[0]+'>'+count_pegawai);
+																	+grup_kosa_kata_final+'>'+jabatan_cari+'>'+regex6[0]+'>'+count_pegawai);
 												})
 											}
+											console.log('--> fix  : '+res1); //object
+											console.log('--> nma  : '+regex6[0]);
+											console.log('--> idx  : '+index); //memotong kalimat penting menjadi nama yang dicari. misalnya heryani r bla bla bla
+											console.log('--> prs  : '+parse);
+											console.log('--> prs2 : '+parse2);
+											console.log('--> spc1 : '+splice);
+											console.log('--> grp  : '+grup_kosa_kata_final);
 										});
 										return 0;
 									}
@@ -1163,6 +1113,8 @@ exports.chat_user = function(req,res,next){
 				return 0;
 			}
 			else if (grup_kosa_kata_final.endsWith("siswa")) {
+				var jabatan_cari = grup_kosa_kata_final.split("_")
+				var jabatan_cari = jabatan_cari[jabatan_cari.length - 1]
 				var sql = "SELECT nama_siswa,jabatan_siswa FROM data_siswa ORDER BY nama_siswa ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
 					if (err_cari_nama) throw err_cari_nama;
@@ -1178,7 +1130,6 @@ exports.chat_user = function(req,res,next){
 							var hps_arr_kosong = splice.filter(function(str) {
 								return /\S/.test(str);
 							}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-							var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
 							hps_arr_kosong.push("null");
 						}
 					} // output | [1]
@@ -1189,9 +1140,10 @@ exports.chat_user = function(req,res,next){
 										+"|"
 										+"error|"
 										+"1_parameter_no_clear|"
-		 							 	+JSON.stringify(process_chat));
+										+"|");
 						return 0;
 					}
+					else {
 						var arr = [];
 						for (var j = 0; j < rows_cari_nama.length; j++) {
 							var nama3 = rows_cari_nama[j].nama_siswa;
@@ -1240,16 +1192,14 @@ exports.chat_user = function(req,res,next){
 														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																		+"Mohon maaf, data yang kamu minta masih kosong.|"
 																		+"error|"
-																		+"2_parameters|"
-																		+JSON.stringify(process_chat));
+																		+"2_parameters");
 														return false
 													}
 													else {
 														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
-														+"2_parameters|"
-														+JSON.stringify(process_chat));
+														+"2_parameters");
 														return 0;
 													}
 												});// ./rows
@@ -1271,15 +1221,22 @@ exports.chat_user = function(req,res,next){
 																	+"Coba pilih nomor yang telah disediakan : |"
 																	+"success|"
 																	+"duplicate_name|"
-																	+JSON.stringify(process_chat)+"|"
-																	+grup_kosa_kata_final+'>siswa>'+regex6[0]+'>'+count_siswa);
+																	+grup_kosa_kata_final+'>'+jabatan_cari+'>'+regex6[0]+'>'+count_siswa);
 												})
 											}
+											console.log('--> fix  : '+res1); //object
+											console.log('--> nma  : '+regex6[0]);
+											console.log('--> idx  : '+index); //memotong kalimat penting menjadi nama yang dicari. misalnya heryani r bla bla bla
+											console.log('--> prs  : '+parse);
+											console.log('--> prs2 : '+parse2);
+											console.log('--> spc1 : '+splice);
+											console.log('--> grp  : '+grup_kosa_kata_final);
 										});
 										return 0;
 									} }
 								else {
 								} } }
+					}
 					});
 			}
 			}); // ./grup_kosa_kata_final
@@ -1378,38 +1335,4 @@ exports.chat_user = function(req,res,next){
 	  }
 	return s
 	}
-
-	function stopWords (parsing) {
-		var stopwords = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong","yaitu","yakin","yakni","yang"]
-		var stopwords_finish = parsing.replace(new RegExp('\\b('+stopwords.join('|')+')\\b', 'g'), '');
-		var stopwords_finish = stopwords_finish.split(" ")
-		var stopwords_finish = stopwords_finish.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-		return stopwords_finish
-	}
-
-	function cariNama (parse, data_nama, process_chat) {
-		for (var i = 0; i < data_nama.length; i++) {
-			var nama1 = data_nama[i];
-			var nama4 = nama1.split(" ");
-			var nama2 = new RegExp(nama4[0], 'gi'); //diambil nama depannya (contoh : addisty)
-			var match	= parse.match(nama2);
-			if (match !== null) {
-				var parse2 = parse.split(" ");
-				var index = parse2.indexOf(match[0]); //nomor letak array heryani
-				var splice = parse2.splice(index); //splice atau pemotongan
-				var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-				hps_arr_kosong.push("null");
-			}
-		} // output | [1]
-		if (index === undefined || index == -1) {
-			res.send("Mohon maaf, <b>nama siswa</b> yang dicari tidak ditemukan.<br>|"
-							+"|"
-							+"error|"
-							+"1_parameter_no_clear|"
-							+JSON.stringify(process_chat));
-			return 0;
-		}
-		return hps_arr_kosong
-	}
-
 };
