@@ -148,7 +148,7 @@ exports.chat_user = function(req,res,next){
     };
 		// RESPONSE
 		var pesan  	= JSON.stringify(input.isi_pesan_chat_pengguna);
-		var parse0 	=	pesan.replace(/(\?|\!| ya )/gi, "");
+		var parse0 	=	pesan.replace(/(\?|\!)/gi, "");
 		var parsing	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
@@ -394,23 +394,23 @@ exports.chat_user = function(req,res,next){
 					var parse2 = parsing.split(" ")
 					var parse2 = parse2.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
 					var process_chat = []
+					var process_kalimat = []
+					var process_nama = []
 
-					// Stopwords process
-					var stopwords = stopWords (parsing)
-					// ./Stopwords process
+					// Stopword process
+					var stopword = stopWord (parsing)
+					// ./Stopword process
 
 	        // Stemming process
 					var split = []
-					for (var i = 0; i < stopwords.length; i++) {
-					  if (stopwords[i].endsWith("ku")) { var l = stopwords[i].replace(/(ku)/gi, "") }
-					  else { var l = stopwords[i] }
+					for (var i = 0; i < stopword.length; i++) {
+					  if (stopword[i].endsWith("ku")) { var l = stopword[i].replace(/(ku)/gi, "") }
+					  else { var l = stopword[i] }
 					  split.push(l)
 					}
 					var stem = stemming (split)
 					var parse = stem.join(" ")
 	        // ./Stemming process
-					process_chat.push(stem)
-
 					var data = []
 					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ? && active_kosa_kata_pesan_chat_bot_kosa_kata='1' GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
 					connection.query(sqls, jabatan, function  (err,rows){
@@ -430,12 +430,8 @@ exports.chat_user = function(req,res,next){
 						  }
 						} // output | [1]
 
-						process_chat.push(json)
-
 						var tempArray = _.chunk(json,data.length)
 						// output | [2]
-
-						process_chat.push(tempArray)
 
 						var tempMatchPerKata = []
 						for (var i = 0; i < data.length; i++) {
@@ -445,12 +441,8 @@ exports.chat_user = function(req,res,next){
 						  }
 						} // output | [3]
 
-						process_chat.push(tempMatchPerKata)
-
-						var tempArrayd = _.chunk(tempMatchPerKata,stopwords.length)
+						var tempArrayd = _.chunk(tempMatchPerKata,stopword.length)
 						// output | [4]
-
-						process_chat.push(tempArrayd)
 
 						var fix = []
 						for (var i = 0; i < tempArrayd.length; i++) {
@@ -463,18 +455,16 @@ exports.chat_user = function(req,res,next){
 						  })
 						}// output | [5]
 
-						process_chat.push(fix)
-
 						var totalMatch = []
 						for (var i = 0; i < fix.length; i++) {
 						  totalMatch.push(fix[i].total_match)
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
-						process_chat.push(totalMatch)
-						process_chat.push(max_match_kata)
-
 						if (max_match_kata == 0 || parsing.length == 1) {
+							process_chat.push({
+								process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
+							})
 							res.send("Mohon maaf, maksud dari pertanyaan <b>"+pesan+"</b> apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 							+"|"
 							+"error|"
@@ -502,12 +492,11 @@ exports.chat_user = function(req,res,next){
 						}
 						var lowestSplit = Math.min(...lowestSplit) // array | mencari max pada array total match
 
-						process_chat.push(fix2)
-						process_chat.push(allKalimat)
-						process_chat.push(lowestSplit)
-
 						// ketika pertanyaan yang diajukan length hanya : 1 / 2, maka dicegat disini
 						if (pesan.split(" ").length == 1 || pesan.split(" ").length == 2) {
+							process_chat.push({
+								process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
+							})
 							var penomoranDuplikatPertanyaan = []
 							for (var i = 0; i < allKalimat.length; i++) {
 								var no = i+1
@@ -536,18 +525,19 @@ exports.chat_user = function(req,res,next){
 							  })
 						  }
 						}
-						process_chat.push(fix3)
 
 						var qwe = []
 						for (var i = 0; i < fix3.length; i++) {
 							qwe.push(fix3[i].kalimat)
 						}// output | [6]
-						process_chat.push(qwe)
 
+						process_chat.push({
+							process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
+						})
 						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
 						if (f.length == 1) {
 							var res1 = f[0]
-							ketemuKosaKata(res1, pesan, parse, process_chat)
+							ketemuKosaKata (res1, pesan, parse, process_chat)
 						}
 						else {
 							var penomoranDuplikatPertanyaan = []
@@ -578,69 +568,7 @@ exports.chat_user = function(req,res,next){
 			var grup_kosa_kata_final 	= rows_grup_kosa_kata[0].grup_kosa_kata_pesan_chat_bot_kosa_kata;
 
 			if (grup_kosa_kata_final.startsWith("0")) {
-				if (grup_kosa_kata_final == "0_jumlah_siswa") {
-					var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
-					connection.query(sql, function  (err_rows,rows){
-					var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
-					connection.query(sql, function (err_hitung_jml_siswa_per_kelas,hitung_jml_siswa_per_kelas){
-					var sql = "SELECT COUNT(nis_siswa) as jumlah_seluruh_siswa FROM data_siswa";
-					connection.query(sql, function  (err_rows,rows_jumlah_siswa){
-						var arr = []
-						for (var i = 0; i < rows.length; i++) {
-							for (var j = 0; j < hitung_jml_siswa_per_kelas.length; j++) {
-								var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
-								var regex	= hitung_jml_siswa_per_kelas[j].kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan.match(regex)
-								if (regex !== null) {
-									var no = j+1;
-									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Siswa : <b>"+hitung_jml_siswa_per_kelas[j].cnt+"</b><br>");
-								}
-							}
-						}
-						arr.push("<br>Jumlah Seluruh Siswa : <b><br>"+rows_jumlah_siswa[0].jumlah_seluruh_siswa+"</b>")
-						var arr = JSON.stringify(arr)
-						var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
-						res.send("Jumlah Seluruh Siswa : <br>"+arr+"|"
-										+"|"
-										+"success|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
-						return 0;
-					})
-				})
-				})
-				}
-				else if(grup_kosa_kata_final == "0_jumlah_pegawai"){
-					var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
-					connection.query(sql, function  (err_rows,rows){
-					var sql = "SELECT kd_kelas_daftar_mata_pelajaran_transaksi, COUNT(DISTINCT nip_pegawai_mata_pelajaran_transaksi) AS cnt FROM mata_pelajaran_transaksi GROUP BY kd_kelas_daftar_mata_pelajaran_transaksi ORDER BY kd_kelas_daftar_mata_pelajaran_transaksi ASC";
-					connection.query(sql, function (err_hitung_jml_pegawai_per_kelas,hitung_jml_pegawai_per_kelas){
-					var sql = "SELECT COUNT(nip_pegawai) as jumlah_seluruh_pegawai FROM data_pegawai WHERE jabatan_pegawai != 'admin'";
-					connection.query(sql, function  (err_rows,rows_jumlah_pegawai){
-						var arr = []
-						for (var i = 0; i < rows.length; i++) {
-							for (var j = 0; j < hitung_jml_pegawai_per_kelas.length; j++) {
-								var regex = new RegExp (rows[i].kd_kelas_daftar_kelas_transaksi, 'g')
-								var regex	= hitung_jml_pegawai_per_kelas[j].kd_kelas_daftar_mata_pelajaran_transaksi.match(regex)
-								if (regex !== null) {
-									var no = j+1;
-									arr.push("<br><b>"+no+". Nama Kelas : <b>"+rows[i].kd_kelas_daftar_kelas_transaksi+"</b></b><br>Data : <br>a). Jumlah Pegawai : <b>"+hitung_jml_pegawai_per_kelas[j].cnt+"</b><br>");
-								}
-							}
-						}
-						arr.push("<br>Jumlah Seluruh Pegawai : <b><br>"+rows_jumlah_pegawai[0].jumlah_seluruh_pegawai+"</b>")
-						var arr = JSON.stringify(arr)
-						var arr = arr.replace(/[^a-zA-Z0-9.\s+<>:='_/&#]/g, "")
-						res.send("Jumlah Seluruh pegawai : <br>"+arr+"|"
-										+"|"
-										+"success|"
-										+"1_parameter|"
-										+JSON.stringify(process_chat));
-						return 0;
-				})
-				})
-				})
-				}
-				else if (grup_kosa_kata_final == "0_daftar_kelas_dan_wali_kelas") { // SELURUH KELAS DAN WALI KELAS
+				if (grup_kosa_kata_final == "0_daftar_kelas_dan_wali_kelas") { // SELURUH KELAS DAN WALI KELAS
 					var sql = "SELECT * FROM kelas_transaksi INNER JOIN data_pegawai on kelas_transaksi.nip_pegawai_wali_kelas_transaksi = data_pegawai.nip_pegawai ORDER BY kd_kelas_daftar_kelas_transaksi ASC";
 					connection.query(sql, function  (err_rows,rows){
 					var sql = "SELECT kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan, COUNT(DISTINCT nis_siswa_nilai_siswa_transaksi_smt1_pengetahuan) AS cnt FROM nilai_siswa_transaksi_smt1_pengetahuan GROUP BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ORDER BY kd_kelas_daftar_nilai_siswa_transaksi_smt1_pengetahuan ASC";
@@ -671,40 +599,11 @@ exports.chat_user = function(req,res,next){
 					var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
 						connection.query(sql,function (err_cari_nama_kelas,rows_cari_nama_kelas){
 						if (err_cari_nama_kelas) throw err_cari_nama_kelas;
+						var data_nama = []
 						for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
-							var nama1 = rows_cari_nama_kelas[i].nama_kelas_daftar;
-							var nama4 = nama1.split(" ");
-							var nama2 = new RegExp(nama4[0], 'gi');
-							var match	= parse.match(nama2);
-							if (match !== null) {
-								var parse2 = parse.split(" ");
-								var index = parse2.indexOf(match[0]); //nomor letak array heryani
-								var splice = parse2.splice(index);
-								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-								hps_arr_kosong.push("null");
-							}
-						} // output | [1]
-						// NOT FOUND 3 nama kelas
-						if (index === undefined || index == -1) {
-							res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
-											+"|"
-											+"error|"
-											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
-							return 0;
+							data_nama.push(rows_cari_nama_kelas[i].nama_kelas_daftar)
 						}
-						var arr = [];
-						for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
-							var nama3 = rows_cari_nama_kelas[j].nama_kelas_daftar;
-							for (var k = 0; k < hps_arr_kosong.length; k++) {
-								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-								var regexx  = new RegExp(tt, 'gi');
-								var regexxx = nama3.match(regexx);
-								if (regexxx === null) {
-										hps_arr_kosong.pop();
-										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-										arr.push(nama_fix);
-								} } }
+						var arr = cariNama (pesan, parse, data_nama, process_chat)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
@@ -785,40 +684,11 @@ exports.chat_user = function(req,res,next){
 					var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
 						connection.query(sql,function (err_cari_nama_kelas,rows_cari_nama_kelas){
 						if (err_cari_nama_kelas) throw err_cari_nama_kelas;
+						var data_nama = []
 						for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
-							var nama1 = rows_cari_nama_kelas[i].nama_kelas_daftar;
-							var nama4 = nama1.split(" ");
-							var nama2 = new RegExp(nama4[0], 'gi');
-							var match	= parse.match(nama2);
-							if (match !== null) {
-								var parse2 = parse.split(" ");
-								var index = parse2.indexOf(match[0]); //nomor letak array heryani
-								var splice = parse2.splice(index);
-								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-								hps_arr_kosong.push("null");
-							}
-						} // output | [1]
-						// NOT FOUND 3 nama kelas
-						if (index === undefined || index == -1) {
-							res.send("Mohon maaf, <b>nama kelas</b> yang dicari tidak ditemukan.<br>|"
-											+"|"
-											+"error|"
-											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
-							return 0;
+							data_nama.push(rows_cari_nama_kelas[i].nama_kelas_daftar)
 						}
-						var arr = [];
-						for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
-							var nama3 = rows_cari_nama_kelas[j].nama_kelas_daftar;
-							for (var k = 0; k < hps_arr_kosong.length; k++) {
-								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-								var regexx  = new RegExp(tt, 'gi');
-								var regexxx = nama3.match(regexx);
-								if (regexxx === null) {
-										hps_arr_kosong.pop();
-										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-										arr.push(nama_fix);
-								} } }
+						var arr = cariNama (pesan, parse, data_nama, process_chat)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
@@ -925,40 +795,11 @@ exports.chat_user = function(req,res,next){
 					var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran ORDER BY nama_mata_pelajaran ASC";
 						connection.query(sql,function (err_cari_nama_mapel,rows_cari_nama_mapel){
 						if (err_cari_nama_mapel) throw err_cari_nama_mapel;
+						var data_nama = []
 						for (var i = 0; i < rows_cari_nama_mapel.length; i++) {
-							var nama1 = rows_cari_nama_mapel[i].nama_mata_pelajaran;
-							var nama4 = nama1.split(" ");
-							var nama2 = new RegExp(nama4[0], 'gi');
-							var match	= parse.match(nama2);
-							if (match !== null) {
-								var parse2 = parse.split(" ");
-								var index = parse2.indexOf(match[0]); //nomor letak array heryani
-								var splice = parse2.splice(index);
-								var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-								hps_arr_kosong.push("null");
-							}
-						} // output | [1]
-						// NOT FOUND 3 nama mata pelajaran
-						if (index === undefined || index == -1) {
-							res.send("Mohon maaf, <b>nama mata pelajaran</b> yang dicari tidak ditemukan.<br>|"
-											+"|"
-											+"error|"
-											+"1_parameter_no_clear|"
-											+JSON.stringify(process_chat));
-							return 0;
+							data_nama.push(rows_cari_nama_mapel[i].nama_mata_pelajaran)
 						}
-						var arr = [];
-						for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
-							var nama3 = rows_cari_nama_mapel[j].nama_mata_pelajaran;
-							for (var k = 0; k < hps_arr_kosong.length; k++) {
-								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-								var regexx  = new RegExp(tt, 'gi');
-								var regexxx = nama3.match(regexx);
-								if (regexxx === null) {
-										hps_arr_kosong.pop();
-										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-										arr.push(nama_fix);
-								} } }
+						var arr = cariNama (pesan, parse, data_nama, process_chat)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
@@ -1039,45 +880,12 @@ exports.chat_user = function(req,res,next){
 			else if (grup_kosa_kata_final.endsWith("pegawai")) {
 				var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai ORDER BY nama_pegawai ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
-					if (err_cari_nama) throw err_cari_nama;
-					for (var i = 0; i < rows_cari_nama.length; i++) {
-						var nama1 = rows_cari_nama[i].nama_pegawai;
-						var nama4 = nama1.split(" ");
-						var nama2 = new RegExp(nama4[0], 'gi');
-						var match	= parse.match(nama2);
-						if (match !== null) {
-							var parse2 = parse.split(" ");
-							var index = parse2.indexOf(match[0]); //nomor letak array heryani
-							var splice = parse2.splice(index); // mendeteksi array nama panjang setelah index nama awal heryani
-							var hps_arr_kosong = splice.filter(function(str) {
-								return /\S/.test(str);
-							}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-							var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
-							hps_arr_kosong.push("null");
+						if (err_cari_nama) throw err_cari_nama;
+						var data_nama = []
+						for (var i = 0; i < rows_cari_nama.length; i++) {
+							data_nama.push(rows_cari_nama[i].nama_pegawai)
 						}
-					}
-					// NOT FOUND 3 pegawai
-					if (index === undefined || index == -1) {
-						res.send("Mohon maaf, <b>nama pegawai</b> yang dicari tidak ditemukan.<br>|"
-										+"|"
-										+"error|"
-										+"1_parameter_no_clear|"
-		 							 	+JSON.stringify(process_chat));
-						return 0;
-					}
-					else {
-						var arr = [];
-						for (var j = 0; j < rows_cari_nama.length; j++) {
-							var nama3 = rows_cari_nama[j].nama_pegawai;
-							for (var k = 0; k < hps_arr_kosong.length; k++) {
-								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-								var regexx  = new RegExp(tt, 'gi');
-								var regexxx = nama3.match(regexx);
-								if (regexxx === null) {
-										hps_arr_kosong.pop();
-										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-										arr.push(nama_fix);
-								} } }
+						var arr = cariNama (pesan, parse, data_nama, process_chat)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -1158,53 +966,18 @@ exports.chat_user = function(req,res,next){
 								else {
 								} } }
 								return 0;
-					}
 					});
 				return 0;
 			}
 			else if (grup_kosa_kata_final.endsWith("siswa")) {
 				var sql = "SELECT nama_siswa,jabatan_siswa FROM data_siswa ORDER BY nama_siswa ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
-					if (err_cari_nama) throw err_cari_nama;
-					for (var i = 0; i < rows_cari_nama.length; i++) {
-						var nama1 = rows_cari_nama[i].nama_siswa;
-						var nama4 = nama1.split(" ");
-						var nama2 = new RegExp(nama4[0], 'gi'); //diambil nama depannya (contoh : addisty)
-						var match	= parse.match(nama2);
-						if (match !== null) {
-							var parse2 = parse.split(" ");
-							var index = parse2.indexOf(match[0]); //nomor letak array heryani
-							var splice = parse2.splice(index); //splice atau pemotongan
-							var hps_arr_kosong = splice.filter(function(str) {
-								return /\S/.test(str);
-							}); //fungsi menghapus array yg kosong : BENTUK OBJECT
-							var splice2 = hps_arr_kosong.join().replace(/,/g, ' ');
-							hps_arr_kosong.push("null");
+						if (err_cari_nama) throw err_cari_nama;
+						var data_nama = []
+						for (var i = 0; i < rows_cari_nama.length; i++) {
+							data_nama.push(rows_cari_nama[i].nama_siswa)
 						}
-					} // output | [1]
-
-					// NOT FOUND 3 SISWA
-					if (index === undefined || index == -1) {
-						res.send("Mohon maaf, <b>nama siswa</b> yang dicari tidak ditemukan.<br>|"
-										+"|"
-										+"error|"
-										+"1_parameter_no_clear|"
-		 							 	+JSON.stringify(process_chat));
-						return 0;
-					}
-						var arr = [];
-						for (var j = 0; j < rows_cari_nama.length; j++) {
-							var nama3 = rows_cari_nama[j].nama_siswa;
-							for (var k = 0; k < hps_arr_kosong.length; k++) {
-								var tt = hps_arr_kosong.join().replace(/,/g, ' ');
-								var regexx  = new RegExp(tt, 'gi');
-								var regexxx = nama3.match(regexx);
-								if (regexxx === null) {
-										hps_arr_kosong.pop();
-										var nama_fix	= hps_arr_kosong.join().replace(/,/g, ' ');
-										arr.push(nama_fix);
-								} } } // output | [2]
-
+						var arr = cariNama (pesan, parse, data_nama, process_chat)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -1289,7 +1062,7 @@ exports.chat_user = function(req,res,next){
 		var json =  {
 		              "mata" : [ "mata pencaharian", "mata pelajaran", "mata uang", "mata kail" ]
 		            }
-	  // double words
+	  // double word
 	  var temp1 = []
 	  var temp2 = []
 	  for (var i = 0; i < split.length; i++) {
@@ -1331,7 +1104,7 @@ exports.chat_user = function(req,res,next){
 	              return e.index;
 	            });
 	  var stem = _.orderBy(all, ['index'],['asc']);
-	  // ./double words
+	  // ./double word
 
 		var s = []
 	  for (var i = 0; i < stem.length; i++) {
@@ -1379,15 +1152,30 @@ exports.chat_user = function(req,res,next){
 	return s
 	}
 
-	function stopWords (parsing) {
-		var stopwords = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong","yaitu","yakin","yakni","yang"]
-		var stopwords_finish = parsing.replace(new RegExp('\\b('+stopwords.join('|')+')\\b', 'g'), '');
-		var stopwords_finish = stopwords_finish.split(" ")
-		var stopwords_finish = stopwords_finish.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-		return stopwords_finish
+	function stopWord (parsing) {
+		var stopword = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong", "ya", "yaitu","yakin","yakni","yang"]
+
+		var pertanyaan = parsing.split(" ")
+		var pertanyaan_terstopword = []
+		for (var i = 0; i < pertanyaan.length; i++) {
+		  for (var j = 0; j < stopword.length; j++) {
+		    if (pertanyaan[i].match(RegExp(stopword[j]), "gi") !== null && pertanyaan[i].length == stopword[j].length) {
+		      pertanyaan_terstopword.push(`${pertanyaan[i]}`)
+		    }
+		  }
+		}
+
+		for (var i = 0; i < pertanyaan.length; i++) {
+		  for (var j = 0; j < pertanyaan_terstopword.length; j++) {
+		    remove(pertanyaan, pertanyaan_terstopword[j])
+		  }
+		}
+
+		var stopword_finish = pertanyaan.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
+		return stopword_finish
 	}
 
-	function cariNama (parse, data_nama, process_chat) {
+	function cariNama (pesan, parse, data_nama, process_chat) {
 		for (var i = 0; i < data_nama.length; i++) {
 			var nama1 = data_nama[i];
 			var nama4 = nama1.split(" ");
@@ -1397,10 +1185,14 @@ exports.chat_user = function(req,res,next){
 				var parse2 = parse.split(" ");
 				var index = parse2.indexOf(match[0]); //nomor letak array heryani
 				var splice = parse2.splice(index); //splice atau pemotongan
-				var hps_arr_kosong = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
-				hps_arr_kosong.push("null");
+				var splice_nama_sampai_ketemu = splice.filter(function(str) { return /\S/.test(str); }); //fungsi menghapus array yg kosong : BENTUK OBJECT
+				splice_nama_sampai_ketemu.push("null");
 			}
 		} // output | [1]
+		process_chat.push({
+			process_nama : {"pesan" : [pesan.replace(/"/gi, "")], "parse2" : parse2, "splice" : splice, "splice_nama_sampai_ketemu" : []}
+		})
+
 		if (index === undefined || index == -1) {
 			res.send("Mohon maaf, <b>nama siswa</b> yang dicari tidak ditemukan.<br>|"
 							+"|"
@@ -1409,7 +1201,29 @@ exports.chat_user = function(req,res,next){
 							+JSON.stringify(process_chat));
 			return 0;
 		}
-		return hps_arr_kosong
+
+		var arr = [];
+		for (var j = 0; j < data_nama.length; j++) {
+			var nama3 = data_nama[j];
+			for (var k = 0; k < splice_nama_sampai_ketemu.length; k++) {
+				var tt = splice_nama_sampai_ketemu.join(" ");
+				var regexx  = new RegExp(tt, 'gi');
+				var regexxx = nama3.match(regexx);
+				if (regexxx === null) {
+						splice_nama_sampai_ketemu.pop();
+						var nama_fix	= splice_nama_sampai_ketemu.join(" ")
+						arr.push(nama_fix);
+						process_chat[1].process_nama.splice_nama_sampai_ketemu.push(tt)
+				} } }
+		return arr
+	}
+
+	// hapus element array yang duplikat
+	function remove (array, element) {
+		const index = array.indexOf(element);
+		if (index !== -1) {
+			array.splice(index, 1);
+		}
 	}
 
 };

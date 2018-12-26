@@ -8,7 +8,7 @@
   </ul>
   <div class="container">
     <div class="row">
-      <div class="col s5 m5 l5 xl5">
+      <div class="col s4 m4 l4 xl4">
         <div style="margin-top:30px"> <h5 class="center-align">Aplikasi Chat</h5> </div>
         <div class="row chat-page">
           <div class="col s12">
@@ -32,12 +32,24 @@
           </div>
         </div>
       </div>
-      <div class="col s1 m1 l1 xs1"></div>
-      <div class="col s5 m5 l5 xl5">
+      <div class="col s4 m4 l4 xl4">
         <div style="margin-top:30px"> <h5 class="center-align">Proses Kalimat</h5> </div>
         <div class="row chat-page">
           <div class="col s12">
-            <ul id="process-chat-page-history" class="chat-page-history"></ul>
+            <ul id="process-kalimat-page-history" class="chat-page-history"></ul>
+          </div>
+          <div class="col s12 chat-page-typing-and-sending" style="margin-bottom:-20px">
+            <div class="center-align">
+              <a class="btn-floating btn-medium waves-effect waves-light chat-sending" disabled><i class="small material-icons right">refresh</i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col s4 m4 l4 xl4">
+        <div style="margin-top:30px"> <h5 class="center-align">Proses Nama</h5> </div>
+        <div class="row chat-page">
+          <div class="col s12">
+            <ul id="process-nama-page-history" class="chat-page-history"></ul>
           </div>
           <div class="col s12 chat-page-typing-and-sending" style="margin-bottom:-20px">
             <div class="center-align">
@@ -120,7 +132,7 @@
                   </li>');
                }
                else{
-                 processChat (message, r)
+                  processChat (message, r)
                   $('.chat-sending').addClass('disabled'); //ketika sedang proses chat, tombol send akan disabled
                   var itemCount = ($("[id^='message-']").length + 1);
                   $('#chat-page-history').append('<li id="message-'+itemCount+'" class="receiver"><p class="chat-receiver"><i id="'+message+'" class="large material-icons modal-trigger" href="#modal1" style="color:#b7d0a5;font-size:17px;float:right">announcement</i><br><a style="color:#262626">' + message + '</a></p></li>');
@@ -177,38 +189,62 @@
       }
 
       function processChat (message, r) {
-        $("#process-chat-page-history").empty()
-        $("#process-chat-page-history").animate({
-          scrollTop: $("#process-chat-page-history").position().top
+        $("#process-kalimat-page-history").empty()
+        $("#process-nama-page-history").empty()
+
+        $("#process-kalimat-page-history").animate({
+          scrollTop: $("#process-kalimat-page-history").position().top
         });
-        let process_chat = []
-        // let {stem, json, tempArray, tempMatchPerKata, tempArrayd, fix, totalMatch, max_match_kata, fix2, allKalimat, lowestSplit, qwe} = JSON.parse(r[4])
-        $("#process-chat-page-history").append(`<li class="sender"><p class="chat-sender">Pertanyaan : <b>${message}</b></p></li>`);
-        process_chat.push(`stem : <b>${JSON.stringify(JSON.parse(r[4])[0])}</b>`)
-        process_chat.push(`json : <b>${JSON.stringify(JSON.parse(r[4])[1])}</b>`)
-        process_chat.push(`tempArray : <b>${JSON.stringify(JSON.parse(r[4])[2])}</b>`)
-        process_chat.push(`tempMatchPerKata : <b>${JSON.stringify(JSON.parse(r[4])[3])}</b>`)
-        process_chat.push(`tempArrayd : <b>${JSON.stringify(JSON.parse(r[4])[4])}</b>`)
-        process_chat.push(`fix : <b>${JSON.stringify(JSON.parse(r[4])[5])}</b>`)
-        process_chat.push(`totalMatch : <b>${JSON.stringify(JSON.parse(r[4])[6])}</b>`)
-        process_chat.push(`max_match_kata : <b>${JSON.stringify(JSON.parse(r[4])[7])}</b>`)
-        process_chat.push(`fix2 : <b>${JSON.stringify(JSON.parse(r[4])[8])}</b>`)
-        process_chat.push(`allKalimat : <b>${JSON.stringify(JSON.parse(r[4])[9])}</b>`)
+        $("#process-nama-page-history").animate({
+          scrollTop: $("#process-nama-page-history").position().top
+        });
 
-        if (JSON.stringify(JSON.parse(r[4])[11]) === undefined) {
-          process_chat.push(`lowestSplit : <b>Terdapat Ambigu Pertanyaan</b>`)
-          process_chat.push(`fix3 : <b>Terdapat Ambigu Pertanyaan</b>`)
-        }
-        else {
-          process_chat.push(`lowestSplit : <b>${JSON.stringify(JSON.parse(r[4])[10])}</b>`)
-          process_chat.push(`fix3 : <b>${JSON.stringify(JSON.parse(r[4])[11])}</b>`)
-        }
-        if (JSON.stringify(JSON.parse(r[4])[12]) === undefined) { process_chat.push(`qwe : <b>Terdapat Ambigu Pertanyaan</b>`) }
-        else { process_chat.push(`qwe : <b>${JSON.stringify(JSON.parse(r[4])[12])}</b>`) }
+        // process kalimat (found)
+        var new_process_kalimat = [];
+        var { pesan : pesan, stem: stem, json: json, tempArray: tempArray, tempMatchPerKata: tempMatchPerKata, tempArrayd: tempArrayd, fix: fix, totalMatch: totalMatch, max_match_kata: max_match_kata, fix2: fix2, allKalimat: allKalimat, lowestSplit: lowestSplit, fix3: fix3, qwe: qwe } = JSON.parse(r[4])[0].process_kalimat;
 
-        for (var i = 0; i < process_chat.length; i++) {
+        new_process_kalimat.push(`pesan : <br><br><b>${JSON.stringify(pesan)}</b>`);
+        new_process_kalimat.push(`stem : <br><br><b>${JSON.stringify(stem)}</b>`);
+        new_process_kalimat.push(`json : <br><br><b>${JSON.stringify(json)}</b>`);
+        new_process_kalimat.push(`tempArray : <br><br><b>${JSON.stringify(tempArray)}</b>`);
+        new_process_kalimat.push(`tempMatchPerKata : <br><br><b>${JSON.stringify(tempMatchPerKata)}</b>`);
+        new_process_kalimat.push(`tempArrayd : <br><br><b>${JSON.stringify(tempArrayd)}</b>`);
+        new_process_kalimat.push(`fix : <br><br><b>${JSON.stringify(fix)}</b>`);
+        new_process_kalimat.push(`totalMatch : <br><br><b>${JSON.stringify(totalMatch)}</b>`);
+        new_process_kalimat.push(`max_match_kata : <br><br><b>${JSON.stringify(max_match_kata)}</b>`);
+        new_process_kalimat.push(`fix2 : <br><br><b>${JSON.stringify(fix2)}</b>`);
+        new_process_kalimat.push(`allKalimat : <br><br><b>${JSON.stringify(allKalimat)}</b>`);
+        new_process_kalimat.push(`lowestSplit : <br><br><b>${JSON.stringify(lowestSplit)}</b>`);
+        new_process_kalimat.push(`fix3 : <br><br><b>${JSON.stringify(fix3)}</b>`);
+        new_process_kalimat.push(`Ketemu : <br><br><b>${JSON.stringify(qwe)}</b>`);
+
+        for (var i = 0; i < new_process_kalimat.length; i++) {
           var no = i+1
-          $('#process-chat-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-warning'><b style='color:black'>${no}.</b></a>  ${process_chat[i]}</p></li>`);
+          if (no == 1) {
+            $('#process-kalimat-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-success'><b style='color:black'>${no}.</b></a>  ${new_process_kalimat[i]}</p></li>`);
+          }
+          else {
+            $('#process-kalimat-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-warning'><b style='color:black'>${no}.</b></a>  ${new_process_kalimat[i]}</p></li>`);
+          }
+        }
+
+
+        // deteksi nama (not found)
+        var new_process_nama = []
+        var { pesan: pesan, parse2: parse2, splice: splice, splice_nama_sampai_ketemu: splice_nama_sampai_ketemu } = JSON.parse(r[4])[1].process_nama;
+        console.log(JSON.parse(r[4])[1].process_nama);
+        new_process_nama.push(`pesan : <br><br><b>${JSON.stringify(pesan)}</b>`);
+        new_process_nama.push(`parse2 : <br><br><b>${JSON.stringify(parse2)}</b>`);
+        new_process_nama.push(`splice : <br><br><b>${JSON.stringify(splice)}</b>`);
+        new_process_nama.push(`splice_nama_sampai_ketemu : <br><br><b>${JSON.stringify(splice_nama_sampai_ketemu)}</b>`);
+        for (var i = 0; i < new_process_nama.length; i++) {
+          var no = i+1
+          if (no == 1) {
+            $('#process-nama-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-success'><b style='color:black'>${no}.</b></a>  ${new_process_nama[i]}</p></li>`);
+          }
+          else {
+            $('#process-nama-page-history').append(`<li class="sender"><p class="chat-sender"><a class='code label label-warning'><b style='color:black'>${no}.</b></a>  ${new_process_nama[i]}</p></li>`);
+          }
         }
       }
 

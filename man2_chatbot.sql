@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2018 at 01:37 AM
+-- Generation Time: Dec 26, 2018 at 07:09 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -2111,6 +2111,7 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
   `id_pesan_chat_bot_kosa_kata` int(11) NOT NULL,
   `kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
   `grup_kosa_kata_pesan_chat_bot_kosa_kata` varchar(50) NOT NULL,
+  `active_kosa_kata_pesan_chat_bot_kosa_kata` enum('0','1') NOT NULL,
   `chat_privilege_kosa_kata` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -2118,35 +2119,33 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
 -- Dumping data for table `pesan_chat_bot_kosa_kata`
 --
 
-INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kata_pesan_chat_bot_kosa_kata`, `grup_kosa_kata_pesan_chat_bot_kosa_kata`, `chat_privilege_kosa_kata`) VALUES
-(326, 'nama lengkap pegawai', 'nama_pegawai', 'pegawai,siswa'),
-(327, 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', 'pegawai,siswa'),
-(328, 'alamat rumah pegawai', 'alamat_pegawai', 'pegawai,siswa'),
-(329, 'nomor telepon pegawai', 'no_handphone_pegawai', 'pegawai,siswa'),
-(330, 'nomor induk pegawai', 'nip_pegawai', 'pegawai,siswa'),
-(331, 'nomor telepon siswa', 'no_handphone_siswa', 'pegawai,siswa'),
-(332, 'nomor induk siswa', 'nis_siswa', 'pegawai,siswa'),
-(334, 'alamat rumah siswa', 'alamat_siswa', 'pegawai,siswa'),
-(335, 'tempat lahir siswa', 'tempat_lahir_siswa', 'pegawai,siswa'),
-(336, 'tanggal lahir siswa', 'tanggal_lahir_siswa', 'pegawai,siswa'),
-(337, 'nama ayah siswa', 'orangtua_nama_ayah_siswa', 'pegawai,siswa'),
-(338, 'nama ibu siswa', 'orangtua_nama_ibu_siswa', 'pegawai,siswa'),
-(339, 'alamat orangtua siswa', 'orangtua_alamat_siswa', 'pegawai,siswa'),
-(341, 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', 'pegawai,siswa'),
-(342, 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', 'pegawai,siswa'),
-(343, 'nama wali siswa', 'nama_wali_siswa', 'pegawai,siswa'),
-(344, 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', 'pegawai,siswa'),
-(345, 'alamat wali siswa', 'alamat_wali_siswa', 'pegawai,siswa'),
-(347, 'detail pembayaran', '0_detail_pembayaran', 'siswa'),
-(349, 'jumlah siswa', '0_jumlah_siswa', 'pegawai,siswa'),
-(350, 'jumlah pegawai', '0_jumlah_pegawai', 'pegawai,siswa'),
-(351, 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', 'pegawai,siswa'),
-(353, 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', 'pegawai,siswa'),
-(354, 'nama lengkap siswa', 'nama_siswa', 'pegawai,siswa'),
-(355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', 'pegawai,siswa'),
-(356, 'nomor induk nasional siswa', 'nisn_siswa', 'pegawai,siswa'),
-(358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', 'pegawai,siswa'),
-(359, 'nomor telepon orangtua siswa', 'orangtua_telepon_siswa', 'pegawai,siswa');
+INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kata_pesan_chat_bot_kosa_kata`, `grup_kosa_kata_pesan_chat_bot_kosa_kata`, `active_kosa_kata_pesan_chat_bot_kosa_kata`, `chat_privilege_kosa_kata`) VALUES
+(326, 'nama lengkap pegawai', 'nama_pegawai', '0', 'pegawai,siswa'),
+(327, 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', '0', 'pegawai,siswa'),
+(328, 'alamat rumah pegawai', 'alamat_pegawai', '0', 'pegawai,siswa'),
+(329, 'nomor telepon pegawai', 'no_handphone_pegawai', '1', 'pegawai,siswa'),
+(330, 'nomor induk pegawai', 'nip_pegawai', '0', 'pegawai,siswa'),
+(331, 'nomor telepon siswa', 'no_handphone_siswa', '1', 'pegawai,siswa'),
+(332, 'nomor induk siswa', 'nis_siswa', '0', 'pegawai,siswa'),
+(334, 'alamat rumah siswa', 'alamat_siswa', '0', 'pegawai,siswa'),
+(335, 'tempat lahir siswa', 'tempat_lahir_siswa', '0', 'pegawai,siswa'),
+(336, 'tanggal lahir siswa', 'tanggal_lahir_siswa', '0', 'pegawai,siswa'),
+(337, 'nama ayah siswa', 'orangtua_nama_ayah_siswa', '0', 'pegawai,siswa'),
+(338, 'nama ibu siswa', 'orangtua_nama_ibu_siswa', '0', 'pegawai,siswa'),
+(339, 'alamat orangtua siswa', 'orangtua_alamat_siswa', '0', 'pegawai,siswa'),
+(341, 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', '0', 'pegawai,siswa'),
+(342, 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', '0', 'pegawai,siswa'),
+(343, 'nama wali siswa', 'nama_wali_siswa', '0', 'pegawai,siswa'),
+(344, 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', '0', 'pegawai,siswa'),
+(345, 'alamat wali siswa', 'alamat_wali_siswa', '0', 'pegawai,siswa'),
+(347, 'detail pembayaran siswa', '0_detail_pembayaran', '1', 'siswa'),
+(351, 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', '1', 'pegawai,siswa'),
+(353, 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', '1', 'pegawai,siswa'),
+(354, 'nama lengkap siswa', 'nama_siswa', '1', 'pegawai,siswa'),
+(355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', '1', 'pegawai,siswa'),
+(356, 'nomor induk nasional siswa', 'nisn_siswa', '0', 'pegawai,siswa'),
+(358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', '1', 'pegawai,siswa'),
+(359, 'nomor telepon orangtua siswa', 'orangtua_telepon_siswa', '1', 'pegawai,siswa');
 
 -- --------------------------------------------------------
 
@@ -2210,6 +2209,13 @@ CREATE TABLE `verifikasi_password` (
   `jam_verifikasi_verifikasi_password_baru` time DEFAULT NULL,
   `status_verifikasi_password_baru` enum('N','Y') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `verifikasi_password`
+--
+
+INSERT INTO `verifikasi_password` (`id_verifikasi_password_baru`, `username_verifikasi_password_baru`, `password_baru_verifikasi_password_baru`, `jabatan_verifikasi_password_baru`, `tanggal_ganti_verifikasi_password_baru`, `jam_ganti_verifikasi_password_baru`, `tanggal_verifikasi_verifikasi_password_baru`, `jam_verifikasi_verifikasi_password_baru`, `status_verifikasi_password_baru`) VALUES
+(1, '195811111179031002', 'asd', 'pegawai', '2018-12-13', '23:15:19', NULL, NULL, 'N');
 
 --
 -- Indexes for dumped tables
@@ -2401,7 +2407,7 @@ ALTER TABLE `pesan_chat_bot_kosa_kata_suggest`
 -- AUTO_INCREMENT for table `verifikasi_password`
 --
 ALTER TABLE `verifikasi_password`
-  MODIFY `id_verifikasi_password_baru` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_verifikasi_password_baru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
