@@ -36,7 +36,11 @@ exports.login_siswa = function(req, res){
 						var hash = password_siswa;
 						var hash = hash.replace(/^\$2y(.+)$/i, '$2a$1');
 						bcrypt.compare(password, hash, function(error_bcrypt, result_bcrypt) {
-							if (error_bcrypt) throw error_bcrypt;
+							if (error_bcrypt) {
+								// throw error_bcrypt;
+								req.flash('error_login_siswa', 'Terjadi kesalahan pada Username atau Password')
+								res.redirect('/')
+							}
 							console.log(result_bcrypt);
 						    if (result_bcrypt == true) {
 									req.session.userId = result[0].nis_siswa;

@@ -21,8 +21,8 @@
                 <div class="col s9 m9 l9 xl9 input-field">
                   <i class="material-icons prefix">textsms</i>
                   <input class="form-control input-send-message" name="pengirim_pesan_chat_pengguna" id="pengirim_pesan_chat_pengguna" type="hidden" value="<%=session%>">
-                  <input type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?">
-                  <input type="hidden" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
+                  <input type="text" class="chat-typing browser-default" name="isi_pesan_chat_pengguna" placeholder="Tanya sesuatu?" value="">
+                  <input type="text" name="isi_pesan_chat_pengguna_choose" class="chat-typing-choose">
                 </div>
                 <div class="col s2 m2 l2 xl2">
                   <a class="btn-floating btn-medium waves-effect waves-light chat-sending"><i class="small material-icons right">send</i></a>
@@ -228,11 +228,13 @@
           }
         }
 
-
+        if (JSON.parse(r[4])[1] == undefined) {
+            $('#process-nama-page-history').append(`<li class="sender"><p class="chat-sender"><b style='color:black'>Parameter nama tidak dibutuhkan</b></p></li>`);
+            return 0
+        }
         // deteksi nama (not found)
         var new_process_nama = []
         var { pesan: pesan, parse2: parse2, splice: splice, splice_nama_sampai_ketemu: splice_nama_sampai_ketemu } = JSON.parse(r[4])[1].process_nama;
-        console.log(JSON.parse(r[4])[1].process_nama);
         new_process_nama.push(`pesan : <br><br><b>${JSON.stringify(pesan)}</b>`);
         new_process_nama.push(`parse2 : <br><br><b>${JSON.stringify(parse2)}</b>`);
         new_process_nama.push(`splice : <br><br><b>${JSON.stringify(splice)}</b>`);

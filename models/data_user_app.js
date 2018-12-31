@@ -152,19 +152,13 @@ exports.chat_user = function(req,res,next){
 		var parsing	= JSON.parse(parse0);
 
 		if (data.isi_pesan_chat_pengguna_choose.length >= 1) {
-			var process_chat = "Duplikasi Nama"
-			if (data.isi_pesan_chat_pengguna.match(/^([a-zA-Z\D]|\d\w|\d.+\w|\d\D|\d.+\D)/g)) {
-				res.send("Pilihan Tidak Tersedia.</b>|"
-							 +"|"
-							 +"error|"
-							 +"1_parameter|"
-							 +JSON.stringify(process_chat));
-				return 0
-			}
-			var data = data.isi_pesan_chat_pengguna_choose+data.isi_pesan_chat_pengguna;
-			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', '1' ]
-			var offset = data[4]-1;
+			var data = data.isi_pesan_chat_pengguna_choose;
+			var data = data.split(">") // [ 'nama_pegawai', 'pegawai', 'NUR', '2', 'process chat' ]
+			var pilihan_duplikat = input.isi_pesan_chat_pengguna;
+			var process_chat = JSON.parse(data[4]);
+			var offset = pilihan_duplikat-1;
 			var grup =	data[0]; // grup kosa kata
+
 			if (data[1] == "pegawai") {
 				if (grup == "nama_mata_pelajaran_pegawai") {
 					var grup	=	grup.replace(/_pegawai/gi, "");
@@ -179,7 +173,7 @@ exports.chat_user = function(req,res,next){
 									 +"1_parameter|"
 									 +JSON.stringify(process_chat));
 					}
-				  else if (data[3] < data[4] || data[4] == 0) {
+				  else if (data[3] < pilihan_duplikat || data[4] == 0) {
 				    res.send("Keluar dari pilihan.</b>|"
 				           +"|"
 				           +"success|"
@@ -212,7 +206,7 @@ exports.chat_user = function(req,res,next){
 									 +JSON.stringify(process_chat));
 						return 0;
 					}
-					else if (data[3] < data[4] || data[4] == 0) {
+					else if (data[3] < pilihan_duplikat || data[4] == 0) {
 						res.send("Keluar dari pilihan.</b>|"
 									 +"|"
 									 +"success|"
@@ -259,7 +253,7 @@ exports.chat_user = function(req,res,next){
 									 +JSON.stringify(process_chat));
 						return 0;
 					}
-					else if (data[3] < data[4] || data[4] == 0 || rows.length == 0) {
+					else if (data[3] < pilihan_duplikat || data[4] == 0 || rows.length == 0) {
 						res.send("Keluar dari pilihan.</b>|"
 									 +"|"
 									 +"success|"
@@ -315,7 +309,7 @@ exports.chat_user = function(req,res,next){
 										 +JSON.stringify(process_chat));
 							return 0;
 						}
-						else if (data[3] < data[4] || data[4] == 0 || rows.length == 0) {
+						else if (data[3] < pilihan_duplikat || data[4] == 0 || rows.length == 0) {
 							res.send("Keluar dari pilihan.</b>|"
 										 +"|"
 										 +"success|"
@@ -465,7 +459,7 @@ exports.chat_user = function(req,res,next){
 							process_chat.push({
 								process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
 							})
-							res.send("Mohon maaf, maksud dari pertanyaan <b>"+pesan+"</b> apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+							res.send("<a class='code label label-warning'>Kode : <b style='color:black'>str01</b></a><br><br>Mohon maaf, maksud dari pertanyaan <b>"+pesan+"</b> apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 							+"|"
 							+"error|"
 							+"1_parameter|"
@@ -596,6 +590,7 @@ exports.chat_user = function(req,res,next){
 					})
 				}
 				else if (grup_kosa_kata_final == "0_daftar_nama_seluruh_siswa_kelas") {
+					var type = grup_kosa_kata_final.match(/kelas/gi)[0]
 					var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
 						connection.query(sql,function (err_cari_nama_kelas,rows_cari_nama_kelas){
 						if (err_cari_nama_kelas) throw err_cari_nama_kelas;
@@ -603,7 +598,7 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
 							data_nama.push(rows_cari_nama_kelas[i].nama_kelas_daftar)
 						}
-						var arr = cariNama (pesan, parse, data_nama, process_chat)
+						var arr = cariNama (pesan, parse, data_nama, process_chat, type)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
@@ -668,7 +663,7 @@ exports.chat_user = function(req,res,next){
 																		+"success|"
 																		+"duplicate_name|"
 																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
+																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas+'>'+JSON.stringify(process_chat));
 													})
 													return 0;
 											}
@@ -680,7 +675,8 @@ exports.chat_user = function(req,res,next){
 						});
 					return 0;
 				}
-				else if (grup_kosa_kata_final == "0_daftar_pengampu_kelas") { //SELURUH MATA PELAJARAN PER KELAS DAN PENGAMPUNYA
+				else if (grup_kosa_kata_final == "0_daftar_pengampu_kelas") {
+					var type = grup_kosa_kata_final.match(/kelas/gi)[0]
 					var sql = "SELECT nama_kelas_daftar FROM kelas_daftar ORDER BY nama_kelas_daftar ASC";
 						connection.query(sql,function (err_cari_nama_kelas,rows_cari_nama_kelas){
 						if (err_cari_nama_kelas) throw err_cari_nama_kelas;
@@ -688,7 +684,7 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows_cari_nama_kelas.length; i++) {
 							data_nama.push(rows_cari_nama_kelas[i].nama_kelas_daftar)
 						}
-						var arr = cariNama (pesan, parse, data_nama, process_chat)
+						var arr = cariNama (pesan, parse, data_nama, process_chat, type)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_kelas.length; j++) {
@@ -755,7 +751,7 @@ exports.chat_user = function(req,res,next){
 																		+"success|"
 																		+"duplicate_name|"
 																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas);
+																		+grup_kosa_kata_final+'>kelas>'+regex6[0]+'>'+count_nama_kelas+'>'+JSON.stringify(process_chat));
 													})
 													return 0;
 											}
@@ -791,7 +787,8 @@ exports.chat_user = function(req,res,next){
 					return 0;
 				})
 				}
-				else if (grup_kosa_kata_final == "0_daftar_pengampu_mapel") { // Jika yang dicari daftar seluruh pengampu Contoh : Bahasa Indonesia
+				else if (grup_kosa_kata_final == "0_daftar_pengampu_mapel") {
+					var type = grup_kosa_kata_final.match(/mapel/gi)[0]
 					var sql = "SELECT nama_mata_pelajaran FROM mata_pelajaran ORDER BY nama_mata_pelajaran ASC";
 						connection.query(sql,function (err_cari_nama_mapel,rows_cari_nama_mapel){
 						if (err_cari_nama_mapel) throw err_cari_nama_mapel;
@@ -799,7 +796,7 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows_cari_nama_mapel.length; i++) {
 							data_nama.push(rows_cari_nama_mapel[i].nama_mata_pelajaran)
 						}
-						var arr = cariNama (pesan, parse, data_nama, process_chat)
+						var arr = cariNama (pesan, parse, data_nama, process_chat, type)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama_mapel.length; j++) {
@@ -864,7 +861,7 @@ exports.chat_user = function(req,res,next){
 																		+"success|"
 																		+"duplicate_name|"
 																		+JSON.stringify(process_chat)+"|"
-																		+grup_kosa_kata_final+'>mapel>'+regex6[0]+'>'+count_nama_mapel);
+																		+grup_kosa_kata_final+'>mapel>'+regex6[0]+'>'+count_nama_mapel+'>'+JSON.stringify(process_chat));
 													})
 													return 0;
 											}
@@ -878,6 +875,7 @@ exports.chat_user = function(req,res,next){
 				}
 			}
 			else if (grup_kosa_kata_final.endsWith("pegawai")) {
+				var type = grup_kosa_kata_final.match(/pegawai/gi)[0]
 				var sql = "SELECT nama_pegawai,jabatan_pegawai FROM data_pegawai ORDER BY nama_pegawai ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
 						if (err_cari_nama) throw err_cari_nama;
@@ -885,7 +883,7 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows_cari_nama.length; i++) {
 							data_nama.push(rows_cari_nama[i].nama_pegawai)
 						}
-						var arr = cariNama (pesan, parse, data_nama, process_chat)
+						var arr = cariNama (pesan, parse, data_nama, process_chat, type)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -956,7 +954,7 @@ exports.chat_user = function(req,res,next){
 																	+"success|"
 																	+"duplicate_name|"
 																	+JSON.stringify(process_chat)+"|"
-																	+grup_kosa_kata_final+'>pegawai>'+regex6[0]+'>'+count_pegawai);
+																	+grup_kosa_kata_final+'>pegawai>'+regex6[0]+'>'+count_pegawai+'>'+JSON.stringify(process_chat));
 												})
 											}
 										});
@@ -970,6 +968,7 @@ exports.chat_user = function(req,res,next){
 				return 0;
 			}
 			else if (grup_kosa_kata_final.endsWith("siswa")) {
+				var type = grup_kosa_kata_final.match(/siswa/gi)[0]
 				var sql = "SELECT nama_siswa,jabatan_siswa FROM data_siswa ORDER BY nama_siswa ASC";
 					connection.query(sql,function (err_cari_nama,rows_cari_nama){
 						if (err_cari_nama) throw err_cari_nama;
@@ -977,7 +976,7 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows_cari_nama.length; i++) {
 							data_nama.push(rows_cari_nama[i].nama_siswa)
 						}
-						var arr = cariNama (pesan, parse, data_nama, process_chat)
+						var arr = cariNama (pesan, parse, data_nama, process_chat, type)
 						for (var i = 0; i < arr.length; i++) {
 							var nama_fix2 = arr[i];
 							for (var j = 0; j < rows_cari_nama.length; j++) {
@@ -1045,7 +1044,7 @@ exports.chat_user = function(req,res,next){
 																	+"success|"
 																	+"duplicate_name|"
 																	+JSON.stringify(process_chat)+"|"
-																	+grup_kosa_kata_final+'>siswa>'+regex6[0]+'>'+count_siswa);
+																	+grup_kosa_kata_final+'>siswa>'+regex6[0]+'>'+count_siswa+'>'+JSON.stringify(process_chat));
 												})
 											}
 										});
@@ -1153,7 +1152,7 @@ exports.chat_user = function(req,res,next){
 	}
 
 	function stopWord (parsing) {
-		var stopword = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong", "ya", "yaitu","yakin","yakni","yang"]
+		var stopword = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong", "ya", "yaitu","yakin","yakni","yang","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","ab","ac","ad","af","ag","ah","aj","ak","al","am","an","ap","aq","ar","as","at","av","aw","ax","ay","az","ib","ic","id","if","ig","ih","ij","ik","il","im","in","ip","iq","ir","is","it","iv","iw","ix","iy","iz","ub","uc","ud","uf","ug","uh","uj","uk","ul","um","un","up","uq","ur","us","ut","uv","uw","ux","uy","uz","eb","ec","ed","ef","eg","eh","ej","ek","el","em","en","ep","eq","er","es","et","ev","ew","ex","ey","ez","ob","oc","od","of","og","oh","oj","ok","ol","om","on","op","oq","or","os","ot","ov","ow","ox","oy","ozba","ca","da","fa","ga","ha","ja","ka","la","ma","na","pa","qa","ra","sa","ta","va","wa","xa","ya","za","bi","ci","di","fi","gi","hi","ji","ki","li","mi","ni","pi","qi","ri","si","ti","vi","wi","xi","yi","zi","bu","cu","du","fu","gu","hu","ju","ku","lu","mu","nu","pu","qu","ru","su","tu","vu","wu","xu","yu","zu","be","ce","de","fe","ge","he","je","ke","le","me","ne","pe","qe","re","se","te","ve","we","xe","ye","ze","bo","co","do","fo","go","ho","jo","ko","lo","mo","no","po","qo","ro","so","to","vo","wo","xo","yo","zo"]
 
 		var pertanyaan = parsing.split(" ")
 		var pertanyaan_terstopword = []
@@ -1175,7 +1174,7 @@ exports.chat_user = function(req,res,next){
 		return stopword_finish
 	}
 
-	function cariNama (pesan, parse, data_nama, process_chat) {
+	function cariNama (pesan, parse, data_nama, process_chat, type) {
 		for (var i = 0; i < data_nama.length; i++) {
 			var nama1 = data_nama[i];
 			var nama4 = nama1.split(" ");
@@ -1194,7 +1193,7 @@ exports.chat_user = function(req,res,next){
 		})
 
 		if (index === undefined || index == -1) {
-			res.send("Mohon maaf, <b>nama siswa</b> yang dicari tidak ditemukan.<br>|"
+			res.send("Mohon maaf, <b>nama "+type+"</b> yang dicari tidak ditemukan.<br>|"
 							+"|"
 							+"error|"
 							+"1_parameter_no_clear|"
