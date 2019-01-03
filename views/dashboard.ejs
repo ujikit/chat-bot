@@ -236,8 +236,8 @@
         var new_process_nama = []
         var { pesan: pesan, parse2: parse2, splice: splice, splice_nama_sampai_ketemu: splice_nama_sampai_ketemu } = JSON.parse(r[4])[1].process_nama;
         new_process_nama.push(`pesan : <br><br><b>${JSON.stringify(pesan)}</b>`);
-        new_process_nama.push(`parse2 : <br><br><b>${JSON.stringify(parse2)}</b>`);
-        new_process_nama.push(`splice : <br><br><b>${JSON.stringify(splice)}</b>`);
+        new_process_nama.push(`Potongan 1 (parse2) : <br><br><b>${JSON.stringify(parse2)}</b>`);
+        new_process_nama.push(`Potongan 2 (splice) : <br><br><b>${JSON.stringify(splice)}</b>`);
         new_process_nama.push(`splice_nama_sampai_ketemu : <br><br><b>${JSON.stringify(splice_nama_sampai_ketemu)}</b>`);
         for (var i = 0; i < new_process_nama.length; i++) {
           var no = i+1
