@@ -19,26 +19,26 @@ var connection = mysql.createConnection({
 
 // VIEWS
 exports.dashboard_user = function(req, res){
-	// var userId = req.session.userId;
-	// if(userId == null){ res.redirect("/"); return 0; }
-	// if (req.session.jabatan == "siswa") {
-	// 	var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
-	// 	connection.query(sql, function  (err_final,rows){
-	// 		if (err_final) throw err_final
-	// 		res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
-	// 	})
-	// }
-	// else if (req.session.jabatan == "pegawai") {
-	// 	var sql = "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
-	// 	connection.query(sql, function  (err_final,rows){
-	// 		res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
-	// 	})
-	// }
+	var userId = req.session.userId;
+	if(userId == null){ res.redirect("/"); return 0; }
+	if (req.session.jabatan == "siswa") {
+		var sql = "SELECT * FROM data_siswa WHERE nis_siswa='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+			if (err_final) throw err_final
+			res.render('dashboard.ejs',{session:rows[0].nis_siswa, jabatan:rows[0].jabatan_siswa, nama_pengguna:rows[0].nama_siswa});
+		})
+	}
+	else if (req.session.jabatan == "pegawai") {
+		var sql = "SELECT * FROM data_pegawai WHERE nip_pegawai='"+userId+"'"; //userID
+		connection.query(sql, function  (err_final,rows){
+			res.render('dashboard.ejs',{session:rows[0].nip_pegawai, jabatan:rows[0].jabatan_pegawai, nama_pengguna:rows[0].nama_pegawai});
+		})
+	}
   // development
-	var nis_siswa = "10888"
-	var jabatan_siswa = "siswa"
-	var nama_siswa = "fauzi"
-	res.render('dashboard.ejs',{session:nis_siswa, jabatan:jabatan_siswa, nama_pengguna:nama_siswa});
+	// var nis_siswa = "10888"
+	// var jabatan_siswa = "siswa"
+	// var nama_siswa = "fauzi"
+	// res.render('dashboard.ejs',{session:nis_siswa, jabatan:jabatan_siswa, nama_pengguna:nama_siswa});
 };
 exports.dashboard_tutorial_video = function(req, res){
 	var userId = req.session.userId;
@@ -87,7 +87,7 @@ exports.dashboard_tutorial_video_cari = function(req, res){
 				<div class="col s12 l4">\
 					<p style="font-size:20px;color:#262626;"><b>'+no+'. '+rows_cari_video[i].nama_tutorial_chatbot_video.substring(0, 21)+'</b></p>\
 					<video class="responsive-video" controls>\
-						<source src="http://192.168.1.129:8888/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
+						<source src="http://localhost:8888/media/video_tutorial/'+rows_cari_video[i].kd_tutorial_chatbot_video+'.mp4" type="video/mp4">\
 					</video>\
 				</div>\
 				');
@@ -187,7 +187,7 @@ exports.chat_user = function(req,res,next){
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
 
-				    res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				    res.send("<img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
 				            +"2_parameters|"
@@ -229,7 +229,7 @@ exports.chat_user = function(req,res,next){
 							return false
 						}
 						else {
-							res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
 							+"2_parameters|"
@@ -415,12 +415,13 @@ exports.chat_user = function(req,res,next){
 						for (var i = 0; i < rows.length; i++) {
 							data.push(rows[i].kosa_kata_pesan_chat_bot_kosa_kata)
 						}
+						// data = ["nomor telepon pegawai","nomor telepon siswa", "daftar pengampu mata pelajaran kelas", "nama lengkap siswa", "detail pembayaran siswa"]
 						var json = []
 						for (var i = 0; i < stem.length; i++) {
 						  var regex = new RegExp(stem[i],"gi")
 						  for (var j = 0; j < data.length; j++) {
 						    var asd = data[j].match(regex)
-								// console.log(j+". "+asd+" == "+data[j]);
+							// json.push(j+". "+asd+" == "+data[j]);
 						    if (asd !== null) { var d = 1 }
 						    else { var d = 0 }
 						    json.push(d)
@@ -458,7 +459,7 @@ exports.chat_user = function(req,res,next){
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
-						if (max_match_kata == 0 || parsing.length == 1) {
+						if (max_match_kata == 0 || max_match_kata == 1 || parsing.length == 1) {
 							process_chat.push({
 								process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
 							})
@@ -930,7 +931,7 @@ exports.chat_user = function(req,res,next){
 														return false
 													}
 													else {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters|"
@@ -947,7 +948,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nip_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
+														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
 													}
 													nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nip_baru = JSON.stringify(nama_nip_baru)
@@ -1012,7 +1013,7 @@ exports.chat_user = function(req,res,next){
 													} // ./READONLY
 													// DATA KOSONG SISWA
 													if (final == "null" || final == "") {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																		+"Mohon maaf, data yang kamu minta masih kosong.|"
 																		+"error|"
 																		+"2_parameters|"
@@ -1020,7 +1021,7 @@ exports.chat_user = function(req,res,next){
 														return false
 													}
 													else {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters|"
@@ -1037,7 +1038,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nis_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 													}
 													nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nis_baru = JSON.stringify(nama_nis_baru)
@@ -1112,8 +1113,8 @@ exports.chat_user = function(req,res,next){
 	  for (var i = 0; i < stem.length; i++) {
 	    if (stem[i].visible == "0") {
 	      // prefiks
-	      if (stem[i].word.startsWith("peng") || stem[i].word.startsWith("meng")) {
-	        var l = stem[i].word.replace(/peng|meng/gi, "")
+	      if (stem[i].word.startsWith("peng") || stem[i].word.startsWith("meng") || stem[i].word.startsWith("ber")) {
+	        var l = stem[i].word.replace(/peng|meng|ber/gi, "")
 	        s.push(l)
 	      }
 	      // ./prefiks

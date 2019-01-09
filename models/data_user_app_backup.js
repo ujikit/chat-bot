@@ -189,7 +189,7 @@ exports.chat_user = function(req,res,next){
 				    var rows_s = rows_s[1].replace(/[^a-zA-Z0-9\s']/gi, "");
 				    var rows_s = rows_s.replace(/nippegawai/gi, "");
 
-				    res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+				    res.send("<img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 				            +rows_s+"|"
 				            +"success|"
 				            +"2_parameters");
@@ -227,7 +227,7 @@ exports.chat_user = function(req,res,next){
 							return false
 						}
 						else {
-							res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+							res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 							+rows_s+"|"
 							+"success|"
 							+"2_parameters");
@@ -1066,7 +1066,7 @@ exports.chat_user = function(req,res,next){
 														return false
 													}
 													else {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[0].nip_pegawai+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters");
@@ -1082,7 +1082,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nip_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
+														nama_nip_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_pegawai+"<br><img src='http://localhost:80/man2/frontend/img/foto/pegawai/"+rows[i].nip_pegawai+"' style='width:70px'></img>")
 													}
 													nama_nip_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nip_baru = JSON.stringify(nama_nip_baru)
@@ -1189,14 +1189,14 @@ exports.chat_user = function(req,res,next){
 													} // ./READONLY
 													// DATA KOSONG SISWA
 													if (final == "null" || final == "") {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 																		+"Mohon maaf, data yang kamu minta masih kosong.|"
 																		+"error|"
 																		+"2_parameters");
 														return false
 													}
 													else {
-														res.send("<img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
+														res.send("<img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[0].nis_siswa+"' style='width:170px'></img>|"
 														+final+"|"
 														+"success|"
 														+"2_parameters");
@@ -1212,7 +1212,7 @@ exports.chat_user = function(req,res,next){
 													var nama_nis_baru = []
 													for (var i = 0; i < rows.length; i++) {
 														var j = i+1;
-														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://192.168.1.129/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
+														nama_nis_baru.push("<br><b>"+j+"</b>. "+rows[i].nama_siswa+"<br><img src='http://localhost:80/man2/frontend/img/foto/siswa/"+rows[i].nis_siswa+"' style='width:70px'></img>")
 													}
 													nama_nis_baru.push("<br><b>"+(j+1)+"</b> > lebih. <b>Keluar<b><br><br><a class='code label label-warning'>Kode : <b style='color:black'>srn02</b></a>")
 													var nama_nis_baru = JSON.stringify(nama_nis_baru)
