@@ -1,5 +1,7 @@
 var fs = require("fs")
-var data = ["nama lengkap pegawai","jenis kelamin pegawai","alamat rumah pegawai","nomor telepon pegawai","nomor induk pegawai","nomor telepon siswa","nomor induk siswa","alamat rumah siswa","tempat lahir siswa","tanggal lahir siswa","nama ayah siswa","nama ibu siswa","alamat orangtua siswa","pekerjaan ayah siswa","pekerjaan ibu siswa","nama wali siswa","pekerjaan wali siswa","alamat wali siswa","detail pembayaran siswa","daftar pengampu mata pelajaran kelas","daftar nama siswa kelas","nama lengkap siswa","daftar kelas dan wali kelas","nomor induk nasional siswa","daftar pengampu mata pelajaran","nomor telepon orangtua siswa"]
+// var data = ["nama lengkap pegawai","jenis kelamin pegawai","alamat rumah pegawai","nomor telepon pegawai","nomor induk pegawai","nomor telepon siswa","nomor induk siswa","alamat rumah siswa","tempat lahir siswa","tanggal lahir siswa","nama ayah siswa","nama ibu siswa","alamat orangtua siswa","pekerjaan ayah siswa","pekerjaan ibu siswa","nama wali siswa","pekerjaan wali siswa","alamat wali siswa","detail pembayaran siswa","daftar pengampu mata pelajaran kelas","daftar nama siswa kelas","nama lengkap siswa","daftar kelas dan wali kelas","nomor induk nasional siswa","daftar pengampu mata pelajaran","nomor telepon orangtua siswa"]
+var datas = fs.readFileSync("../_pendadaran/stopwords-id.json", "utf8")
+var data = JSON.parse(datas)
 
 var data_baru = []
 for (var i = 0; i < data.length; i++) {
@@ -16,23 +18,22 @@ for (var i = 0; i < data_baru.length; i++) {
     words.push(data_baru[i][j])
   }
 }
+ss = words.filter(function(item, pos) {
+  return words.indexOf(item) == pos;
+})
 
 uniqueWord = words.filter(function(item, pos) {
   return words.indexOf(item) == pos;
 })
 
-// var uniqueWord = ["tes", "hoya"]
 var possible = {}
 for (var i = 0; i < uniqueWord.length; i++) {
   var word = uniqueWord[i]
   var permutation = getPermutations(word);
   var result = process(word, permutation)
   possible[uniqueWord[i]] = result;
-  return 0
-  fs.writeFileSync("data.json", JSON.stringify(possible))
+  fs.writeFileSync("../_pendadaran/correction.json", JSON.stringify(possible)) //FINAL tuis semua correction kata pada file khusus
 }
-var tes = fs.readFileSync("data.json")
-console.log(tes.root.length);
 
 function getPermutations(string) {
   var results = [];
@@ -62,11 +63,8 @@ function process (string, permutation) {
       news.push(permutation[i])
     }
   }
-  return news
+  ss = news.filter(function(item, pos) {
+    return news.indexOf(item) == pos;
+  })
+  return ss
 }
-
-// output
-// {
-//   "tes":["tes","tse"],
-//   "hoya":["hoya","hoay","hyoa","hyao","haoy","hayo","ohya","ohay","oyha","oyah","oahy","oayh"]
-// }

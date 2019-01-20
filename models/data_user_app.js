@@ -406,8 +406,20 @@ exports.chat_user = function(req,res,next){
 	        // ./Stemming process
 
 					var afterCorrection = correction (stem)
-					var parse = afterCorrection.join(" ")
 
+					if (afterCorrection.length == 0) {
+						process_chat.push({
+							process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem }
+						})
+						res.send("<a class='code label label-warning'>Kode : <b style='color:black'>str01</b></a><br><br>Mohon maaf, maksud dari pertanyaan <b>"+pesan+"</b> apa ya ? <br>Kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+						+"|"
+						+"error|"
+						+"1_parameter|"
+						+JSON.stringify(process_chat));
+						return 0
+					}
+
+					var parse = afterCorrection.join(" ")
 					var data = []
 					var sqls = "SELECT kosa_kata_pesan_chat_bot_kosa_kata FROM pesan_chat_bot_kosa_kata WHERE chat_privilege_kosa_kata REGEXP ? && active_kosa_kata_pesan_chat_bot_kosa_kata='1' GROUP BY grup_kosa_kata_pesan_chat_bot_kosa_kata";
 					connection.query(sqls, jabatan, function  (err,rows){
@@ -459,7 +471,7 @@ exports.chat_user = function(req,res,next){
 						} // array | daftar total match kata pertanyaan dengan seluruh kalimat
 						var max_match_kata = Math.max(...totalMatch) // array | mencari max pada array total match
 
-						if (max_match_kata == 0 || max_match_kata == 1 || parsing.length == 1) {
+						if (max_match_kata == 0 || afterCorrection.length == 1) {
 							process_chat.push({
 								process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
 							})
@@ -533,19 +545,28 @@ exports.chat_user = function(req,res,next){
 							process_kalimat : {"pesan" : [pesan.replace(/"/gi, "")], "stem" : stem, "json" : json, "tempArray" : tempArray, "tempMatchPerKata" : tempMatchPerKata, "tempArrayd" : tempArrayd, "fix" : fix,  "totalMatch" : totalMatch, "max_match_kata" : max_match_kata, "fix2" : fix2, "allKalimat" : allKalimat, "lowestSplit" : lowestSplit, "fix3" : fix3, "qwe" : qwe }
 						})
 						var f = qwe.filter(function(elem, index, self) { return index === self.indexOf(elem); })
+						var penomoranDuplikatPertanyaan = []
+						for (var i = 0; i < f.length; i++) {
+							var no = i+1
+							penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
+						}
+						var g = JSON.stringify(penomoranDuplikatPertanyaan);
+						var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
+						var i	= h.replace(/,/gi, "<br>")
+
+						if (max_match_kata == 1 || max_match_kata == 1 && afterCorrection.length == 1) {
+							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
+											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
+											+"error|"
+											+"2_parameters|"
+											+JSON.stringify(process_chat));
+							return 0
+						}
 						if (f.length == 1) {
 							var res1 = f[0]
 							ketemuKosaKata (res1, pesan, parse, process_chat)
 						}
 						else {
-							var penomoranDuplikatPertanyaan = []
-							for (var i = 0; i < f.length; i++) {
-								var no = i+1
-								penomoranDuplikatPertanyaan.push(no+". <a id='salin-pertanyaan'>"+f[i]+"</a>")
-							}
-							var g = JSON.stringify(penomoranDuplikatPertanyaan);
-							var h	= g.replace(/[^0-9a-z,.\s='>\-<]/gi, "")
-							var i	= h.replace(/,/gi, "<br>")
 							res.send("Mohon maaf, kami tidak memahami <b>pertanyaan</b> yang kamu cari.<br><b>Ulangi pertanyaanmu lagi.</b>|"
 											+"<a class='code label label-warning'>Kode : <b style='color:black'>srn01</b></a><br><br>Mungkin <b>kata kunci</b> yang kamu cari ada disini : <br><b class='data-saran'>"+i+"</b></br>|"
 											+"error|"
@@ -1066,97 +1087,75 @@ exports.chat_user = function(req,res,next){
 		              "mata" : [ "mata pencaharian", "mata pelajaran", "mata uang", "mata kail" ]
 		            }
 	  // double word
-	  var temp1 = []
-	  var temp2 = []
-	  for (var i = 0; i < split.length; i++) {
-	    for (var j = 0; j < Object.keys(json).length; j++) {
-	      if (split[i] == Object.keys(json)[j]) {
-	        var lihatBelakang = i
-	        var lihatDepan = i+1
-					if (split[lihatDepan] === undefined) { return [split[lihatBelakang]] }
-					var keys = Object.keys(json)[j]
-	        var values = Object.values(json)[j]
-	        var regex = new RegExp (split[lihatDepan], "g")
-	        for (var k = 0; k < values.length; k++) {
-	          if (values[k].match(regex) || values[k].match(regex) !== null){
-	            temp1.push({
-	              "index" : i,
-	              "word" : split[lihatBelakang],
-	              "visible" : "1"
-	            })
-	            i++
-	            temp1.push({
-	              "index" : i,
-	              "word" : split[lihatDepan],
-	              "visible" : "1"
-	            })
-	          }
-	        }
-	      }
-	      else {
-	        temp2.push({
-	          "index" : i,
-	          "word" : split[i],
-	          "visible" : "0"
-	        })
-	      }
-	    }
-	  }
-	  var all = temp1.concat(temp2)
-	  var all = _.uniqBy(all, function (e) {
-	              return e.index;
-	            });
-	  var stem = _.orderBy(all, ['index'],['asc']);
+		var stem = []
+		for (var i = 0; i < split.length; i++) {
+		  var lihatDepan = i+1
+		  for (var j = 0; j < Object.keys(json).length; j++) {
+		    if (split[i] == Object.keys(json)[j]) {
+		      for (var k = 0; k < json[Object.keys(json)[j]].length; k++) {
+		        var neww = json[Object.keys(json)[j]][k].split(" ")
+		        for (var l = 0; l < neww.length; l++) {
+		          var reg = new RegExp(neww[l], "g")
+		          if (split[lihatDepan].match(reg)) {
+		            stem.push(`${split[i]} ${split[lihatDepan]}`)
+		            i++
+		          }
+		        }
+		      }
+		    }
+		    else { stem.push(split[i]) }
+		  }
+		}
 	  // ./double word
 
 		var s = []
 	  for (var i = 0; i < stem.length; i++) {
-	    if (stem[i].visible == "0") {
-	      // prefiks
-	      if (stem[i].word.startsWith("peng") || stem[i].word.startsWith("meng") || stem[i].word.startsWith("ber")) {
-	        var l = stem[i].word.replace(/peng|meng|ber/gi, "")
-	        s.push(l)
-	      }
-	      // ./prefiks
-	      // konfiks
-	      else if (stem[i].word.startsWith("pel") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pel|an)/gi, "")
-	        s.push(l)
-	      }
-	      else if (stem[i].word.startsWith("pem") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pem|an)/gi, "")
-	        s.push(l)
-	      }
-	      else if (stem[i].word.startsWith("pe") && stem[i].word.endsWith("an")) {
-	        var l = stem[i].word.replace(/(pe|an)/gi, "")
-	        s.push(l)
-	      }
-	      // ./konfiks
-	      // suffiks
-	      else if (stem[i].word.endsWith("nya") || stem[i].word.endsWith("kan")) {
-	        var l = stem[i].word.replace(/(nya|kan)/gi, "")
-	        s.push(l)
-	      }
-	      // ./suffiks
-	      else {
-	        s.push(stem[i].word)
-	      }
-	    }
-	    else if (stem[i].visible == "1") {
-	      if (stem[i].word.endsWith("nya") || stem[i].word.endsWith("kan")) {
-	        var l = stem[i].word.replace(/(nya|kan)/gi, "")
-	        s.push(l)
-	      }
-	      else {
-	        s.push(stem[i].word)
-	      }
-	    }
+      // prefiks
+      if (stem[i].startsWith("peng") || stem[i].startsWith("meng") || stem[i].startsWith("ber")) {
+        var l = stem[i].replace(/peng|meng|ber/gi, "")
+        s.push(l)
+      }
+      // ./prefiks
+      // suffiks
+      else if (stem[i].endsWith("nya")) {
+        var l = stem[i].replace(/(nya)/gi, "")
+        s.push(l)
+      }
+      // ./suffiks
+      // konfiks
+      else if (stem[i].startsWith("pel") && stem[i].endsWith("an")) {
+        var l = stem[i].replace(/(pel|an)/gi, "")
+        s.push(l)
+      }
+      else if (stem[i].startsWith("pem") && stem[i].endsWith("an")) {
+        var l = stem[i].replace(/(pem|an)/gi, "")
+        s.push(l)
+      }
+      else if (stem[i].startsWith("pe") && stem[i].endsWith("an")) {
+        var l = stem[i].replace(/(pe|an)/gi, "")
+        s.push(l)
+      }
+      // ./konfiks
+      else {
+        s.push(stem[i])
+      }
 	  }
-	return s
+
+		var splitString = []
+		for (var i = 0; i < s.length; i++) {
+			if (s[i].match(/\s/g)) {
+				var n = s[i].split(" ")
+				for (var j = 0; j < n.length; j++) {
+					splitString.push(n[j])
+				}
+			}
+			else { splitString.push(s[i]) }
+		}
+	return splitString
 	}
 
 	function correction (pesan) {
-	  var read = fs.readFileSync("correction.json")
+	  var read = fs.readFileSync("_data/correction.json", "utf8")
 	  var data = JSON.parse(read)
 	  var allPossible = []
 	  for (var i = 0; i < Object.keys(data).length; i++) {
@@ -1175,8 +1174,8 @@ exports.chat_user = function(req,res,next){
 	}
 
 	function stopWord (parsing) {
-		var stopword = ["ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir","akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara","antaranya","apa","apaan","apabila","apakah","apalagi","apatah","artinya","asal","asalkan","atas","atau","ataukah","ataupun","awal","awalnya","bagai","bagaikan","bagaimana","bagaimanakah","bagaimanapun","bagi","bagian","bahkan","bahwa","bahwasanya","baik","bakal","bakalan","balik","banyak","baru","bawah","beberapa","begini","beginian","beginikah","beginilah","begitu","begitukah","begitulah","begitupun","bekerja","belakang","belakangan","belum","belumlah","benar","benarkah","benarlah","berada","berakhir","berakhirlah","berakhirnya","berapa","berapakah","berapalah","berapapun","berarti","berawal","berbagai","berdatangan","beri","berikan","berikut","berikutnya","berjumlah","berkali-kali","berkata","berkehendak","berkeinginan","berkenaan","berlainan","berlalu","berlangsung","berlebihan","bermacam","bermacam-macam","bermaksud","bermula","bersama","bersama-sama","bersiap","bersiap-siap","bertanya","bertanya-tanya","berturut","berturut-turut","bertutur","berujar","berupa","besar","betul","betulkah","biasa","biasanya","bila","bilakah","bisa","bisakah","boleh","bolehkah","bolehlah","buat","bukan","bukankah","bukanlah","bukannya","bulan","bung","cara","caranya","cukup","cukupkah","cukuplah","cuma","dahulu","dalam","dan","dapat","dari","daripada","datang","dekat","demi","demikian","demikianlah","dengan","depan","di","dia","diakhiri","diakhirinya","dialah","diantara","diantaranya","diberi","diberikan","diberikannya","dibuat","dibuatnya","didapat","didatangkan","digunakan","diibaratkan","diibaratkannya","diingat","diingatkan","diinginkan","dijawab","dijelaskan","dijelaskannya","dikarenakan","dikatakan","dikatakannya","dikerjakan","diketahui","diketahuinya","dikira","dilakukan","dilalui","dilihat","dimaksud","dimaksudkan","dimaksudkannya","dimaksudnya","diminta","dimintai","dimisalkan","dimulai","dimulailah","dimulainya","dimungkinkan","dini","dipastikan","diperbuat","diperbuatnya","dipergunakan","diperkirakan","diperlihatkan","diperlukan","diperlukannya","dipersoalkan","dipertanyakan","dipunyai","diri","dirinya","disampaikan","disebut","disebutkan","disebutkannya","disini","disinilah","ditambahkan","ditandaskan","ditanya","ditanyai","ditanyakan","ditegaskan","ditujukan","ditunjuk","ditunjuki","ditunjukkan","ditunjukkannya","ditunjuknya","dituturkan","dituturkannya","diucapkan","diucapkannya","diungkapkan","dong","dulu","empat","enggak","enggaknya","entah","entahlah","guna","gunakan","hal","hampir","hanya","hanyalah","hari","harus","haruslah","harusnya","hendak","hendaklah","hendaknya","hingga","ia","ialah","ibarat","ibaratkan","ibaratnya","ikut","ingat","ingat-ingat","ingin","inginkah","inginkan","ini","inikah","inilah","itu","itukah","itulah","jadi","jadilah","jadinya","jangan","jangankan","janganlah","jauh","jawab","jawaban","jawabnya","jelas","jelaskan","jelaslah","jelasnya","jika","jikalau","juga","justru","kala","kalau","kalaulah","kalaupun","kalian","kami","kamilah","kamu","kamulah","kan","kapan","kapankah","kapanpun","karena","karenanya","kasus","kata","katakan","katakanlah","katanya","ke","keadaan","kebetulan","kecil","kedua","keduanya","keinginan","kelamaan","kelihatan","kelihatannya","kelima","keluar","kembali","kemudian","kemungkinan","kemungkinannya","kenapa","kepada","kepadanya","kesampaian","keseluruhan","keseluruhannya","keterlaluan","ketika","khususnya","kini","kinilah","kira","kira-kira","kiranya","kita","kitalah","kok","kurang","lagi","lagian","lah","lain","lainnya","lalu","lama","lamanya","lanjut","lanjutnya","lebih","lewat","lima","luar","macam","maka","makanya","makin","malah","malahan","mampu","mampukah","mana","manakala","manalagi","masa","masalah","masalahnya","masih","masihkah","masing","masing-masing","mau","maupun","melainkan","melakukan","melalui","melihat","melihatnya","memang","memastikan","memberi","memberikan","membuat","memerlukan","memihak","meminta","memintakan","memisalkan","memperbuat","mempergunakan","memperkirakan","memperlihatkan","mempersiapkan","mempersoalkan","mempertanyakan","mempunyai","memulai","memungkinkan","menaiki","menambahkan","menandaskan","menanti","menanti-nanti","menantikan","menanya","menanyai","menanyakan","mendapat","mendapatkan","mendatang","mendatangi","mendatangkan","menegaskan","mengakhiri","mengapa","mengatakan","mengatakannya","mengenai","mengerjakan","mengetahui","menggunakan","menghendaki","mengibaratkan","mengibaratkannya","mengingat","mengingatkan","menginginkan","mengira","mengucapkan","mengucapkannya","mengungkapkan","menjadi","menjawab","menjelaskan","menuju","menunjuk","menunjuki","menunjukkan","menunjuknya","menurut","menuturkan","menyampaikan","menyangkut","menyatakan","menyebutkan","menyeluruh","menyiapkan","merasa","mereka","merekalah","merupakan","meski","meskipun","meyakini","meyakinkan","minta","mirip","misal","misalkan","misalnya","mula","mulai","mulailah","mulanya","mungkin","mungkinkah","nah","naik","namun","nanti","nantinya","nyaris","nyatanya","oleh","olehnya","pada","padahal","padanya","pak","paling","panjang","pantas","para","pasti","pastilah","penting","pentingnya","per","percuma","perlu","perlukah","perlunya","pernah","persoalan","pertama","pertama-tama","pertanyaan","pertanyakan","pihak","pihaknya","pukul","pula","pun","punya","rasa","rasanya","rata","rupanya","saat","saatnya","saja","sajalah","saling","sama","sama-sama","sambil","sampai","sampai-sampai","sampaikan","sana","sangat","sangatlah","satu","saya","sayalah","se","sebab","sebabnya","sebagai","sebagaimana","sebagainya","sebagian","sebaik","sebaik-baiknya","sebaiknya","sebaliknya","sebanyak","sebegini","sebegitu","sebelum","sebelumnya","sebenarnya","seberapa","sebesar","sebetulnya","sebisanya","sebuah","sebut","sebutlah","sebutnya","secara","secukupnya","sedang","sedangkan","sedemikian","sedikit","sedikitnya","seenaknya","segala","segalanya","segera","seharusnya","sehingga","seingat","sejak","sejauh","sejenak","sejumlah","sekadar","sekadarnya","sekali","sekali-kali","sekalian","sekaligus","sekalipun","sekarang","sekecil","seketika","sekiranya","sekitar","sekitarnya","sekurang-kurangnya","sekurangnya","sela","selagi","selain","selaku","selalu","selama","selama-lamanya","selamanya","selanjutnya","seluruh","seluruhnya","semacam","semakin","semampu","semampunya","semasa","semasih","semata","semata-mata","semaunya","sementara","semisal","semisalnya","sempat","semua","semuanya","semula","sendiri","sendirian","sendirinya","seolah","seolah-olah","seorang","sepanjang","sepantasnya","sepantasnyalah","seperlunya","seperti","sepertinya","sepihak","sering","seringnya","serta","serupa","sesaat","sesama","sesampai","sesegera","sesekali","seseorang","sesuatu","sesuatunya","sesudah","sesudahnya","setelah","setempat","setengah","seterusnya","setiap","setiba","setibanya","setidak-tidaknya","setidaknya","setinggi","seusai","sewaktu","siap","siapa","siapakah","siapapun","sini","sinilah","soal","soalnya","suatu","sudah","sudahkah","sudahlah","supaya","tadi","tadinya","tahu","tahun","tak","tambah","tambahnya","tampak","tampaknya","tandas","tandasnya","tanpa","tanya","tanyakan","tanyanya","tapi","tegas","tegasnya","telah","tengah","tentang","tentu","tentulah","tentunya","tepat","terakhir","terasa","terbanyak","terdahulu","terdapat","terdiri","terhadap","terhadapnya","teringat","teringat-ingat","terjadi","terjadilah","terjadinya","terkira","terlalu","terlebih","terlihat","termasuk","ternyata","tersampaikan","tersebut","tersebutlah","tertentu","tertuju","terus","terutama","tetap","tetapi","tiap","tiba","tiba-tiba","tidak","tidakkah","tidaklah","tiga","tinggi","toh","tunjuk","turut","tutur","tuturnya","ucap","ucapnya","ujar","ujarnya","umum","umumnya","ungkap","ungkapnya","untuk","usah","usai","waduh","wah","wahai","waktu","waktunya","walau","walaupun","wong", "ya", "yaitu","yakin","yakni","yang","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","ab","ac","ad","af","ag","ah","aj","ak","al","am","an","ap","aq","ar","as","at","av","aw","ax","ay","az","ib","ic","id","if","ig","ih","ij","ik","il","im","in","ip","iq","ir","is","it","iv","iw","ix","iy","iz","ub","uc","ud","uf","ug","uh","uj","uk","ul","um","un","up","uq","ur","us","ut","uv","uw","ux","uy","uz","eb","ec","ed","ef","eg","eh","ej","ek","el","em","en","ep","eq","er","es","et","ev","ew","ex","ey","ez","ob","oc","od","of","og","oh","oj","ok","ol","om","on","op","oq","or","os","ot","ov","ow","ox","oy","oz", "ba","ca","da","fa","ga","ha","ja","ka","la","ma","na","pa","qa","ra","sa","ta","va","wa","xa","ya","za","bi","ci","di","fi","gi","hi","ji","ki","li","mi","ni","pi","qi","ri","si","ti","vi","wi","xi","yi","zi","bu","cu","du","fu","gu","hu","ju","ku","lu","mu","nu","pu","qu","ru","su","tu","vu","wu","xu","yu","zu","be","ce","de","fe","ge","he","je","ke","le","me","ne","pe","qe","re","se","te","ve","we","xe","ye","ze","bo","co","do","fo","go","ho","jo","ko","lo","mo","no","po","qo","ro","so","to","vo","wo","xo","yo","zo"]
-
+		var read = fs.readFileSync("_data/stopword.json", "utf8")
+		var stopword = JSON.parse(read)
 		var pertanyaan = parsing.split(" ")
 		var pertanyaan_terstopword = []
 		for (var i = 0; i < pertanyaan.length; i++) {
