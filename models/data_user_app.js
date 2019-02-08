@@ -131,10 +131,10 @@ exports.data_user_suggest = function(req,res,next){
 // Response Chat
 exports.chat_user = function(req,res,next){
   // development
-	var userId = "10888"
-	var jabatan = "siswa"
-	// var userId = req.session.userId;
-	// var jabatan =	[req.session.jabatan];
+	// var userId = "10888"
+	// var jabatan = "siswa"
+	var userId = req.session.userId;
+	var jabatan =	[req.session.jabatan];
 	if(userId == null){ res.redirect("/"); return 0; }
   var input = JSON.parse(JSON.stringify(req.body));
   req.getConnection(function (err, connection) {
@@ -165,7 +165,6 @@ exports.chat_user = function(req,res,next){
 				}
 				var sqls 		= "SELECT "+grup+", nip_pegawai FROM data_pegawai INNER JOIN mata_pelajaran ON data_pegawai.kd_mata_pelajaran_pegawai = mata_pelajaran.kd_mata_pelajaran WHERE nama_pegawai REGEXP '"+data[2]+"' ORDER BY nama_pegawai ASC LIMIT 1 OFFSET "+offset;
 				connection.query(sqls, function  (err_final,rows){
-					if (err_final) throw err_final
 				  if (rows === undefined) {
 						res.send("Pilihan Tidak Tersedia.</b>|"
 									 +"|"
@@ -404,8 +403,9 @@ exports.chat_user = function(req,res,next){
 					}
 					var stem = stemming (split)
 	        // ./Stemming process
+					var lemma = lemmatization (stem)
 
-					var afterCorrection = correction (stem)
+					var afterCorrection = correction (lemma)
 
 					if (afterCorrection.length == 0) {
 						process_chat.push({
@@ -429,8 +429,8 @@ exports.chat_user = function(req,res,next){
 						}
 						// data = ["nomor telepon pegawai","nomor telepon siswa", "daftar pengampu mata pelajaran kelas", "nama lengkap siswa", "detail pembayaran siswa"]
 						var json = []
-						for (var i = 0; i < stem.length; i++) {
-						  var regex = new RegExp(stem[i],"gi")
+						for (var i = 0; i < lemma.length; i++) {
+						  var regex = new RegExp(lemma[i],"gi")
 						  for (var j = 0; j < data.length; j++) {
 						    var asd = data[j].match(regex)
 							// json.push(j+". "+asd+" == "+data[j]);
@@ -1154,10 +1154,27 @@ exports.chat_user = function(req,res,next){
 	return splitString
 	}
 
+	function lemmatization (pesan) {
+		var read = fs.readFileSync("_data/lemmatization.json", "utf8")
+		var data = JSON.parse(read)
+		for (var i = 0; i < Object.keys(data).length; i++) {
+		  for (var j = 0; j < Object.values(data)[i].length; j++) {
+		    for (var k = 0; k < pesan.length; k++) {
+		      if (Object.values(data)[i][j] == pesan[k]) {
+		        var index = pesan.indexOf(pesan[k]);
+		        if (~index) {
+		            pesan[index] = Object.keys(data)[i];
+		        }
+		      }
+		    }
+		  }
+		}
+		return pesan
+	}
+
 	function correction (pesan) {
 	  var read = fs.readFileSync("_data/correction.json", "utf8")
 	  var data = JSON.parse(read)
-	  var allPossible = []
 	  for (var i = 0; i < Object.keys(data).length; i++) {
 	    for (var j = 0; j < Object.values(data)[i].length; j++) {
 	      for (var k = 0; k < pesan.length; k++) {

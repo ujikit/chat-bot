@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 26, 2018 at 07:09 PM
+-- Generation Time: Feb 08, 2019 at 02:53 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.0.26
 
@@ -48,7 +48,7 @@ CREATE TABLE `data_pegawai` (
 
 INSERT INTO `data_pegawai` (`nip_pegawai`, `nama_pegawai`, `jabatan_pegawai`, `kd_mata_pelajaran_pegawai`, `jenis_kelamin_pegawai`, `username_pegawai`, `password_pegawai`, `alamat_pegawai`, `tempat_lahir_pegawai`, `tanggal_lahir_pegawai`, `no_handphone_pegawai`) VALUES
 ('1111', 'admin', 'admin', 'admin', 'L', 'admin', '$2y$10$MgSFgKlI3s1KdLcbp6TLAuIMYmjXfIIQ190VRKNi9yUPVkrdqeAMq', NULL, NULL, NULL, NULL),
-('195811111179031002', 'Ahmad Wahyudi', 'pegawai', 'sasindo', 'L', '195811111179031002', '$2y$10$e5adeCf/NCxS3GSVoXDimeFKUusVIav9oVA0k5WwITc7h2RFrf8q.', 'YOGYAKARTA', 'YOGYAKARTA', '1982-06-30', '08121668218'),
+('195811111179031002', 'Ahmad Wahyudi', 'pegawai', 'sasindo', 'L', '195811111179031002', '$2y$10$Z6mgJ9q2Hi33zV0aPrN07OqtxbUoDBhlBU.8PCHICjmLepJQ3/czK', 'YOGYAKARTA', 'YOGYAKARTA', '1982-06-30', '08121668218'),
 ('195811112679031002', 'Anwar Hermanto', 'pegawai', 'sasing', 'L', '195811112679031002', '$2y$10$Pzyi3QOi44Xem5b3At2eYOq6PkD.9aRPt9/ql.eHsRnJkLi4AYmyG', 'YOGYAKARTA', 'YOGYAKARTA', '1976-11-13', '08121668218'),
 ('195811171612031002', 'Cecep Supriyatna', 'pegawai', 'bindo', 'L', '195811171612031002', '$2y$10$vtQuTUiuBDp6erXTfbWH1OAYQ11H0uQEauMy0LLQGq.fQGQgFN6su', 'YOGYAKARTA', 'YOGYAKARTA', '1963-01-23', '08121668218'),
 ('195811171676723202', 'Marlina', 'pegawai', 'fis', 'P', '195811171676723202', '$2y$10$nZFDfxT5CWjeLJ67/ObkEO0OotibS7chl1qnNtUci2wVoM9xUnpkm', 'YOGYAKARTA', 'YOGYAKARTA', '1961-01-29', '081983838044'),
@@ -133,7 +133,7 @@ CREATE TABLE `data_siswa` (
 --
 
 INSERT INTO `data_siswa` (`nis_siswa`, `nisn_siswa`, `nama_siswa`, `username_siswa`, `password_siswa`, `jenis_kelamin_siswa`, `kd_kelas_daftar_siswa`, `jabatan_siswa`, `alamat_siswa`, `tempat_lahir_siswa`, `tanggal_lahir_siswa`, `no_handphone_siswa`, `anak_ke_siswa`, `agama_siswa`, `status_dalam_keluarga_siswa`, `diterima_tanggal_siswa`, `diterima_semester_siswa`, `sekolah_asal_nama_siswa`, `sekolah_asal_alamat_siswa`, `stl_tahun_siswa`, `stl_nomor_siswa`, `orangtua_nama_ayah_siswa`, `orangtua_nama_ibu_siswa`, `orangtua_alamat_siswa`, `orangtua_telepon_siswa`, `orangtua_pekerjaan_ayah_siswa`, `orangtua_pekerjaan_ibu_siswa`, `username_wali`, `password_wali`, `nama_wali`, `pekerjaan_wali`, `jenis_kelamin_wali`, `alamat_wali`, `tempat_lahir_wali`, `tanggal_lahir_wali`, `no_handphone_wali`) VALUES
-('10888', '0045310829', 'Achmad Ramzi Adriansyah', '10888', '$2y$10$eoGdEQM5xkQ0d80uJaPQoeiqM5OtMrK0ktuxixWwRL4VBuLrLuZ3q', 'L', '11agama1', 'siswa', 'Banda Aceh', 'Pagar Alam', '1999-05-06', '0817149802826', '2', 'Islam', 'Anak', '0000-00-00', '', '', '', '', '', 'ROEDY SOEBIANTORO', '', 'Surabaya', '0818671684244', '', '', '1088', '$2y$10$Ufb0ZXxcMLgK7az49fhV1OaYN.fwhoGFFoPldjeSxLveJxEwvYYn.', 'ROEDY SOEBIANTORO', '', '', 'Bontang', '', '0000-00-00', '0817660931600'),
+('10888', '0045310829', 'Achmad Ramzi Adriansyah', '10888', '$2y$10$lsck3DhgsjBobuOgNFbBX.XajcfQnMVm6m35fvT52XcolKUluNipa', 'L', '11agama1', 'siswa', 'Banda Aceh', 'Pagar Alam', '1999-05-06', '0817149802826', '2', 'Islam', 'Anak', '0000-00-00', '', '', '', '', '', 'ROEDY SOEBIANTORO', '', 'Surabaya', '0818671684244', '', '', '1088', '$2y$10$Ufb0ZXxcMLgK7az49fhV1OaYN.fwhoGFFoPldjeSxLveJxEwvYYn.', 'ROEDY SOEBIANTORO', '', '', 'Bontang', '', '0000-00-00', '0817660931600'),
 ('10889', '0044735860', 'Addisty Ayu Rinjani', '10889', '$2y$10$GuK/hpDinrBO2zkrk203a.YHIwNP1Fy81X2q9eB/cV/jkPiXlEVsW', 'P', '10ipa1', 'siswa', 'Salatiga', 'Solok', '2002-08-29', '0817711458921', '3', 'Islam', 'Anak', '0000-00-00', '', '', '', '', '', 'AGUS MARYONO', '', 'Parepare', '0817292790020', '', '', '1088', '$2y$10$5jxZua6TjZf9kQkyMJNEf..BmTulyi5EomZPi25VeEPwOD6Xdua32', 'AGUS MARYONO', '', '', 'Padangsidempuan', '', '0000-00-00', '0815578185440'),
 ('10890', '0057386934', 'Akbar Cahyo Mustika Putra', '10890', '$2y$10$qP33WY2zYjCaf1lkJy5csOlsb7IEjhrdaNiHnSy2ks9x52QaFSkZW', 'L', '11agama2', 'siswa', 'Probolinggo', 'Tasikmalaya', '2001-07-24', '0818230980550', '2', 'Islam', 'Anak', '0000-00-00', '', '', '', '', '', 'DIAH NURANI', '', 'Tanjungbalai', '0815548823883', '', '', '1089', '$2y$10$kwihhkG5KlrfDhjH0ltZaOPAiHbAuohw4dXR/t47BCmu7LgAZSTT.', 'DIAH NURANI', '', '', 'Singkawang', '', '0000-00-00', '0817520729997'),
 ('10891', '0041893929', 'Andhika Gunawan', '10891', '$2y$10$OyQwWv1CChf5iZa5Ee2dAuo4fIYuOw9MYX36M1uf7eSsh96zzbt4W', 'L', '11bahasa1', 'siswa', 'Pangkal Pinang', 'Bandar Lampung', '2002-02-18', '0817590036778', '1', 'Islam', 'Anak', '0000-00-00', '', '', '', '', '', 'SUBAGJO', '', 'Denpasar', '0815891366437', '', '', '1089', '$2y$10$/LNr3xIG45uqKyxc7NFdQOXzEhbe2egr2dzYyM8g03.rcxfVbLOn2', 'SUBAGJO', '', '', 'Surabaya', '', '0000-00-00', '0815692163824'),
@@ -2120,30 +2120,30 @@ CREATE TABLE `pesan_chat_bot_kosa_kata` (
 --
 
 INSERT INTO `pesan_chat_bot_kosa_kata` (`id_pesan_chat_bot_kosa_kata`, `kosa_kata_pesan_chat_bot_kosa_kata`, `grup_kosa_kata_pesan_chat_bot_kosa_kata`, `active_kosa_kata_pesan_chat_bot_kosa_kata`, `chat_privilege_kosa_kata`) VALUES
-(326, 'nama lengkap pegawai', 'nama_pegawai', '0', 'pegawai,siswa'),
-(327, 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', '0', 'pegawai,siswa'),
-(328, 'alamat rumah pegawai', 'alamat_pegawai', '0', 'pegawai,siswa'),
+(326, 'nama lengkap pegawai', 'nama_pegawai', '1', 'pegawai,siswa'),
+(327, 'jenis kelamin pegawai', 'jenis_kelamin_pegawai', '1', 'pegawai,siswa'),
+(328, 'alamat rumah pegawai', 'alamat_pegawai', '1', 'pegawai,siswa'),
 (329, 'nomor telepon pegawai', 'no_handphone_pegawai', '1', 'pegawai,siswa'),
-(330, 'nomor induk pegawai', 'nip_pegawai', '0', 'pegawai,siswa'),
+(330, 'nomor induk pegawai', 'nip_pegawai', '1', 'pegawai,siswa'),
 (331, 'nomor telepon siswa', 'no_handphone_siswa', '1', 'pegawai,siswa'),
-(332, 'nomor induk siswa', 'nis_siswa', '0', 'pegawai,siswa'),
-(334, 'alamat rumah siswa', 'alamat_siswa', '0', 'pegawai,siswa'),
-(335, 'tempat lahir siswa', 'tempat_lahir_siswa', '0', 'pegawai,siswa'),
-(336, 'tanggal lahir siswa', 'tanggal_lahir_siswa', '0', 'pegawai,siswa'),
-(337, 'nama ayah siswa', 'orangtua_nama_ayah_siswa', '0', 'pegawai,siswa'),
-(338, 'nama ibu siswa', 'orangtua_nama_ibu_siswa', '0', 'pegawai,siswa'),
-(339, 'alamat orangtua siswa', 'orangtua_alamat_siswa', '0', 'pegawai,siswa'),
-(341, 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', '0', 'pegawai,siswa'),
-(342, 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', '0', 'pegawai,siswa'),
-(343, 'nama wali siswa', 'nama_wali_siswa', '0', 'pegawai,siswa'),
-(344, 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', '0', 'pegawai,siswa'),
-(345, 'alamat wali siswa', 'alamat_wali_siswa', '0', 'pegawai,siswa'),
+(332, 'nomor induk siswa', 'nis_siswa', '1', 'pegawai,siswa'),
+(334, 'alamat rumah siswa', 'alamat_siswa', '1', 'pegawai,siswa'),
+(335, 'tempat lahir siswa', 'tempat_lahir_siswa', '1', 'pegawai,siswa'),
+(336, 'tanggal lahir siswa', 'tanggal_lahir_siswa', '1', 'pegawai,siswa'),
+(337, 'nama ayah siswa', 'orangtua_nama_ayah_siswa', '1', 'pegawai,siswa'),
+(338, 'nama ibu siswa', 'orangtua_nama_ibu_siswa', '1', 'pegawai,siswa'),
+(339, 'alamat orangtua siswa', 'orangtua_alamat_siswa', '1', 'pegawai,siswa'),
+(341, 'pekerjaan ayah siswa', 'orangtua_pekerjaan_ayah_siswa', '1', 'pegawai,siswa'),
+(342, 'pekerjaan ibu siswa', 'orangtua_pekerjaan_ibu_siswa', '1', 'pegawai,siswa'),
+(343, 'nama wali siswa', 'nama_wali_siswa', '1', 'pegawai,siswa'),
+(344, 'pekerjaan wali siswa', 'pekerjaan_wali_siswa', '1', 'pegawai,siswa'),
+(345, 'alamat wali siswa', 'alamat_wali_siswa', '1', 'pegawai,siswa'),
 (347, 'detail pembayaran siswa', '0_detail_pembayaran', '1', 'siswa'),
 (351, 'daftar pengampu mata pelajaran kelas', '0_daftar_pengampu_kelas', '1', 'pegawai,siswa'),
 (353, 'daftar nama siswa kelas', '0_daftar_nama_seluruh_siswa_kelas', '1', 'pegawai,siswa'),
 (354, 'nama lengkap siswa', 'nama_siswa', '1', 'pegawai,siswa'),
 (355, 'daftar kelas dan wali kelas', '0_daftar_kelas_dan_wali_kelas', '1', 'pegawai,siswa'),
-(356, 'nomor induk nasional siswa', 'nisn_siswa', '0', 'pegawai,siswa'),
+(356, 'nomor induk nasional siswa', 'nisn_siswa', '1', 'pegawai,siswa'),
 (358, 'daftar pengampu mata pelajaran', '0_daftar_pengampu_mapel', '1', 'pegawai,siswa'),
 (359, 'nomor telepon orangtua siswa', 'orangtua_telepon_siswa', '1', 'pegawai,siswa');
 
@@ -2169,7 +2169,8 @@ INSERT INTO `pesan_chat_bot_kosa_kata_suggest` (`id_pesan_chat_bot_kosa_kata_sug
 (3, '10888', 'nilai mata pelajaran bahasa indonesia'),
 (4, '10888', 'nilai uts mata pelajaran bahasa indonesia'),
 (5, '10888', 'berapa harga kertas a4 dikantin ?'),
-(6, '10888', 'berapakah harga kertas a4 dikantin ?');
+(6, '10888', 'berapakah harga kertas a4 dikantin ?'),
+(7, '10888', 'sadsaHAHAHA');
 
 -- --------------------------------------------------------
 
@@ -2215,7 +2216,7 @@ CREATE TABLE `verifikasi_password` (
 --
 
 INSERT INTO `verifikasi_password` (`id_verifikasi_password_baru`, `username_verifikasi_password_baru`, `password_baru_verifikasi_password_baru`, `jabatan_verifikasi_password_baru`, `tanggal_ganti_verifikasi_password_baru`, `jam_ganti_verifikasi_password_baru`, `tanggal_verifikasi_verifikasi_password_baru`, `jam_verifikasi_verifikasi_password_baru`, `status_verifikasi_password_baru`) VALUES
-(1, '195811111179031002', 'asd', 'pegawai', '2018-12-13', '23:15:19', NULL, NULL, 'N');
+(6, '10888', '10888', 'siswa', '2018-12-29', '23:45:52', NULL, NULL, 'N');
 
 --
 -- Indexes for dumped tables
@@ -2401,13 +2402,13 @@ ALTER TABLE `pesan_chat_bot_kosa_kata`
 -- AUTO_INCREMENT for table `pesan_chat_bot_kosa_kata_suggest`
 --
 ALTER TABLE `pesan_chat_bot_kosa_kata_suggest`
-  MODIFY `id_pesan_chat_bot_kosa_kata_suggest` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_pesan_chat_bot_kosa_kata_suggest` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `verifikasi_password`
 --
 ALTER TABLE `verifikasi_password`
-  MODIFY `id_verifikasi_password_baru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_verifikasi_password_baru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
